@@ -1,0 +1,68 @@
+@startuml
+left to right direction
+
+:Membre:
+:Benevole:
+:Visiteur:
+database "Database" as Db
+database "Paiement API" as api
+
+rectangle ProjetGo {
+  Visiteur --> (Inscription)  
+  Benevole --> (Subscription)
+  (Subscription) .> Inscription : extends
+
+  Membre --> (Paiment Subscription)
+  api --> (Paiment Subscription)
+  
+
+  Membre --> (Creation Projet)
+  Membre --> (Modifier le statut de projet)
+
+  (Afficher une liste des projets) as ListeProjet
+  Visiteur --> ListeProjet
+
+  (Afficher details public d'un projet) as AccesPublic
+  Visiteur --> AccesPublic
+
+  (Afficher details restreint d'un projet) as AccesRestreint
+  Membre --> AccesRestreint
+
+  Membre -> (Afficher liste membres d'un projet) 
+
+  Membre --> (Creation d'une levee de fonds)
+
+
+}
+
+Visiteur --|> Benevole
+Benevole --|> Membre
+@enduml
+
+@startuml jf
+left to right direction
+:Membre:
+:Benevole:
+:Visiteur:
+:{Abstract} PrivateUsr: as private
+:{Abstract} PublicUsr: as public
+Membre -|> private
+Membre -|> public
+Benevole -|> public
+Visiteur -|> public
+database "Database" as Db
+rectangle ProjetGo {
+  private --> (Inscription)
+  public --> (Devenir membre)
+  Inscription .> (Devenir Membre) : extends
+  private --> (Creation Projet)
+  private --> (Modifier le statut de projet)
+  (Afficher une liste des projets) as ListeProjet
+  public --> ListeProjet
+  (Afficher details public d'un projet) as AccesPublic
+  public --> AccesPublic
+  (Afficher details restreint d'un projet) as AccesRestreint
+  private --> AccesRestreint
+  private -> (Afficher liste membres d'un projet)
+}
+@enduml
