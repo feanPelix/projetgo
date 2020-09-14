@@ -12,3 +12,18 @@
   Database -> Service__Backend: Register new donation response
   Service__Backend -> PublicUser__Frontend: Show Payment result
 @enduml
+
+@startuml Status_Notification
+  Responsable__Frontend -> Service__Backend: Show project information
+  Service__Backend -> Database: Project informations request
+  
+  Database -> Service__Backend: Project informations response
+
+  loop missing project status == true
+    Service__Backend -> Responsable__Frontend: Show status request
+    Responsable__Frontend -> Service__Backend: Set project status
+  end
+
+  Service__Backend -> Responsable__Frontend: Show project response
+
+@enduml
