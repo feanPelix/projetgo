@@ -1,68 +1,72 @@
-@startuml
+@startuml ProjetGo
 left to right direction
-
+:Responsable:
 :Membre:
 :Benevole:
 :Visiteur:
-database "Database" as Db
-database "Paiement API" as api
-
-rectangle ProjetGo {
-  Visiteur --> (Inscription)  
-  Benevole --> (Subscription)
-  (Subscription) .> Inscription : extends
-
-  Membre --> (Paiment Subscription)
-  api --> (Paiment Subscription)
-  
-
-  Membre --> (Creation Projet)
-  Membre --> (Modifier le statut de projet)
-
-  (Afficher une liste des projets) as ListeProjet
-  Visiteur --> ListeProjet
-
-  (Afficher details public d'un projet) as AccesPublic
-  Visiteur --> AccesPublic
-
-  (Afficher details restreint d'un projet) as AccesRestreint
-  Membre --> AccesRestreint
-
-  Membre -> (Afficher liste membres d'un projet) 
-
-  Membre --> (Creation d'une levee de fonds)
-
-
-}
-
-Visiteur --|> Benevole
-Benevole --|> Membre
-@enduml
-
-@startuml jf
-left to right direction
-:Membre:
-:Benevole:
-:Visiteur:
-:{Abstract} PrivateUsr: as private
 :{Abstract} PublicUsr: as public
-Membre -|> private
+
 Membre -|> public
 Benevole -|> public
 Visiteur -|> public
+Responsable -|> Membre
+
 database "Database" as Db
+database "Paiement API" as API
+
 rectangle ProjetGo {
-  private --> (Inscription)
-  public --> (Devenir membre)
-  Inscription .> (Devenir Membre) : extends
-  private --> (Creation Projet)
-  private --> (Modifier le statut de projet)
+  Visiteur --> (Inscription)
+  Benevole --> (Subscription)
+  Inscription .> (Subscription) : extends
+
+  (Paiment Subscription) as SubFee
+  Membre --> SubFee
+  API --> SubFee
+  
+  Membre --> (Creation Projet)
+
+  Responsable --> (Gestion Projet)
+
   (Afficher une liste des projets) as ListeProjet
   public --> ListeProjet
+
   (Afficher details public d'un projet) as AccesPublic
   public --> AccesPublic
+  
   (Afficher details restreint d'un projet) as AccesRestreint
-  private --> AccesRestreint
-  private -> (Afficher liste membres d'un projet)
+  Membre --> AccesRestreint
+
+  (Notification statut manquant) as Notify
+  Db --> Notify
+
+  (Faire un don) as Don
+  public --> Don
+  API --> Don
+
+}
+@enduml
+
+@startuml GestionProjet
+left to right direction
+
+:Responsable:
+
+rectangle GestionProjet {
+  Responsable --> (Modifier le statut de projet)
+  
+  (Ajouter membre au projet) as AddMember
+  Responsable --> AddMember
+
+  (Ajouter benevole au projet) as AddBenevole
+  Responsable --> AddBenevole
+
+  (Afficher liste membres d'un projet) as ListeMembre
+  Responsable --> ListeMembre
+
+  (Afficher liste benevole d'un projet) as ListBenevole
+  Responsable --> ListBenevole
+
+  (Creation d'une levee de fonds) as LeveeFonds
+  Responsable --> LeveeFonds
 }
 @enduml
