@@ -1,0 +1,98 @@
+@startuml ProjetGo
+
+class User {
+  string nom
+  string prenom
+  string email
+  string phone
+  string adresse
+  date Inscription
+}
+
+class Member {
+  User User
+  date adhesion
+  StatutAdhesion statutAdhesion
+}
+
+enum StatutAdhesion {
+  ACTIF
+  TERMINE
+  ATTENTE_COTISATION
+  GELE
+}
+
+class Project {
+  string code
+  string titre
+  string description
+  Sommaire sommaire du projet
+  StatutProjet statutProjet 
+  date débutEstimée
+  date finEstimé
+  decimal budget
+  decimal totalFondsCollectés
+  decimal totalDépenses
+  date débutRéelle
+  date finRéelle 
+  EtatAvancement étatProjet
+}
+
+enum StatutProjet {
+  PROPOSE
+  SOUMIS
+  APPROUVE
+  ACTIF
+  TERMINE
+  GELE
+}
+
+enum EtatAvancement {
+  VERT
+  JAUNE
+  ROUGE
+}
+
+class Participant {
+  Project projet
+  User User
+  bool comite
+}
+
+class Sommaire {
+ Project projet
+ string but
+ string objectifs
+ string bénéfices
+ string risques
+}
+
+class Report {
+  Project projet
+  date dateReport
+  string update
+  string completed
+  string reported
+  string etatRisque
+}
+
+class Fundraising {
+  Project projet
+  date debut
+  date fin
+  decimal objective
+}
+
+class Don {
+  Fundraising fundraising
+  date dateDon
+  decimal montant
+  string typePaiement
+  string nom
+  string prenom
+  string email
+  string telephone
+  string adresse
+}
+
+@enduml
