@@ -12,7 +12,7 @@ Visiteur -|> public
 Responsable -|> Membre
 
 database "Database" as Db
-database "Paiement Payment__API" as Payment__API
+database "Payment__API" as Payment__API
 
 rectangle ProjetGo {
   Visiteur --> (Inscription)
