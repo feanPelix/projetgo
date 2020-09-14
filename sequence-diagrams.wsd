@@ -1,13 +1,14 @@
 @startuml Collecte
-  PublicUser -> ProjetGo: New donation request
-  ProjetGo -> API: Paiment Request
-  API -> PublicUser: Show payment form
-  PublicUser -> API: Provide billing informations
-  API -> Bank: Paiment processing request
-  Bank -> API: Paiement processing response
-  API -> PublicUser: Show result
-  API -> ProjetGo: Return result
-  ProjetGo -> Database: Email notification request
-  Database -> ProjetGo: Email notification response
-  ProjetGo -> PublicUser: Show Thank you page  
+  PublicUser__Frontend -> Service__Backend: New donation request
+  Service__Backend -> Payment__API: Payment Request
+  Payment__API -> Service__Backend: Payment Response
+  Service__Backend -> PublicUser__Frontend: Show payment form
+  PublicUser__Frontend -> Service__Backend: Provide billing informations
+  Service__Backend -> Payment__API: Send payment informations
+  Payment__API -> Bank: Payment processing request
+  Bank -> Payment__API: Payment processing response
+  Payment__API -> Service__Backend: Return payment result
+  Service__Backend -> Database: Register new donation request
+  Database -> Service__Backend: Register new donation response
+  Service__Backend -> PublicUser__Frontend: Show Payment result
 @enduml
