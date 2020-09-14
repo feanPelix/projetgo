@@ -12,7 +12,7 @@ Visiteur -|> public
 Responsable -|> Membre
 
 database "Database" as Db
-database "Paiement API" as API
+database "Paiement Payment__API" as Payment__API
 
 rectangle ProjetGo {
   Visiteur --> (Inscription)
@@ -21,7 +21,7 @@ rectangle ProjetGo {
 
   (Paiment Subscription) as SubFee
   Membre --> SubFee
-  API --> SubFee
+  Payment__API --> SubFee
   
   Membre --> (Creation Projet)
 
@@ -41,7 +41,7 @@ rectangle ProjetGo {
 
   (Faire un don) as Don
   public --> Don
-  API --> Don
+  Payment__API --> Don
 
 }
 @enduml
