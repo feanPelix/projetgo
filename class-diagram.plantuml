@@ -140,5 +140,5 @@ note left of Login
     relative à l'authentification et
     sera stocké séparément.
 end note
-User "1" - "0..1"Login
+User "1" - "1"Login
 @enduml
