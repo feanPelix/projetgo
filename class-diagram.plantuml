@@ -129,4 +129,16 @@ Responsable -- Project:Produit regulierement >
 
 Participant -- Project: Contribue >
 
+/'Est-ce que les classes d'authentification ont leur place dans ce diagramme? '/
+class Login {
+    int userId
+    string username
+    string password
+}
+note left of Login
+    Contient les informations
+    relative à l'authentification et
+    sera stocké séparément.
+end note
+User "1" - "0..1"Login
 @enduml
