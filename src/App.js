@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
+import ProjectCard from './components/ProjectCard';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           Learn React
         </a>
         <Button variant="warning">Primary</Button>
+        <ProjectCard />
       </header>
     </div>
   );
