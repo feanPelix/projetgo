@@ -1,17 +1,20 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
-
+import './CardProject.css';
 import ButtonDonation from '../ButtonDonation/ButtonDonation';
 
+
+
 export function ProjectCard({srcImage, name, summary}) {
-  const variant = null;
+  const size = "small";
+  let styles = `bkg ${size}`;
 
   return (
     <Card 
-      style={{ width: '18rem' }}
+      className={styles}
     >
       <Card.Img 
-        variant={variant}
+        variant="top"
         src={srcImage}
       />
       <Card.Body>
