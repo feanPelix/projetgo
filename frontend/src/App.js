@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Switch from 'react-bootstrap/esm/Switch';
 import ProjectCard from './components/ProjectCard';
+import VideoPlayer from './components/VideoPlayer/VideoPlayer';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
 
         </Router> */}
         <ProjectCard />
+        <VideoPlayer />
       </div>
       <footer className="App-footer">
 
