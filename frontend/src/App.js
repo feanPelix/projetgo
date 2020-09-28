@@ -2,10 +2,8 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Button from 'react-bootstrap/Button';
-import Switch from 'react-bootstrap/esm/Switch';
-import ProjectCard from './components/ProjectCard';
-import VideoPlayer from './components/VideoPlayer/VideoPlayer';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './components/Home/Home';
 
 function App() {
   return (
@@ -13,25 +11,15 @@ function App() {
       <header className="App-header">
       </header>
       <div className="App-main">
-        {/* <Router>
+        <Router>
           <Switch>
             <Route path="/">
               <Home />
             </Route>
-            <Route path="/home">
-              <Home />
-            </Route>
-            <Route path="/home">
-              <Home />
-            </Route>
-            <Route path="/home">
-              <Home />
-            </Route>
           </Switch>
 
-        </Router> */}
-        <ProjectCard />
-        <VideoPlayer />
+        </Router>
+        
       </div>
       <footer className="App-footer">
 
