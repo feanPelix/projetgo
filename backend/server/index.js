@@ -72,7 +72,7 @@ app.post("/utilisateur/membre", async (req, res) => {
 //---------------------User Story 5------------------------------------
 //get login info (Pour se Connecter)
 //Dans le front-end il faudra vérifier que le password entré est bien le meme
-// que celui retourneé par la base de donner
+// que celui retourneé par la base de donnée
 //Si une erreur (donc aucun password) est retourner cela voudra dire que le username n'est pas valide, il faudra le signaler
 app.get("/connect/:username", async (req, res) => {
     try {
