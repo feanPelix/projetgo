@@ -3,8 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
+import ProjectCard from './components/CardProject/CardProject';
 import Switch from 'react-bootstrap/esm/Switch';
-import ProjectCard from './components/ProjectCard';
 
 function App() {
   return (
