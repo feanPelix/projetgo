@@ -2,10 +2,18 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
+const path = require("path")
 
 //middleware
 app.use(cors());
 app.use(express.json());
+
+// serve static files built by React
+app.use(express.static(path.join(__dirname, "frontend/build")));
+
+app.get("/", function(req, res) {
+    res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
+});
 
 //ROUTES//
 
