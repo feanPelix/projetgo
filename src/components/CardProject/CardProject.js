@@ -6,7 +6,7 @@ import ButtonDonation from '../ButtonDonation/ButtonDonation';
 
 
 export function ProjectCard({srcImage, name, summary}) {
-  const size = "small";
+  const size = null;
   let styles = `bkg ${size}`;
 
   return (
