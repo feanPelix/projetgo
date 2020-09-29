@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import CardProject from '../CardProject/CardProject';
@@ -12,8 +13,6 @@ export function Home() {
       const response = await fetch("http://localhost:5000/Accueil");
       const jsonData = await response.json();
 
-
-
       setProjects(jsonData);
     } catch (err) {
       console.error(err.message);
@@ -24,7 +23,18 @@ export function Home() {
     getProjects();
   }, []);
 
-  projects.map(() => {});
+  const highligthProjects = projects.map(key => {
+    return (
+      <Col lg={4}>
+        <CardProject 
+          key={key}
+          srcImage={key.srcImage}
+          title={key.title}
+          summary={key.summary}
+        />
+      </Col>
+    );
+  });
 
   return(
     <Container fluid>
@@ -34,27 +44,7 @@ export function Home() {
         </Col>
       </Row>
       <Row>
-        <Col lg={4}>
-          <CardProject 
-            srcImage="https://bit.ly/fcc-relaxing-cat"
-            title="title"
-            summary="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt."
-          />
-        </Col>
-        <Col lg={4}>
-          <CardProject
-            srcImage="https://bit.ly/fcc-relaxing-cat"
-            title="title"
-            summary="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt."
-          />
-        </Col>
-        <Col lg={4}>
-          <CardProject
-            srcImage="https://bit.ly/fcc-relaxing-cat"
-            title="title"
-            summary="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt."
-          />
-        </Col>
+        {highligthProjects}
       </Row>
     </Container>
   );
