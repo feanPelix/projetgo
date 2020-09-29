@@ -18,7 +18,10 @@ export function Footer() {
       </Row>
       <Row>
         <Col>
-
+          <div>
+            &#169;2020 ProjetGo. Tous droits réservés./Site Web réalisé par
+            <span className="team"> do-or-paste</span>
+          </div>
         </Col>
       </Row>
     </Container>
