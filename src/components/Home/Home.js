@@ -5,6 +5,27 @@ import CardProject from '../CardProject/CardProject';
 import './Home.css';
 
 export function Home() {
+  const [projects, setProjects] = useState([]);
+
+  const getProjects = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/Accueil");
+      const jsonData = await response.json();
+
+
+
+      setProjects(jsonData);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    getProjects();
+  }, []);
+
+  projects.map(() => {});
+
   return(
     <Container fluid>
       <Row>
