@@ -1,4 +1,6 @@
+# projetgo
 [![Board Status](https://dev.azure.com/do-or-paste/c59b07c0-ba9a-49b9-90f5-0f2a920c70a0/305d6441-f4f0-4423-b736-75d5fd513dd4/_apis/work/boardbadge/fb181b68-a8d2-4f9b-b9e2-7107e2376d9c)](https://dev.azure.com/do-or-paste/c59b07c0-ba9a-49b9-90f5-0f2a920c70a0/_boards/board/t/305d6441-f4f0-4423-b736-75d5fd513dd4/Microsoft.EpicCategory)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -34,36 +36,15 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Étapes pour rouler l'application avec le backend
+1. L'application React doit etre 'build'. Donc à partir de `projetgo/frontend`:
 
-## Learn More
+    `npm run-script build`
+    
+2. Dans le fichier `projetgo/backend/server` lancez le serveur:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    `node index`
+    
+3. L'url pour accéder au site est `localhost:5000`
