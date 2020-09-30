@@ -7,7 +7,11 @@ import Home from './components/Home/Home';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 
+
+
 function App() {
+  const [state, dispatch] = React.useReducer(reducer, initialState);
+  
   return (
     <div className="App">
       <header className="App-header">

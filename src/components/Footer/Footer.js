@@ -1,6 +1,8 @@
 import React from 'react';
 import { Container, Col, Row, ListGroup } from 'react-bootstrap';
 import { Facebook, Twitter, Instagram } from 'react-feather';
+import { useState, useEffect } from 'react';
+import User from '../User';
 
 export function Footer() {
   const [projects, setProjects] = useState([]);
@@ -43,6 +45,21 @@ export function Footer() {
         </Col>
         <Col lg={4}>
           <h4>Mon compte</h4>
+          <User>
+            {({ isAuthenticated }) => {
+              if (isAuthenticated) {
+                return <>
+                  <a>Mes projets</a>
+                  <a>Creer nouveau projet</a>
+                </>;
+              }
+
+              return <>
+                <a>Devenir membre</a>
+                <a>Devenir bénévole</a>
+              </>;
+            }}
+          </User>
         </Col>
         <Col lg={4}>
           <h4>Restez en contact!</h4>
