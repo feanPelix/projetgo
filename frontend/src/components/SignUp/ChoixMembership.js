@@ -1,13 +1,13 @@
 import React, {useState} from "react";
 import {Button, Col, Container, Form, Row} from "react-bootstrap";
-import {useHistory} from "react-router-dom";
-import {Link} from "react-feather";
+import {Link, useHistory} from "react-router-dom";
+
 
 function ChoixMembership(props) {
 
     const history = useHistory();
 
-    const [item, setItem] = useState({ choixMembership: "", another: "another" });
+    const [item, setItem] = useState({ choixMembership: ""});
     const { choixMembership } = item;
 
     const handleChange = e => {
@@ -35,29 +35,29 @@ function ChoixMembership(props) {
                             <Col>
                                 <Form.Check
                                     name="temp"
-                                    value="1"
+                                    value="/inscription/benevole"
                                     type="radio"
                                     label="Devenir un bénévole"
                                     onChange={handleChange}
-                                    checked={choixMembership === "1"}
+                                    checked={choixMembership === "/inscription/benevole"}
                                 />
                             </Col>
                             <Col>
                                 <Form.Check
                                     name="temp"
-                                    value="2"
+                                    value="/inscription/membre"
                                     type="radio"
                                     label="Devenir un membre"
                                     onChange={handleChange}
-                                    checked={choixMembership === "2"}
+                                    checked={choixMembership === "/inscription/membre"}
                                 />
                             </Col>
                         </Form.Group>
-                        <Link to={"/inscription/form"}>
-                            <Button variant="warning" className="mb" disabled={!disableButton}>
-                                Go
-                            </Button>
-                        </Link>
+
+                        <Button variant="warning" className="mb" disabled={!disableButton()} onClick={(e)=>{history.push(choixMembership)}}>
+                            Go
+                        </Button>
+
                     </Row>
                 </Form>
             </Container>
