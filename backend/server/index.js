@@ -88,7 +88,7 @@ app.put("/login/:username/:motdepass", async (req, res) => {
         const motdepass =req.params.motdepass;
         const userInfo = await pool.query("SELECT * FROM login WHERE USERNAME=$1 AND PASSWORD=$2",[username, motdepass]);
 
-        if(userInfo.rows.length=1){
+        if(userInfo.rows.length === 1){
             res.json(true);
         }else{
             res.json(false);
@@ -149,7 +149,7 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
         const newProjectQuery = await pool.query("select * from project");
         console.log (oldProjectQuery.rows.length);
         console.log (newProjectQuery.rows.length);
-        if (newProjectQuery.rows.length -oldProjectQuery.rows.length == 1){
+        if (newProjectQuery.rows.length -oldProjectQuery.rows.length === 1){
             res.json(true);
         }else{
             res.json(false);
