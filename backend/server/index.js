@@ -78,34 +78,100 @@ app.post("/utilisateur/membre", async (req, res) => {
 })
 
 //---------------------User Story 5------------------------------------
-//get login info (Pour se Connecter)
-//Dans le front-end il faudra vérifier que le password entré est bien le meme
-// que celui retourneé par la base de donnée
-//Si une erreur (donc aucun password) est retourner cela voudra dire que le username n'est pas valide, il faudra le signaler
-app.get("/connect/:username", async (req, res) => {
+// User story 5
+// Get all the user/passwords to validate the info. If a single row is returned from the query, the user is validate.
+// If validated, return true, else, false.
+app.put("/login/:username/:motdepass", async (req, res) => {
     try {
-        const {username} = req.params;
-        const userLogin = await pool.query("SELECT password from login WHERE username = $1", [username]);
-        res.json(userLogin.rows);
+        const username = req.params.username;
+        const motdepass =req.params.motdepass;
+        const userInfo = await pool.query("SELECT * FROM login WHERE USERNAME=$1 AND PASSWORD=$2",[username, motdepass]);
+
+        if(userInfo.rows.length=1){
+            res.json(true);
+        }else{
+            res.json(false);
+        }
+
     } catch (err) {
         console.error(err.message);
     }
 })
-
-
-//-------Autres----------
-//get user info (Afficher les infos de son profil)
-app.get("/utilisateur/:id", async (req, res) => {
+// create user space. Get all the value necessary using the username.
+app.put("/login/:username", async (req, res) =>{
     try {
-        const {id} = req.params;
-        const userInfo = await pool.query("SELECT * from utilisateurs WHERE user_id = $1", [id]);
+        const username = req.params.username;
+        console.log(username);
+        const userInfo = await pool.query("SELECT utilisateur.nom, utilisateur.prenom, utilisateur.user_id, member.statutadhesion FROM utilisateur INNER JOIN login ON login.user_id=utilisateur.user_id INNER JOIN member ON member.user_id = login.user_id WHERE login.username=$1", [username]);
+
         res.json(userInfo.rows);
-    } catch (err) {
+    }catch(err){
         console.error(err.message);
     }
 })
 
+app.put("/userSpace/:userID", async  (req, res) =>{
 
+    try{
+        const userID= req.params.userID;
+        const userInfo = await pool.query("Select * FROM UTILISATEUR INNER JOIN login ON UTILISATEUR.user_id=login.user_id where login.username =$1", [userID]);
+        res.json(userInfo.rows);
+        console.log(userInfo.rows.length);
+    }catch(err){
+        console.error(err.message);
+    }
+})
+//Add project
+
+app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
+    try {
+        const titre = req.params.titre;
+        const descCourte = req.params.descCourte;
+        const sommaire = req.params.sommaire;
+        const debutestime = moment(req.params.startDate).format("YYYY-MM-DD");
+        const finestime = moment(req.params.endDate).format("YYYY-MM-DD");
+        const statutprojet = 'proposé';
+        const budget = 0;
+        const totalfondscoll = 0;
+        const totaldepense = 0;
+        const image = req.params.image;
+        const debutreel = moment(req.params.endDate).format("YYYY-MM-DD");;
+        const debutfin = moment(req.params.endDate).format("YYYY-MM-DD");;
+        const etatavancement = '';
+        const responsable = req.params.responsable;
+
+        // Check if the update is successful. If the difference between number of total project line before and after the commit
+        // is one then the commit is successful. If commit is successful, return true, else false
+
+        const oldProjectQuery = await pool.query ("select * from project");
+        const newProject = await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable])
+        const newProjectQuery = await pool.query("select * from project");
+        console.log (oldProjectQuery.rows.length);
+        console.log (newProjectQuery.rows.length);
+        if (newProjectQuery.rows.length -oldProjectQuery.rows.length == 1){
+            res.json(true);
+        }else{
+            res.json(false);
+        }
+    }catch(err){
+        console.error(err.message);
+    }
+})
+
+//List de projet d'un membre
+// Get the list of the project of a certain member with given userID and return the list.
+
+app.put("/userSpaceProjetList/:userID", async (req, res)=> {
+    try {
+        const userID = req.params.userID;
+
+        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join login on login.user_id=project.responsable WHERE login.username=$1", [userID]);
+        res.json(projetInfo.rows);
+        console.log(projetInfo.rows);
+    }catch(err){
+        console.error(err.message);
+    }
+})
 
 //create  a member
 
@@ -138,6 +204,7 @@ app.get("/member/:id", async (req, res) => {
 
 
 app.listen(5000, () => {
+
     console.log("server has started on port 5000")
 });
 
