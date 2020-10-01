@@ -25,7 +25,7 @@ export function Home() {
 
   const highligthProjects = projects.map(key => {
     return (
-      <Col lg={4}>
+      <Col lg={4} md={4}>
         <CardProject 
           key={key}
           srcImage={key.image}
