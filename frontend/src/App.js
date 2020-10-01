@@ -13,10 +13,14 @@ import ListerProjects from "./components/Login/ListerProjects";
 import {useHistory} from "react-router-dom";
 import Menu from "./components/Header/Menu";
 
+
+import Footer from './components/Footer/Footer';
+
 function App() {
-    const [memberSpecific, setMemberSpecific]=useState('');
-    const [loggin, setLoggedin] =useState(false);
-    const history = useHistory();
+const [memberSpecific, setMemberSpecific]=useState('');
+const [loggin, setLoggedin] =useState(false);
+const history = useHistory();
+
   return (
     <div className="App">
       <header className="App-header">
@@ -38,7 +42,7 @@ function App() {
       </div>
 
       <footer className="App-footer">
-
+        <Footer />
       </footer>
     </div>
   );
