@@ -11,6 +11,8 @@ import Login from "./components/Login/Login";
 import AfficherMessage from "./components/Login/AfficherMessage";
 import ListerProjects from "./components/Login/ListerProjects";
 import {useHistory} from "react-router-dom";
+import FormulaireSignUp from "./components/SignUp/FormulaireInscription";
+
 import Menu from "./components/Header/Menu";
 
 
@@ -35,6 +37,8 @@ const history = useHistory();
             <Route path="/userSpace" component={()=><SpaceMembre memberSpecific={memberSpecific}/>}/>
             <Route path="/addProject" component={()=><AjouterProjet memberSpecific={memberSpecific}/>}/>
             <Route path="/listMemberProject" component={()=><ListerProjects memberSpecific={memberSpecific}/>}/>
+            <Route path="/inscription" component={()=><ChoixMembership />}/>
+            <Route path="/inscription/form" component={()=><FormulaireSignUp />}/>
           </Switch>
 
         </Router>
