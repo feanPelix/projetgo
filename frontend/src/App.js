@@ -36,7 +36,6 @@ const history = useHistory();
             <Route path="/addProject" component={()=><AjouterProjet memberSpecific={memberSpecific}/>}/>
             <Route path="/listMemberProject" component={()=><ListerProjects memberSpecific={memberSpecific}/>}/>
           </Switch>
-
         </Router>
         
       </div>
