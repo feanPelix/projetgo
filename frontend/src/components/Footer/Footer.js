@@ -64,10 +64,10 @@ export function Footer() {
 
                   return <>
                     <li>
-                      <Link t="/">Devenir membre</Link>
+                      <Link to="/inscription/membre">Devenir membre</Link>
                     </li>
                     <li>
-                      <Link to="/">Devenir bénévole</Link>
+                      <Link to="/inscription/benevole">Devenir bénévole</Link>
                     </li>
                   </>;
                 }}

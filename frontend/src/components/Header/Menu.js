@@ -51,7 +51,7 @@ function Menu(props){
               <Nav.Link
                 className="nav-dropdown"
                 eventKey="signup"
-                href="/"
+                href="/inscription"
               >
                 INSCRIPTION
               </Nav.Link>
