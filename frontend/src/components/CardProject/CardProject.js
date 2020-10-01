@@ -5,7 +5,7 @@ import ButtonDonation from '../ButtonDonation/ButtonDonation';
 
 
 
-export function ProjectCard({srcImage, name, summary}) {
+export function ProjectCard({srcImage, title, summary}) {
   const size = null;
   let styles = `bkg ${size}`;
 
@@ -19,7 +19,7 @@ export function ProjectCard({srcImage, name, summary}) {
       />
       <Card.Body>
         <Card.Title>
-          {name}
+          {title}
         </Card.Title>
         <Card.Text>
           {summary}
