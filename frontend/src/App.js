@@ -24,10 +24,10 @@ const history = useHistory();
   return (
     <div className="App">
       <header className="App-header">
+        <Header loggin={loggin} />
       </header>
       <div className="App-main">
         <Router>
-            <Header loggin={loggin} />
           <Switch>
             <Route path="/" component={Home} exact/>
             <Route path="/login" component={()=><Login setMemberSpecific={setMemberSpecific} setLoggedin={setLoggedin}/>}/>
