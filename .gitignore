@@ -24,3 +24,5 @@ yarn-error.log*
 
 .idea
 /backend/.env
+/backend/package-lock.json
+/frontend/package-lock.json
