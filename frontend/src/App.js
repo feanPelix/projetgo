@@ -45,7 +45,6 @@ const history = useHistory();
             <Route path="/inscription/payment" component={()=><FormulairePayment />}/>
 
           </Switch>
-
         </Router>
         
       </div>
