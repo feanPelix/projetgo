@@ -22,7 +22,8 @@ app.get("/", function(req, res) {
 app.get("/Accueil", async (req, res) => {
     try {
         const {id} = req.params;
-        const projectInfo = await pool.query("SELECT * from project WHERE user_id = $1 && $2 && $3 ", [1, 2, 3]);
+        // Hard-coded project code
+        const projectInfo = await pool.query("SELECT * from project WHERE code between 1 and 3");
         res.json(projectInfo.rows);
     } catch (err) {
         console.error(err.message);
