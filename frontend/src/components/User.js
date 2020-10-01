@@ -1,10 +1,10 @@
 import React from 'react';
 import { useContext } from 'react';
-import { AuthContext } from '../App';
+//import { AuthContext } from './AuthContext';
 
 export function User({ children }) {
-  const { isAuthenticated, user } = useContext(AuthContext);
-  return children({ isAuthenticated, role: user.role })
+  //const { isAuthenticated, user } = useContext(AuthContext);
+  return children({});//children({ isAuthenticated, role: user.role })
 }
 
 export default User;

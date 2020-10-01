@@ -2,7 +2,9 @@ import React from 'react';
 import { Container, Col, Row, ListGroup } from 'react-bootstrap';
 import { Facebook, Twitter, Instagram } from 'react-feather';
 import { useState, useEffect } from 'react';
+import { Link, BrowserRouter } from 'react-router-dom';
 import User from '../User';
+import './Footer.css';
 
 export function Footer() {
   const [projects, setProjects] = useState([]);
@@ -37,43 +39,57 @@ export function Footer() {
   return(
     <Container fluid>
       <Row>
-        <Col lg={4}>
+        <Col lg={4} md={4}>
           <h4>Campagnes</h4>
           <ListGroup variant="flush">
             {highligthProjects}
           </ListGroup>
         </Col>
-        <Col lg={4}>
+        <Col lg={4} md={4}>
           <h4>Mon compte</h4>
-          <User>
-            {({ isAuthenticated }) => {
-              if (isAuthenticated) {
-                return <>
-                  <a>Mes projets</a>
-                  <a>Creer nouveau projet</a>
-                </>;
-              }
+          <BrowserRouter>
+            <ul className="foot-list">
+              <User>
+                {({ isAuthenticated }) => {
+                  if (isAuthenticated) {
+                    return <>
+                      <li>
+                        <Link to="/">Mes projets</Link>
+                      </li>
+                      <li>
+                        <Link to="/">Creer nouveau projet</Link>
+                      </li>
+                    </>;
+                  }
 
-              return <>
-                <a>Devenir membre</a>
-                <a>Devenir bénévole</a>
-              </>;
-            }}
-          </User>
+                  return <>
+                    <li>
+                      <Link t="/">Devenir membre</Link>
+                    </li>
+                    <li>
+                      <Link to="/">Devenir bénévole</Link>
+                    </li>
+                  </>;
+                }}
+              </User>
+            </ul>
+          </BrowserRouter>
         </Col>
-        <Col lg={4}>
+        <Col lg={4} md={4}>
           <h4>Restez en contact!</h4>
-          <Facebook />
-          <Twitter />
-          <Instagram />
-          <p>Contactez-nous</p>
+          <div className="social">
+            <a href="#"><Facebook /></a>
+            <a href="#"><Twitter /></a>
+            <a href="#"><Instagram /></a>
+          </div>
+            <p><a href="#">Contactez-nous</a></p>
         </Col>
       </Row>
       <Row>
         <Col>
           <div>
             &#169;2020 ProjetGo. Tous droits réservés./Site Web réalisé par
-            <span className="team"> do-or-paste</span>
+            <span className="team"> <a href="#">do-or-paste</a></span>
           </div>
         </Col>
       </Row>

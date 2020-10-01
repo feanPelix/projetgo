@@ -9,8 +9,7 @@ import Footer from './components/Footer/Footer';
 
 
 
-function App() {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+function App() { 
   
   return (
     <div className="App">
