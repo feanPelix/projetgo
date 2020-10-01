@@ -29,7 +29,7 @@ export function Footer() {
       <ListGroup.Item
         key={key}
       >
-        {key.title}
+        {key.titre}
 
       </ListGroup.Item>
     );
