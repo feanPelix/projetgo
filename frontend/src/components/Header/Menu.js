@@ -22,29 +22,117 @@ function Menu(props){
 
     const IsLoggedIn=true;
     return(
-        <div>
-            <Container style={{visibility:stateVisibilityNotLoggedin}}>
-                <Nav  variant="tabs" defaultActiveKey="/">
-                    <Nav.Item><Nav.Link className="nav-dropdown" href="/">ACCUEIL</Nav.Link></Nav.Item>
-                    <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
-                    <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="disabled" >INSCRIPTION</Nav.Link></Nav.Item>
-                    <Nav.Item><Nav.Link className="nav-dropdown"  href="/login" >LOGIN</Nav.Link></Nav.Item>
-                </Nav>
-            </Container>
-            <Container style={{visibility:stateVisibilityLoggedin}}>
-                <Nav variant="tabs" defaultActiveKey="/">
-                    <Nav.Item><Nav.Link className="nav-dropdown" href="/home">ACCUEIL</Nav.Link></Nav.Item>
-                    <Nav.Item ><Nav.Link  className="nav-dropdown" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
-                    <NavDropdown id="nav-dropdown" title="Membre" id="nav-dropdown">
-                     <button onClick={() => history.push('/addProject')} > <NavDropdown.Item className="nav-dropdown" type='submit' >Profil</NavDropdown.Item></button>
-                        <NavDropdown.Item  className="nav-dropdown" type='submit' onClick={() => history.push('/addProject')}>Créer un projet</NavDropdown.Item>
-                        <NavDropdown.Item className="nav-dropdown"  type='submit' onClick={() => history.push('/listMemberProject')} >Mes projets</NavDropdown.Item>
-                    </NavDropdown>
-                    <Nav.Item><Nav.Link className="nav-dropdown" eventKey="disabled" > Déconnection</Nav.Link></Nav.Item>
+      <div>
+        <Container 
+          style={{visibility:stateVisibilityNotLoggedin}}
+        >
+          <Nav
+            variant="tabs"
+            defaultActiveKey="/"
+          >
+            <Nav.Item>
+              <Nav.Link
+                className="nav-dropdown"
+                href="/"
+              >
+                ACCUEIL
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                className="nav-dropdown"
+                eventKey="projects"
+                href="/"
+              >
+                PROJETS
+                      </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                className="nav-dropdown"
+                eventKey="signup"
+                href="/"
+              >
+                INSCRIPTION
+              </Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link
+                className="nav-dropdown"
+                eventKey="login"
+                href="/login"
+              >
+                LOGIN
+              </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Container>
 
-                </Nav>
-            </Container>
-        </div>
+        <Container
+          style={{ visibility: stateVisibilityLoggedin }}
+        >
+          <Nav
+            variant="tabs"
+            defaultActiveKey="/"
+          >
+            <Nav.Item>
+              <Nav.Link
+                className="nav-dropdown"
+                href="/"
+              >
+                ACCUEIL
+                    </Nav.Link>
+            </Nav.Item>
+            <Nav.Item >
+              <Nav.Link
+                className="nav-dropdown"
+                eventKey="projects"
+                href="/"
+              >
+                PROJETS
+                    </Nav.Link>
+            </Nav.Item>
+            <NavDropdown
+              id="nav-dropdown"
+              title="Membre"
+              id="nav-dropdown"
+            >
+              <button
+                onClick={() => history.push('/addProject')}
+              >
+                <NavDropdown.Item
+                  className="nav-dropdown"
+                  type='submit'
+                >
+                  Profil
+                      </NavDropdown.Item>
+              </button>
+              <NavDropdown.Item
+                className="nav-dropdown"
+                type='submit'
+                onClick={() => history.push('/addProject')}
+              >
+                Créer un projet
+                      </NavDropdown.Item>
+              <NavDropdown.Item
+                className="nav-dropdown"
+                type='submit'
+                onClick={() => history.push('/listMemberProject')}
+              >
+                Mes projets
+                      </NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Item>
+              <Nav.Link
+                className="nav-dropdown"
+                eventKey="disabled"
+              >
+                Déconnection
+                    </Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Container>
+      </div>
 
     )
 }
