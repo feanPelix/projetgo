@@ -29,16 +29,16 @@ export function Header(props) {
         </Col>
         <Col lg={9}>
             <div>
-                <Container style={{visibility:stateVisibilityNotLoggedin}}>
-                    <Nav  variant="tabs" defaultActiveKey="/home">
-                        <Nav.Item><Nav.Link className="nav-dropdown" href="/home">ACCUEIL</Nav.Link></Nav.Item>
+                {/* <Container style={{visibility:stateVisibilityNotLoggedin}}>
+                    <Nav  variant="tabs" defaultActiveKey="/">
+                        <Nav.Item><Nav.Link className="nav-dropdown" href="/">ACCUEIL</Nav.Link></Nav.Item>
                         <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
                         <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="disabled" >INSCRIPTION</Nav.Link></Nav.Item>
                         <Nav.Item><Nav.Link className="nav-dropdown"  href="/login" >LOGIN</Nav.Link></Nav.Item>
                     </Nav>
                 </Container>
                 <Container style={{visibility:stateVisibilityLoggedin}}>
-                    <Nav variant="tabs" defaultActiveKey="/home">
+                    <Nav variant="tabs" defaultActiveKey="/">
                         <Nav.Item><Nav.Link className="nav-dropdown" onClick={() => history.push('/')}>ACCUEIL</Nav.Link></Nav.Item>
                         <Nav.Item ><Nav.Link  className="nav-dropdown" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
                         <NavDropdown id="nav-dropdown" title="Membre" id="nav-dropdown">
@@ -49,9 +49,10 @@ export function Header(props) {
                         <Nav.Item><Nav.Link className="nav-dropdown" href="/" > Déconnection</Nav.Link></Nav.Item>
 
                     </Nav>
-                </Container>
+                </Container> */}
+                <Menu />
             </div>
-        </Col>}
+        </Col>
       </Row>
     </Container>
   );

@@ -24,15 +24,15 @@ function Menu(props){
     return(
         <div>
             <Container style={{visibility:stateVisibilityNotLoggedin}}>
-                <Nav  variant="tabs" defaultActiveKey="/home">
-                    <Nav.Item><Nav.Link className="nav-dropdown" href="/home">ACCUEIL</Nav.Link></Nav.Item>
+                <Nav  variant="tabs" defaultActiveKey="/">
+                    <Nav.Item><Nav.Link className="nav-dropdown" href="/">ACCUEIL</Nav.Link></Nav.Item>
                     <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
                     <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="disabled" >INSCRIPTION</Nav.Link></Nav.Item>
                     <Nav.Item><Nav.Link className="nav-dropdown"  href="/login" >LOGIN</Nav.Link></Nav.Item>
                 </Nav>
             </Container>
             <Container style={{visibility:stateVisibilityLoggedin}}>
-                <Nav variant="tabs" defaultActiveKey="/home">
+                <Nav variant="tabs" defaultActiveKey="/">
                     <Nav.Item><Nav.Link className="nav-dropdown" href="/home">ACCUEIL</Nav.Link></Nav.Item>
                     <Nav.Item ><Nav.Link  className="nav-dropdown" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
                     <NavDropdown id="nav-dropdown" title="Membre" id="nav-dropdown">
