@@ -29,7 +29,7 @@ export function Header(props) {
         </Col>
         <Col lg={9}>
             <div>
-                {/* <Container style={{visibility:stateVisibilityNotLoggedin}}>
+                <Container style={{visibility:stateVisibilityNotLoggedin}}>
                     <Nav  variant="tabs" defaultActiveKey="/">
                         <Nav.Item><Nav.Link className="nav-dropdown" href="/">ACCUEIL</Nav.Link></Nav.Item>
                         <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
@@ -49,8 +49,11 @@ export function Header(props) {
                         <Nav.Item><Nav.Link className="nav-dropdown" href="/" > Déconnection</Nav.Link></Nav.Item>
 
                     </Nav>
-                </Container> */}
-                <Menu />
+                </Container>
+                {/* <Menu 
+                  member={props.loggin}
+                  history={history}
+                /> */}
             </div>
         </Col>
       </Row>
