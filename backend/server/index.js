@@ -21,14 +21,26 @@ app.get("/", function(req, res) {
 //-Get 3 projets a mettre sur la page principale
 app.get("/Accueil", async (req, res) => {
     try {
-        const {id} = req.params;
         // Hard-coded project code
-        const projectInfo = await pool.query("SELECT * from project WHERE code between 1 and 3");
+        const projectInfo = await pool.query("SELECT image, titre, description from project WHERE code between 1 and 3");
         res.json(projectInfo.rows);
     } catch (err) {
         console.error(err.message);
     }
 })
+
+//---------------------User Story 2---------------------------------------
+//-Get tout les projets pour mettre sur la page projets
+    app.get("/Projets", async (req, res) => {
+        try {
+            // Hard-coded project code
+            const projectInfo = await pool.query("SELECT image, titre, description from project");
+            res.json(projectInfo.rows);
+        } catch (err) {
+            console.error(err.message);
+        }
+})
+
 
 //--------------------User Story 3 et 4------------------------------------
 //create  a user
