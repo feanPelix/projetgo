@@ -6,7 +6,7 @@ export function VideoPlayer() {
   return (
     <ReactPlayer
       className="vd-center"
-      url="https://www.youtube.com/watch?v=7sDY4m8KNLc"
+      url="https://youtu.be/2PZrOSt770U"
       width="64rem"
       height="42rem"
       controls
