@@ -28,9 +28,9 @@ export function Home() {
       <Col lg={4}>
         <CardProject 
           key={key}
-          srcImage={key.srcImage}
-          title={key.title}
-          summary={key.summary}
+          srcImage={key.image}
+          title={key.titre}
+          summary={key.description}
         />
       </Col>
     );
