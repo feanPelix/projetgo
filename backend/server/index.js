@@ -140,8 +140,8 @@ app.put("/userSpace/:userID", async  (req, res) =>{
 app.get("/Rapports/:code", async (req, res) => {
     try {
         const codeProjet = req.params.code;
-        const projectInfo = await pool.query("SELECT * from report where projet = $1", [codeProjet]);
-        res.json(projectInfo.rows);
+        const reportInfo = await pool.query("SELECT * from report where projet = $1", [codeProjet]);
+        res.json(reportInfo.rows);
     } catch (err) {
         console.error(err.message);
     }
