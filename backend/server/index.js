@@ -59,7 +59,7 @@ app.post("/utilisateur", async (req, res) => {
 })
 
 //create  a login
-app.post("/utilisateur", async (req, res) => {
+app.post("/login", async (req, res) => {
     try {
 
         const {username, password, email} = req.body;
@@ -134,7 +134,22 @@ app.put("/userSpace/:userID", async  (req, res) =>{
         console.error(err.message);
     }
 })
-//Add project
+
+//---------------------User Story 6------------------------------------
+//Trouver les compte rendu d'un projet
+app.get("/Rapports/:code", async (req, res) => {
+    try {
+        const codeProjet = req.params.code;
+        const projectInfo = await pool.query("SELECT * from report where projet = $1", [codeProjet]);
+        res.json(projectInfo.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+
+//---------------------User Story 7------------------------------------
+//Ajouter project
 
 app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
     try {
@@ -186,6 +201,13 @@ app.put("/userSpaceProjetList/:userID", async (req, res)=> {
     }
 })
 
+
+
+
+
+
+
+
 //create  a member
 
 //get member info
@@ -201,10 +223,10 @@ app.get("/member/:id", async (req, res) => {
 })
 
 
-//create login info
 
 
-//get login info
+
+
 
 
 //create a donation
