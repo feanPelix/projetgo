@@ -16,19 +16,25 @@ function AjouterProjet(props){
     const[image, setImage]=useState(null);
     const[startDate, setStartDate]=useState(new Date());
     const[endDate, setEndDate]=useState(new Date());
-
+    const[selectedFile, setSelectedFile]=useState(null);
     function onChangeFileHandler(event){
+        setSelectedFile(event.target.files[0]);
+
+
         setImage(new FormData().append(event.target.files[0],0));
     }
     const handleSubmit=async(event)=> {
+
         event.preventDefault();
         try{
             const responsable = props.memberSpecific;
+
             const response = await fetch(`http://localhost:5000/ajoutProjet/${titre}/${descCourte}/${sommaire}/${startDate}/${endDate}/${responsable}/${image}`,{
                 method:'put',
                 Header:{'Content-Type': 'application/json'}
             });
             const jsonData=await response.json();
+            console.log(jsonData);
             if(jsonData){
                 alert("Submission sucessful");
                 setTitre('');
@@ -84,7 +90,7 @@ function AjouterProjet(props){
                         <Form.Label style={{textAlign: 'left'}}>Photo de presentation: </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <input onChange={onChangeFileHandler} id="exampleFormControlFile1" name="photo" type="file"/>
+                        <Form.File onChange={onChangeFileHandler} id="exampleFormControlFile1"  />
                     </Col>
 
                 </Row><br />

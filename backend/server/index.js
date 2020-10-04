@@ -2,12 +2,13 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
-const path = require("path")
-const fileUpload = require("express-fileupload");
+const path = require("path");
+const moment = require("moment");
+
 //middleware
 app.use(cors());
 app.use(express.json());
-app.use(fileUpload());
+
 // serve static files built by React
 app.use(express.static(path.join(__dirname, "../../frontend/build")));
 
@@ -135,22 +136,10 @@ app.put("/userSpace/:userID", async  (req, res) =>{
     }
 })
 
+//Add project
+
+
 //---------------------User Story 6------------------------------------
-//List de projet d'un membre
-// Get the list of the project of a certain member with given userID and return the list.
-
-app.put("/userSpaceProjetList/:userID", async (req, res)=> {
-    try {
-        const userID = req.params.userID;
-
-        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join login on login.user_id=project.responsable WHERE login.username=$1", [userID]);
-        res.json(projetInfo.rows);
-        console.log(projetInfo.rows);
-    }catch(err){
-        console.error(err.message);
-    }
-})
-
 //Trouver les compte rendu d'un projet
 app.get("/Rapports/:code", async (req, res) => {
     try {
@@ -166,9 +155,9 @@ app.get("/Rapports/:code", async (req, res) => {
 //---------------------User Story 7------------------------------------
 //Ajouter project
 
+
 app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
     try {
-        const {name, data} = req.files.photo;
         const titre = req.params.titre;
         const descCourte = req.params.descCourte;
         const sommaire = req.params.sommaire;
@@ -184,15 +173,20 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
         const etatavancement = '';
         const responsable = req.params.responsable;
 
+
+        // Query to get the userID
+
+        const getUserID = await pool.query ("select user_id from login where username = $1", [responsable]);
+        const userID = getUserID.rows[0].user_id;
+
         // Check if the update is successful. If the difference between number of total project line before and after the commit
         // is one then the commit is successful. If commit is successful, return true, else false
 
         const oldProjectQuery = await pool.query ("select * from project");
-        const newProject = await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable])
+        const newProject = await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, userID])
         const newProjectQuery = await pool.query("select * from project");
         console.log (oldProjectQuery.rows.length);
         console.log (newProjectQuery.rows.length);
-
         if (newProjectQuery.rows.length -oldProjectQuery.rows.length === 1){
             res.json(true);
         }else{
@@ -203,19 +197,23 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
     }
 })
 
+//List de projet d'un membre
+// Get the list of the project of a certain member with given userID and return the list.
 
-
-
-//Trouver tout les membres de la bdd
-app.get("/comite/membre/:id", async (req, res) => {
+app.put("/userSpaceProjetList/:userID", async (req, res)=> {
     try {
-        const {id} = req.params;
-        const userInfo = await pool.query("SELECT * from member WHERE user_id = $1", [id]);
-        res.json(userInfo.rows);
-    } catch (err) {
+        const userID = req.params.userID;
+
+        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join login on login.user_id=project.responsable WHERE login.username=$1", [userID]);
+        res.json(projetInfo.rows);
+        console.log(projetInfo.rows);
+    }catch(err){
         console.error(err.message);
     }
 })
+
+
+
 
 
 
