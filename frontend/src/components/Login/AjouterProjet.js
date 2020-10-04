@@ -84,7 +84,7 @@ function AjouterProjet(props){
                         <Form.Label style={{textAlign: 'left'}}>Photo de presentation: </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <Form.File onChange={onChangeFileHandler}id="exampleFormControlFile1"  />
+                        <input onChange={onChangeFileHandler} id="exampleFormControlFile1" name="photo" type="file"/>
                     </Col>
 
                 </Row><br />
