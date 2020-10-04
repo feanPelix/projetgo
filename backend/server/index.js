@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
-const path = require("path")
+const path = require("path");
+const moment = require("moment");
 
 //middleware
 app.use(cors());
@@ -135,7 +136,6 @@ app.put("/userSpace/:userID", async  (req, res) =>{
     }
 })
 //Add project
-
 app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
     try {
         const titre = req.params.titre;
@@ -153,11 +153,17 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
         const etatavancement = '';
         const responsable = req.params.responsable;
 
+
+        // Query to get the userID
+
+        const getUserID = await pool.query ("select user_id from login where username = $1", [responsable]);
+        const userID = getUserID.rows[0].user_id;
+
         // Check if the update is successful. If the difference between number of total project line before and after the commit
         // is one then the commit is successful. If commit is successful, return true, else false
 
         const oldProjectQuery = await pool.query ("select * from project");
-        const newProject = await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable])
+        const newProject = await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, userID])
         const newProjectQuery = await pool.query("select * from project");
         console.log (oldProjectQuery.rows.length);
         console.log (newProjectQuery.rows.length);
