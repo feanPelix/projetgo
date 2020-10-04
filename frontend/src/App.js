@@ -9,13 +9,12 @@ import SpaceMembre from "./components/Login/SpaceMembre";
 import Login from "./components/Login/Login";
 import AfficherMessage from "./components/Login/AfficherMessage";
 import ListerProjects from "./components/Login/ListerProjects";
-import {useHistory} from "react-router-dom";
 import FormulaireSignUpMembre from "./components/SignUp/FormulaireSignUpMembre";
 import FormulaireSignUpBenevole from "./components/SignUp/FormulaireSignUpBenevole";
 import FormulairePayment from "./components/SignUp/FomulairePayment";
 import ChoixMembership from "./components/SignUp/ChoixMembership";
+import ProjetDetails from "./components/Login/ProjetDetails";
 
-import Menu from "./components/Header/Menu";
 
 
 import Footer from './components/Footer/Footer';
@@ -23,7 +22,6 @@ import Footer from './components/Footer/Footer';
 function App() {
 const [memberSpecific, setMemberSpecific]=useState('');
 const [loggin, setLoggedin] =useState(false);
-const history = useHistory();
 
   return (
     <div className="App">
@@ -43,6 +41,7 @@ const history = useHistory();
             <Route path="/inscription/benevole" component={()=><FormulaireSignUpBenevole />}/>
             <Route path="/inscription/membre" component={()=><FormulaireSignUpMembre />}/>
             <Route path="/inscription/payment" component={()=><FormulairePayment />}/>
+            <Route path="/projectDetail" component={()=><ProjetDetails />}/>
 
           </Switch>
         </Router>
