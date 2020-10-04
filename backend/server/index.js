@@ -168,8 +168,8 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
         const totalfondscoll = 0;
         const totaldepense = 0;
         const image = req.params.image;
-        const debutreel = moment(req.params.endDate).format("YYYY-MM-DD");;
-        const debutfin = moment(req.params.endDate).format("YYYY-MM-DD");;
+        const debutreel = moment(req.params.endDate).format("YYYY-MM-DD");
+        const debutfin = moment(req.params.endDate).format("YYYY-MM-DD");
         const etatavancement = '';
         const responsable = req.params.responsable;
 
@@ -178,15 +178,13 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
 
         const getUserID = await pool.query ("select user_id from login where username = $1", [responsable]);
         const userID = getUserID.rows[0].user_id;
-
         // Check if the update is successful. If the difference between number of total project line before and after the commit
         // is one then the commit is successful. If commit is successful, return true, else false
 
         const oldProjectQuery = await pool.query ("select * from project");
-        const newProject = await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, userID])
+        await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, userID])
         const newProjectQuery = await pool.query("select * from project");
-        console.log (oldProjectQuery.rows.length);
-        console.log (newProjectQuery.rows.length);
+        console.log("hello");
         if (newProjectQuery.rows.length -oldProjectQuery.rows.length === 1){
             res.json(true);
         }else{
