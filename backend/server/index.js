@@ -23,7 +23,7 @@ app.get("/", function(req, res) {
 app.get("/Accueil", async (req, res) => {
     try {
         // Hard-coded project code
-        const projectInfo = await pool.query("SELECT image, titre, description from project WHERE code between 1 and 3");
+        const projectInfo = await pool.query("SELECT * from project WHERE code between 1 and 3");
         res.json(projectInfo.rows);
     } catch (err) {
         console.error(err.message);
@@ -35,7 +35,7 @@ app.get("/Accueil", async (req, res) => {
     app.get("/Projets", async (req, res) => {
         try {
             // Hard-coded project code
-            const projectInfo = await pool.query("SELECT image, titre, description from project");
+            const projectInfo = await pool.query("SELECT * from project");
             res.json(projectInfo.rows);
         } catch (err) {
             console.error(err.message);
@@ -151,10 +151,23 @@ app.get("/Rapports/:code", async (req, res) => {
     }
 })
 
+//List de projet d'un membre
+// Get the list of the project of a certain member with given userID and return the list.
+
+app.put("/userSpaceProjetList/:userID", async (req, res)=> {
+    try {
+        const userID = req.params.userID;
+
+        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join login on login.user_id=project.responsable WHERE login.username=$1", [userID]);
+        res.json(projetInfo.rows);
+        console.log(projetInfo.rows);
+    }catch(err){
+        console.error(err.message);
+    }
+})
 
 //---------------------User Story 7------------------------------------
 //Ajouter project
-
 
 app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
     try {
@@ -195,23 +208,73 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
     }
 })
 
-//List de projet d'un membre
-// Get the list of the project of a certain member with given userID and return the list.
+//Trouver tout les membres de la bdd qui ne sont PAS deja dans le comité
 
-app.put("/userSpaceProjetList/:userID", async (req, res)=> {
+app.get("/allMembers", async (req, res) => {
     try {
-        const userID = req.params.userID;
-
-        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join login on login.user_id=project.responsable WHERE login.username=$1", [userID]);
-        res.json(projetInfo.rows);
-        console.log(projetInfo.rows);
-    }catch(err){
+        const {codeProjet} = req.body;
+        const userInfo = await pool.query("SELECT * from member left join participant on member.user_id = participant.user_id " +
+            "WHERE participant.projet is null or participant.projet !=$1", [codeProjet]);
+        res.json(userInfo.rows);
+    } catch (err) {
         console.error(err.message);
     }
 })
 
+//Trouver tout les bénévoles de la bdd qui ne sont PAS deja dans le comité
 
+app.get("/allBenevoles", async (req, res) => {
+    try {
+        const {codeProjet} = req.body;
+        const userInfo = await pool.query("SELECT * from utilisateur left join participant on utilisateur.user_id = participant.user_id WHERE participant.projet is null or participant.projet !=$1", [codeProjet]);
+        res.json(userInfo.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
 
+//Créer un participant (ajouter un membre au comité)
+app.post("/AjouterAuComite", async (req, res) => {
+    try {
+
+        const {code, user_id, role} = req.body;
+        const newComite = await pool.query("INSERT INTO participant (projet, user_id, user_id) VALUES($1, $2 ,$3) RETURNING *",
+            [code, user_id, role]
+        );
+        res.json(newComite.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+//Afficher tout les membre d'un projet
+
+app.get("/VoirMembreProjet", async (req, res) => {
+    try {
+        const {codeProjet} = req.body;
+        const role = 'Membre';
+        const participantInfo = await pool.query("SELECT * from participant WHERE projet = $1 and comite = $2 ", [codeProjet, role]);
+        res.json(participantInfo.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+//Afficher tout les benevoles d'un projet
+
+app.get("/VoirBenevoleProjet", async (req, res) => {
+    try {
+        const {codeProjet} = req.body;
+        const role = 'Benevole';
+        const participantInfo = await pool.query("SELECT * from participant WHERE projet = $1 and comite = $2 ", [codeProjet, role]);
+        res.json(participantInfo.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+//Supprimer un membre d'un projet
+
+//Supprimer un benevole d'un projet
 
 
 

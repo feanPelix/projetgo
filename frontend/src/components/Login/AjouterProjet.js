@@ -20,7 +20,6 @@ function AjouterProjet(props){
         event.preventDefault();
         try{
             const responsable = props.memberSpecific;
-
             const response = await fetch(`http://localhost:5000/ajoutProjet/${titre}/${descCourte}/${sommaire}/${startDate}/${endDate}/${responsable}/${image}`,{
                 method:'put',
                 Header:{'Content-Type': 'application/json'}
