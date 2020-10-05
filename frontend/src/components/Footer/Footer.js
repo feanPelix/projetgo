@@ -27,7 +27,7 @@ export function Footer() {
   const highligthProjects = projects.map(key => {
     return (
       <ListGroup.Item
-        key={key}
+        key={key.code}
       >
         {key.titre}
 

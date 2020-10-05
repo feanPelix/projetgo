@@ -32,7 +32,7 @@ export function Header(props) {
                 <Container style={{visibility:stateVisibilityNotLoggedin}}>
                     <Nav  variant="tabs" defaultActiveKey="/">
                         <Nav.Item><Nav.Link className="nav-dropdown" href="/">ACCUEIL</Nav.Link></Nav.Item>
-                        <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
+                        <Nav.Item><Nav.Link  className="nav-dropdown" href="/projects" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
                         <Nav.Item><Nav.Link  className="nav-dropdown" eventKey="disabled" >INSCRIPTION</Nav.Link></Nav.Item>
                         <Nav.Item><Nav.Link className="nav-dropdown"  href="/login" >LOGIN</Nav.Link></Nav.Item>
                     </Nav>
