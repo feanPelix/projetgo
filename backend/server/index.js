@@ -9,15 +9,7 @@ const moment = require("moment");
 app.use(cors());
 app.use(express.json());
 
-// serve static files built by React
-app.use(express.static(path.join(__dirname, "../../frontend/build")));
-
-app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname, "../../frontend/build", "index.html"));
-});
-
 //ROUTES//
-
 //----------------------User Story 1---------------------------------------
 //-Get 3 projets a mettre sur la page principale
 app.get("/Accueil", async (req, res) => {
@@ -140,10 +132,13 @@ app.put("/userSpace/:userID", async  (req, res) =>{
 
 //---------------------User Story 6------------------------------------
 //Trouver les compte rendu d'un projet
-app.get("/Rapports/:code", async (req, res) => {
+app.get("/report/:code", async (req, res) => {
     try {
         const codeProjet = req.params.code;
         const reportInfo = await pool.query("SELECT * from report where projet = $1", [codeProjet]);
+
+        console.log(reportInfo.rows);
+
         res.json(reportInfo.rows);
     } catch (err) {
         console.error(err.message);

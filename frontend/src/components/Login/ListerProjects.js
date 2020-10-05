@@ -4,6 +4,7 @@ import {Form, Col, Row, Button, Container, Breadcrumb, Image} from "react-bootst
 import {useHistory} from "react-router-dom";
 
 function ListerProjects(props){
+
     const history = useHistory();
 
     const displayList =async()=> {
@@ -32,6 +33,8 @@ function ListerProjects(props){
         history.push('/projectDetail/')
     }
 
+
+
     return(
 
         <Container >
@@ -40,7 +43,7 @@ function ListerProjects(props){
                 <Breadcrumb.Item active>Mes Projets</Breadcrumb.Item>
             </Breadcrumb><br/><br />
 
-            <Form >
+            <Form>
                 {listProjects.map(projects=>
                     <div key={projects.code}>
                         <Row>
@@ -55,7 +58,9 @@ function ListerProjects(props){
                                     <div style={{textAlign:'left', fontSize:'18px'}}>{projects.description}</div>
                                 </Row><br />
                                 <Row>
+
                                     <Button style={{backgroundColor :'orange'}} value={projects.code} onClick={handleClick}>Details</Button>
+
                                 </Row>
                             </Col>
                         </Row><br/>
