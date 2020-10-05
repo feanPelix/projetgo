@@ -62,7 +62,7 @@ function FormulaireSignUpBenevole(props) {
             var inscription = moment().format("YYYY-MM-DD");
             var email = courriel; //for query
             try {
-                const body = {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays}; //inscription = date d'inscription
+                const body = {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays, password}; //inscription = date d'inscription
                 const response = await fetch(`http://localhost:5000/utilisateur`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},

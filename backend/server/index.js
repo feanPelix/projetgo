@@ -47,11 +47,14 @@ app.get("/Accueil", async (req, res) => {
 app.post("/utilisateur", async (req, res) => {
     try {
 
-        const {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays} = req.body;
+        const {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays, password} = req.body;
         const newUser = await pool.query("INSERT INTO utilisateur (nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays) VALUES($1, $2 ,$3 ,$4 ,$5 ,$6 ,$7, $8, $9, $10) RETURNING *",
             [nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays]
         );
         res.json(newUser.rows[0]);
+        const linkToLogin = await  pool.query("INSERT INTO login (username, password, user_id) VALUES($1, $2 ,$3)",
+            [email, password, newUser.rows[0].user_id]
+        );
     } catch (err) {
         if(err.code === 'ER_DUP_ENTRY'){
             console.error(err.message); //TODO Add stronger handling
