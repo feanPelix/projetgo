@@ -1,18 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Form, Col, Row, Button, ListGroup, Container, Breadcrumb, Image, Dropdown,DropdownButton} from "react-bootstrap";
-import Report from './Report';
+import Report from '../Report/Report';
 import { useLocation } from "react-router-dom";
 
 
 
 
 function ProjetDetails(){
-    const location = useLocation();
-    console.log(location);
-    console.log(location.state);
     //Adding and deleting members and volunteers
-
+    const location = useLocation();
     const [memberName, setMemberName]=useState('');
     const [memberID, setMemberID]=useState('');
     const [memberLocation, setMemberLocation]=useState('');
