@@ -23,9 +23,12 @@ export function Projects() {
 
   const allProjects = projects.map(key => {
     return (
-        <Col lg={4} md={4}>
+        <Col 
+          lg={4} 
+          md={4}
+          key={key.code}
+        >
           <CardProject 
-            key={key}
             srcImage={key.image}
             title={key.titre}
             summary={key.description}

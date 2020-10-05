@@ -23,11 +23,15 @@ export function Home() {
     getProjects();
   }, []);
 
-  const highligthProjects = projects.map(key => {
+  
+  const highlightProjects = projects.map(key => {
     return (
-      <Col lg={4} md={4}>
+      <Col 
+        lg={4} 
+        md={4}
+        key={key.code}
+      >
         <CardProject 
-          key={key}
           srcImage={key.image}
           title={key.titre}
           summary={key.description}
@@ -44,7 +48,7 @@ export function Home() {
         </Col>
       </Row>
       <Row>
-        {highligthProjects}
+        {highlightProjects}
       </Row>
     </Container>
   );
