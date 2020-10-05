@@ -3,6 +3,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './components/Home/Home';
+import Projects from './components/Projects/Projects';
 import Header from './components/Header/Header';
 import AjouterProjet from "./components/Login/AjouterProjet";
 import SpaceMembre from "./components/Login/SpaceMembre";
@@ -34,6 +35,7 @@ const history = useHistory();
         <Header loggin={loggin} />
           <Switch>
             <Route path="/" component={Home} exact/>
+            <Route path="/projects" component={Projects} />
             <Route path="/login" component={()=><Login setMemberSpecific={setMemberSpecific} setLoggedin={setLoggedin}/>}/>
             <Route path="/welcome" component={()=><AfficherMessage memberSpecific={memberSpecific} setMemberSpecific={setMemberSpecific}/>}/>
             <Route path="/userSpace" component={()=><SpaceMembre memberSpecific={memberSpecific}/>}/>
