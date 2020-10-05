@@ -86,6 +86,7 @@ app.post("/utilisateur/membre", async (req, res) => {
             [user_id, adhesion, statutAdhesion]
         );
         res.json(newMember.rows[0]);
+        const hello = "";
     } catch (err) {
         console.error(err.message);
     }
@@ -115,7 +116,6 @@ app.put("/login/:username/:motdepass", async (req, res) => {
 app.put("/login/:username", async (req, res) =>{
     try {
         const username = req.params.username;
-        console.log(username);
         const userInfo = await pool.query("SELECT utilisateur.nom, utilisateur.prenom, utilisateur.user_id, member.statutadhesion FROM utilisateur INNER JOIN login ON login.user_id=utilisateur.user_id INNER JOIN member ON member.user_id = login.user_id WHERE login.username=$1", [username]);
 
         res.json(userInfo.rows);
@@ -130,7 +130,6 @@ app.put("/userSpace/:userID", async  (req, res) =>{
         const userID= req.params.userID;
         const userInfo = await pool.query("Select * FROM UTILISATEUR INNER JOIN login ON UTILISATEUR.user_id=login.user_id where login.username =$1", [userID]);
         res.json(userInfo.rows);
-        console.log(userInfo.rows.length);
     }catch(err){
         console.error(err.message);
     }
@@ -202,15 +201,24 @@ app.put("/userSpaceProjetList/:userID", async (req, res)=> {
     try {
         const userID = req.params.userID;
 
-        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join login on login.user_id=project.responsable WHERE login.username=$1", [userID]);
+        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join participant on  participant.projet=project.code inner join login on login.user_id=participant.user_id WHERE login.username=$1" , [userID]);
         res.json(projetInfo.rows);
-        console.log(projetInfo.rows);
     }catch(err){
         console.error(err.message);
     }
 })
 
+// Detail of a specific project
+app.post("/projectDetail:projectID", async (req, res) => {
+    try {
 
+        const projectID = req.params.projectID;
+        const projectDetail = await pool.query("SELECT * FROM PROJECT WHERE PROJECT.code = $1", [projectID]);
+        res.json(projectDetail.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
 
 
 

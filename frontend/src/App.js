@@ -22,6 +22,8 @@ import Footer from './components/Footer/Footer';
 function App() {
 const [memberSpecific, setMemberSpecific]=useState('');
 const [loggin, setLoggedin] =useState(false);
+const [projetID, setProjetID] = useState('');
+const [memberID, setMemberID]=useState('');
 
   return (
     <div className="App">
@@ -36,12 +38,12 @@ const [loggin, setLoggedin] =useState(false);
             <Route path="/welcome" component={()=><AfficherMessage memberSpecific={memberSpecific} setMemberSpecific={setMemberSpecific}/>}/>
             <Route path="/userSpace" component={()=><SpaceMembre memberSpecific={memberSpecific}/>}/>
             <Route path="/addProject" component={()=><AjouterProjet memberSpecific={memberSpecific}/>}/>
-            <Route path="/listMemberProject" component={()=><ListerProjects memberSpecific={memberSpecific}/>}/>
+            <Route path="/listMemberProject" component={()=><ListerProjects memberSpecific={memberSpecific} setProjetID={setProjetID} setMemberID={setMemberID}/>}/>
             <Route path="/inscription" component={()=><ChoixMembership />}/>
             <Route path="/inscription/benevole" component={()=><FormulaireSignUpBenevole />}/>
             <Route path="/inscription/membre" component={()=><FormulaireSignUpMembre />}/>
             <Route path="/inscription/payment" component={()=><FormulairePayment />}/>
-            <Route path="/projectDetail" component={()=><ProjetDetails />}/>
+            <Route path="/projectDetail" component={()=><ProjetDetails  projetID={projetID} memberID={memberID} />}/>
 
           </Switch>
         </Router>

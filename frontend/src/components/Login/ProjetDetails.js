@@ -4,7 +4,7 @@ import {Form, Col, Row, Button, ListGroup, Container, Breadcrumb, Image, Dropdow
 
 
 
-function ProjetDetails(){
+function ProjetDetails(props){
     //Adding and deleting members and volunteers
 
     const [memberName, setMemberName]=useState('');
@@ -163,8 +163,8 @@ function ProjetDetails(){
     );
 
     useEffect(()=>{
-
-    })
+        getProjectDetail()
+    },[])
 
 
 
@@ -174,14 +174,64 @@ function ProjetDetails(){
     const[value, setValue]=useState('Proposé');
     const handleSelect=(e)=>{setValue(e)}
     const[stateVisibility, setStateVisibility]=useState('hidden');
-    const member="responsable";
+
+    const [title, setTitle] =useState ('');
+    const [description, setDescription] = useState('');
+    const [sommaire, setSommaire]= useState('') ;
+    const [statutprojet, setStatutprojet] = useState('');
+    const [debutestime, setDebutestime] = useState(null);
+    const [finestime, setFinestime] = useState(null);
+    const [budget, setBudget] = useState('');
+    const [totalfondscoll, setTotalfondscoll] = useState('');
+    const [totaldepense, setTotaldepense] = useState('');
+    const [image, setImage] = useState('');
+    const [debutreel, setDebutreel] = useState(null);
+    const [debutfin, setDebutfin] = useState(null);
+    const [etatavancement, setEtatavancement] = useState('');
+    const [nameimg, setNameimg] = useState('');
+    const [responsable, setResponsable] = useState('');
+
+    const getProjectDetail = async ()=> {
+        try {
+            const body = {projetID};
+            // Getting the first name, last name, userID and status of the membership from the table
+            const response = await fetch(`http://localhost:5000/projectDetail${projetID}`, {
+                method: 'post',
+                Header: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            const jsonData = await response.json();
+
+            setTitle(jsonData[0].titre);
+            setDescription(jsonData[0].description);
+            setSommaire(jsonData[0].sommaire);
+            setStatutprojet(jsonData[0].statutprojet);
+            setDebutestime(jsonData[0].debutestime);
+            setFinestime(jsonData[0].finestime);
+            setBudget(jsonData[0].budget);
+            setTotalfondscoll(jsonData[0].totalfondscoll);
+            setTotaldepense(jsonData[0].totaldepense);
+            setImage(jsonData[0].image);
+            setDebutreel(jsonData[0].debutreel);
+            setDebutfin(jsonData[0].debutfin);
+            setEtatavancement(jsonData[0].etatavancement);
+            setNameimg(jsonData[0].nameimg);
+            setResponsable(jsonData[0].responsable);
 
 
-    const myArray=['Pepe','Juan','Luis'];
-    const [membres, setMembres]=useState(myArray);
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+    useEffect(()=>{
+        getProjectDetail();
+    },[]);
+
+    const member=props.memberID;
+    const projetID=props.projetID
 
     useEffect(()=>{
-        if (member == "responsable") {
+        if (member == responsable) {
             setStateVisibility('visible');
         }
         else {
@@ -202,19 +252,16 @@ function ProjetDetails(){
             </Breadcrumb><br/>
             <div style={{fontSize:'18px'}}>
                 <Row className="px-3">
-                    <h1>Heading</h1><p> <button style={{visibility:stateVisibility}} type="button" className="mt-3 ml-2 btn btn-info btn-sm">+</button></p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi atque consequatur,
-                        ea eum ipsa iusto labore magnam minima quas quis saepe sapiente sit tempora vitae. Accusamus doloremque
-                        impedit ipsam.  <button style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button></p>
+                    <h1>{title}</h1><p> <button style={{visibility:stateVisibility}} type="button" className="mt-3 ml-2 btn btn-info btn-sm">+</button></p>
+                    <p>{description} <button style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button></p>
                 </Row>
                 <Row>
                     <Col className="mr-4" lg={5} sm={12}>
-                        <Image fluid src='./images/volunteer.jpg' />
+                        <Image fluid src={image} />
                         <button  style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button>
                     </Col><br /><br />
                     <Col className="mr-4" lg={6} sm={12}>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci atque dolor eum facilis fugiat id in iusto, maxime molestias neque non officia perspiciatis, quibusdam repudiandae, saepe sequi ullam ut voluptates!</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci atque dolor eum facilis fugiat id in iusto, maxime molestias neque non officia perspiciatis, quibusdam repudiandae, saepe sequi ullam ut voluptates!</p>
+                        <p>{sommaire}</p>
                         <button  style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button>
                     </Col>
                 </Row><br/>
@@ -222,7 +269,7 @@ function ProjetDetails(){
                     <Col>
                         <Button style={{backgroundColor:'orange'}} className="px-4"><b>Faire un Don</b></Button>
                     </Col>
-                    <Col>
+                    <Col style={{visibility:stateVisibility}}>
                         <div style={{display:'inline-block'}}>
                             <DropdownButton  style={{float:'left'}} variant="info" onSelect={handleSelect} id="dropdown-basic-button" title="Statut Project">
                                 <Dropdown.Item eventKey="Proposé">Proposé</Dropdown.Item>
@@ -238,22 +285,22 @@ function ProjetDetails(){
                 </Row><br/>
                 <Row>
                     <Col>
-                        <p><b>Date début estimée:</b> blablabla</p>
+                        <p><b>Date début estimée:</b> {debutestime}</p>
                     </Col>
                     <Col>
-                        <p><b>Date fin estimé:</b> blablabla</p>
+                        <p><b>Date fin estimé:</b> {finestime}</p>
                     </Col>
                 </Row>
                 <Row>
                     <Col>
-                        <p><b>Montant amassé:</b> 15 000</p>
+                        <p><b>Montant amassé:</b> {totalfondscoll}</p>
                     </Col>
                 </Row><br/>
 
 
             </div><br/>
 
-            <div className="AjouterMembres" >
+            <div style={{visibility:stateVisibility}} className="AjouterMembres" >
                 <Container>
                     <Row>
                         <Col>
@@ -269,7 +316,8 @@ function ProjetDetails(){
                             {listNomsBenevoles}
                         </Col>
                         <Col style={{textAlign:'right'}}>
-                            <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}}  className="px-4"><b>Enregistrer</b></Button>
+                            <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}}  className="px-4"><b>Enregistrer</b></Button><br/><br/>
+                            <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}}  className="px-4"><b>Supprimer Projet</b></Button>
                         </Col>
                     </Row>
                 </Container>
