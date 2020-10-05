@@ -9,6 +9,12 @@ const moment = require("moment");
 app.use(cors());
 app.use(express.json());
 
+// Images
+app.get('/images/:name', async (req, res) => {
+    console.log(req.params);
+    res.sendFile(path.join(__dirname, "../images", req.params.name));
+})
+
 //ROUTES//
 //----------------------User Story 1---------------------------------------
 //-Get 3 projets a mettre sur la page principale
