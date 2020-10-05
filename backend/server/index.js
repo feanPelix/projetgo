@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
-const path = require("path")
+const path = require("path");
+const moment = require("moment");
 
 //middleware
 app.use(cors());
@@ -21,14 +22,26 @@ app.get("/", function(req, res) {
 //-Get 3 projets a mettre sur la page principale
 app.get("/Accueil", async (req, res) => {
     try {
-        const {id} = req.params;
         // Hard-coded project code
-        const projectInfo = await pool.query("SELECT * from project WHERE code between 1 and 3");
+        const projectInfo = await pool.query("SELECT image, titre, description from project WHERE code between 1 and 3");
         res.json(projectInfo.rows);
     } catch (err) {
         console.error(err.message);
     }
 })
+
+//---------------------User Story 2---------------------------------------
+//-Get tout les projets pour mettre sur la page projets
+    app.get("/Projets", async (req, res) => {
+        try {
+            // Hard-coded project code
+            const projectInfo = await pool.query("SELECT image, titre, description from project");
+            res.json(projectInfo.rows);
+        } catch (err) {
+            console.error(err.message);
+        }
+})
+
 
 //--------------------User Story 3 et 4------------------------------------
 //create  a user
@@ -47,7 +60,7 @@ app.post("/utilisateur", async (req, res) => {
 })
 
 //create  a login
-app.post("/utilisateur", async (req, res) => {
+app.post("/login", async (req, res) => {
     try {
 
         const {username, password, email} = req.body;
@@ -122,7 +135,26 @@ app.put("/userSpace/:userID", async  (req, res) =>{
         console.error(err.message);
     }
 })
+
 //Add project
+
+
+//---------------------User Story 6------------------------------------
+//Trouver les compte rendu d'un projet
+app.get("/Rapports/:code", async (req, res) => {
+    try {
+        const codeProjet = req.params.code;
+        const reportInfo = await pool.query("SELECT * from report where projet = $1", [codeProjet]);
+        res.json(reportInfo.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
+
+
+//---------------------User Story 7------------------------------------
+//Ajouter project
+
 
 app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
     try {
@@ -136,19 +168,23 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
         const totalfondscoll = 0;
         const totaldepense = 0;
         const image = req.params.image;
-        const debutreel = moment(req.params.endDate).format("YYYY-MM-DD");;
-        const debutfin = moment(req.params.endDate).format("YYYY-MM-DD");;
+        const debutreel = moment(req.params.endDate).format("YYYY-MM-DD");
+        const debutfin = moment(req.params.endDate).format("YYYY-MM-DD");
         const etatavancement = '';
         const responsable = req.params.responsable;
 
+
+        // Query to get the userID
+
+        const getUserID = await pool.query ("select user_id from login where username = $1", [responsable]);
+        const userID = getUserID.rows[0].user_id;
         // Check if the update is successful. If the difference between number of total project line before and after the commit
         // is one then the commit is successful. If commit is successful, return true, else false
 
         const oldProjectQuery = await pool.query ("select * from project");
-        const newProject = await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable])
+        await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, userID])
         const newProjectQuery = await pool.query("select * from project");
-        console.log (oldProjectQuery.rows.length);
-        console.log (newProjectQuery.rows.length);
+        console.log("hello");
         if (newProjectQuery.rows.length -oldProjectQuery.rows.length === 1){
             res.json(true);
         }else{
@@ -174,6 +210,13 @@ app.put("/userSpaceProjetList/:userID", async (req, res)=> {
     }
 })
 
+
+
+
+
+
+
+
 //create  a member
 
 //get member info
@@ -189,10 +232,10 @@ app.get("/member/:id", async (req, res) => {
 })
 
 
-//create login info
 
 
-//get login info
+
+
 
 
 //create a donation

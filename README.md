@@ -6,8 +6,10 @@
 
     npm run dev
 
+### Dependance
+- Le package `concurrently` doit etre installé dans les dossiers `projetgo/frontend` et `projetgo/backend`.  
+- Le package `nodemon` doit etre installé dans le dossier `projetgo/backend`.  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 

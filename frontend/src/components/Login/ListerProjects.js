@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Form, Col, Row, Button, InputGroup, ListGroup, Container, Breadcrumb, Image} from "react-bootstrap";
-
+import {Form, Col, Row, Button, Container, Breadcrumb, Image} from "react-bootstrap";
+import {useHistory} from "react-router-dom";
 
 
 function ListerProjects(props){
 
+    const history = useHistory();
     const displayList =async()=> {
         try{
             const responsable = props.memberSpecific;
@@ -52,7 +53,7 @@ function ListerProjects(props){
                                     <div style={{textAlign:'left', fontSize:'18px'}}>{projects.description}</div>
                                 </Row><br />
                                 <Row>
-                                    <Button style={{backgroundColor :'orange'}}>Details</Button>
+                                    <Button style={{backgroundColor :'orange'}}  onClick={() => history.push('/projectDetail')}>Details</Button>
                                 </Row>
                             </Col>
                         </Row><br/>
