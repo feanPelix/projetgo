@@ -5,8 +5,9 @@ import {useHistory} from "react-router-dom";
 
 
 function ListerProjects(props){
-
+    const [listProjects, setListProjects]=useState([]);
     const history = useHistory();
+
     const displayList =async()=> {
         try{
             const responsable = props.memberSpecific;
@@ -27,7 +28,6 @@ function ListerProjects(props){
         displayList();
     },[]);
 
-    const [listProjects, setListProjects]=useState([]);
 
 
     return(
@@ -39,21 +39,21 @@ function ListerProjects(props){
             </Breadcrumb><br/><br />
 
             <Form>
-                {listProjects.map(projects=>
-                    <div key={projects.code}>
+                {listProjects.map(project=>
+                    <div key={project.code}>
                         <Row>
                             <Col className="mr-4" lg={5} sm={12}>
                                 <Image fluid src='./images/volunteer.jpg' />
                             </Col><br /><br />
                             <Col className="ml-4" lg={6} sm={12}>
                                 <Row>
-                                    <div><h2>{projects.titre}</h2></div>
+                                    <div><h2>{project.titre}</h2></div>
                                 </Row><br />
                                 <Row>
-                                    <div style={{textAlign:'left', fontSize:'18px'}}>{projects.description}</div>
+                                    <div style={{textAlign:'left', fontSize:'18px'}}>{project.description}</div>
                                 </Row><br />
                                 <Row>
-                                    <Button style={{backgroundColor :'orange'}}  onClick={() => history.push('/projectDetail')}>Details</Button>
+                                    <Button style={{backgroundColor :'orange'}}  onClick={() => history.push('/projectDetail', project)}>Details</Button>
                                 </Row>
                             </Col>
                         </Row><br/>

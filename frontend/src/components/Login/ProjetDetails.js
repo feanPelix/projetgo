@@ -1,10 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Form, Col, Row, Button, ListGroup, Container, Breadcrumb, Image, Dropdown,DropdownButton} from "react-bootstrap";
+import Report from './Report';
+import { useLocation } from "react-router-dom";
+
 
 
 
 function ProjetDetails(){
+    const location = useLocation();
+    console.log(location);
+    console.log(location.state);
     //Adding and deleting members and volunteers
 
     const [memberName, setMemberName]=useState('');
@@ -58,12 +64,12 @@ function ProjetDetails(){
     function ajouterMembre(){
         let check = true;
         arrayAddedAlreadyMembers.map((member) =>{
-            if (member.id== memberID){
+            if (member.id === memberID){
                 alert("inside if");
                 check =false;
             }
         });
-        if(check ==true){
+        if(check === true){
 
             const newListWithAdd = arrayAddedAlreadyMembers.concat({name: memberName, id: memberID});
             setArrayAddedAlreadyMembers(newListWithAdd);
@@ -110,12 +116,12 @@ function ProjetDetails(){
     function ajouterBenevole(){
         let check = true;
         arrayAddedAlreadyBenevoles.map((benevole) =>{
-            if (benevole.id== benevoleID){
+            if (benevole.id === benevoleID){
                 alert("inside if");
                 check =false;
             }
         });
-        if(check ==true){
+        if(check === true){
 
             const newListWithAdd = arrayAddedAlreadyBenevoles.concat({name: benevoleName, id: benevoleID});
             setArrayAddedAlreadyBenevoles(newListWithAdd);
@@ -181,13 +187,13 @@ function ProjetDetails(){
     const [membres, setMembres]=useState(myArray);
 
     useEffect(()=>{
-        if (member == "responsable") {
+        if (member === "responsable") {
             setStateVisibility('visible');
         }
         else {
             setStateVisibility('hidden');
         }
-    })
+    }, [])
 
 
 
@@ -195,6 +201,7 @@ function ProjetDetails(){
     return(
 
         <Container style={{textAlign:'left'}} >
+            <Col>
             <br/>
             <Breadcrumb >
                 <Breadcrumb.Item href="#">Profil</Breadcrumb.Item>
@@ -202,7 +209,8 @@ function ProjetDetails(){
             </Breadcrumb><br/>
             <div style={{fontSize:'18px'}}>
                 <Row className="px-3">
-                    <h1>Heading</h1><p> <button style={{visibility:stateVisibility}} type="button" className="mt-3 ml-2 btn btn-info btn-sm">+</button></p>
+                    <h1>Heading</h1>
+                    <p> <button style={{visibility:stateVisibility}} type="button" className="mt-3 ml-2 btn btn-info btn-sm">+</button></p>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi atque consequatur,
                         ea eum ipsa iusto labore magnam minima quas quis saepe sapiente sit tempora vitae. Accusamus doloremque
                         impedit ipsam.  <button style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button></p>
@@ -230,7 +238,7 @@ function ProjetDetails(){
                                 <Dropdown.Item eventKey="Approuvé">Approuvé</Dropdown.Item>
                                 <Dropdown.Item eventKey="Actif">Actif</Dropdown.Item>
                                 <Dropdown.Item eventKey="Terminé">Terminé</Dropdown.Item>
-                                <Dropdown.Item eventKey="Gelé"d>Gelé</Dropdown.Item>
+                                <Dropdown.Item eventKey="Gelé">Gelé</Dropdown.Item>
                             </DropdownButton>
                             <span style={{float:'right'}} className="pl-2 pt-2">{value}</span>
                         </div>
@@ -274,10 +282,11 @@ function ProjetDetails(){
                     </Row>
                 </Container>
             </div><br/><br/>
-
+            </Col>
+            <Col>
+                <Report project={location.state} />
+            </Col>
         </Container>
-
-
     )
 }
 

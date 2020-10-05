@@ -141,7 +141,7 @@ app.put("/userSpace/:userID", async  (req, res) =>{
 
 //---------------------User Story 6------------------------------------
 //Trouver les compte rendu d'un projet
-app.get("/Rapports/:code", async (req, res) => {
+app.get("/report/:code", async (req, res) => {
     try {
         const codeProjet = req.params.code;
         const reportInfo = await pool.query("SELECT * from report where projet = $1", [codeProjet]);
