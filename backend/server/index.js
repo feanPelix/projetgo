@@ -150,8 +150,6 @@ app.get("/report/:code", async (req, res) => {
         const codeProjet = req.params.code;
         const reportInfo = await pool.query("SELECT * from report where projet = $1", [codeProjet]);
 
-        console.log(reportInfo.rows);
-
         res.json(reportInfo.rows);
     } catch (err) {
         console.error(err.message);

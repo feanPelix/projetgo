@@ -337,7 +337,7 @@ function ProjetDetails(props){
             </div><br/><br/>
             </Col>
             <Col>
-                <Report project={location.state} />
+                <Report project={projetID} />
             </Col>
         </Container>
     )
