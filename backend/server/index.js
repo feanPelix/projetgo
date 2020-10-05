@@ -23,11 +23,7 @@ app.get("/", function(req, res) {
 app.get("/Accueil", async (req, res) => {
     try {
         // Hard-coded project code
-<<<<<<< HEAD
-        const projectInfo = await pool.query("SELECT code, image, titre, description from project WHERE code between 1 and 3");
-=======
         const projectInfo = await pool.query("SELECT * from project WHERE code between 1 and 3");
->>>>>>> 5d97e6a64ef889233223ac5d30703819977bb2db
         res.json(projectInfo.rows);
     } catch (err) {
         console.error(err.message);
@@ -39,11 +35,7 @@ app.get("/Accueil", async (req, res) => {
     app.get("/Projets", async (req, res) => {
         try {
             // Hard-coded project code
-<<<<<<< HEAD
-            const projectInfo = await pool.query("SELECT code, image, titre, description from project");
-=======
             const projectInfo = await pool.query("SELECT * from project");
->>>>>>> 5d97e6a64ef889233223ac5d30703819977bb2db
             res.json(projectInfo.rows);
         } catch (err) {
             console.error(err.message);
