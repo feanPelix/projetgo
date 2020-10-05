@@ -27,40 +27,39 @@ function ChoixMembership(props) {
     }
 
     return (
-        <div style={{backgroundColor: '#138499'}}>
-            <Container fluid>
-                <Form>
-                    <Row>
-                        <Form.Group controlId={"choixMembership"}>
+        <div style={{backgroundColor: '#138499', fontSize:'30px', color:"white"}}>
+            <Form style={{margin:"auto"}}>
+                        <Form.Group controlId={"choixMembership"} className={"m8"}>
                             <Col>
                                 <Form.Check
                                     name="temp"
-                                    value="/inscription/benevole"
+                                    value="/inscription-benevole"
                                     type="radio"
                                     label="Devenir un bénévole"
                                     onChange={handleChange}
-                                    checked={choixMembership === "/inscription/benevole"}
+                                    checked={choixMembership === "/inscription-benevole"}
+                                    className="mx-5 mb-5"
+                                    style={{margin:"20px 10px 20px 10px"}}
                                 />
                             </Col>
                             <Col>
                                 <Form.Check
                                     name="temp"
-                                    value="/inscription/membre"
+                                    value="/inscription-membre"
                                     type="radio"
                                     label="Devenir un membre"
                                     onChange={handleChange}
-                                    checked={choixMembership === "/inscription/membre"}
+                                    checked={choixMembership === "/inscription-membre"}
+                                    className="mx-5 mb-5"
+                                    style={{margin:"20px 10px 20px 10px"}}
                                 />
                             </Col>
                         </Form.Group>
 
-                        <Button variant="warning" className="mb" disabled={!disableButton()} onClick={(e)=>{history.push(choixMembership)}}>
+                        <Button style={{background:"orange",margin:"0px 10px 20px 10px"}} className="px-5" disabled={!disableButton()} onClick={(e)=>{history.push(choixMembership)}}>
                             Go
                         </Button>
-
-                    </Row>
-                </Form>
-            </Container>
+            </Form>
         </div>
     )
 }

@@ -41,10 +41,10 @@ const [memberID, setMemberID]=useState('');
             <Route path="/userSpace" component={()=><SpaceMembre memberSpecific={memberSpecific}/>}/>
             <Route path="/addProject" component={()=><AjouterProjet memberSpecific={memberSpecific}/>}/>
             <Route path="/listMemberProject" component={()=><ListerProjects memberSpecific={memberSpecific} setProjetID={setProjetID} setMemberID={setMemberID}/>}/>
+            <Route path="/inscription-benevole" component={()=><FormulaireSignUpBenevole />}/>
+            <Route path="/inscription-membre" component={()=><FormulaireSignUpMembre />}/>
+            <Route path="/inscription-payment" component={()=><FormulairePayment />}/>
             <Route path="/inscription" component={()=><ChoixMembership />}/>
-            <Route path="/inscription/benevole" component={()=><FormulaireSignUpBenevole />}/>
-            <Route path="/inscription/membre" component={()=><FormulaireSignUpMembre />}/>
-            <Route path="/inscription/payment" component={()=><FormulairePayment />}/>
             <Route path="/projectDetail" component={()=><ProjetDetails  projetID={projetID} memberID={memberID} />}/>
 
           </Switch>

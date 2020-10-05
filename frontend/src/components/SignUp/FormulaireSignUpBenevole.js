@@ -57,22 +57,30 @@ function FormulaireSignUpBenevole(props) {
         if (validateFields()) {
             return;
         } else {
+            var phone = "5551113333"; //temp
+            var adresse = (numCivique + " " + rue);
+            var inscription = moment().format("YYYY-MM-DD");
+            var email = courriel; //for query
             try {
-                var phone = "555-111-3333"; //temp
-                var adresse = (numCivique + rue);
-                var date = moment().format("DD/MM/YYYY");
-                const body = {nom, prenom, courriel, phone, adresse, date}; //inscription = date
-                const response = await fetch("http://localhost:5000/utilisateur/", {
+                const body = {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays}; //inscription = date d'inscription
+                const response = await fetch(`http://localhost:5000/utilisateur`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(body)
                 });
-
-                window.location = "/";
+                const jsonData=await response.json();
+                console.log(jsonData);
+                //window.location = "/";
+                alert("Création de compte réussite!")
                 history.push('/login');
-            } catch (err) {
+            } catch (err) { //A modifier
+                if(err.code === 'ER_DUP_ENTRY') {
+                    alert("Adresse email déjà utilisé. Veuillez choisir une autre.")
+                }
+                else{
+                    alert("Problème lors de la connection au serveur.")
+                }
                 console.log(err.message);
-                alert("Problème lors de la connection au serveur.")
             }
         }
     }
@@ -82,37 +90,37 @@ function FormulaireSignUpBenevole(props) {
         <Container>
 
                 <hr style={{backgroundColor: 'white '}}/>
-                <h4 style={{color: 'white'}}>INSCRIPTION BENEVOLE</h4>
+                <h4 style={{color: 'white'}}>INSCRIPTION BÉNÉVOLES</h4>
                 <hr style={{backgroundColor: 'white'}}/>
-                <Form onSubmit={handleSubmit} controlId={"FormSignUp"} className="m-5">
-                    <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridNom"}>
+                <Form onSubmit={handleSubmit} controlId={"FormSignUp"} className="m-5" style={{margin:"auto"}} >
+                    <Form.Row >
+                        <Form.Group as={"Col"} controlId={"formGridNom"} style={{margin:"0px 20px 2px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Nom"} value={nom}
                                           onChange={e => setNom(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridPrenom"}>
+                        <Form.Group as={"Col"} controlId={"formGridPrenom"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Prenom"} value={prenom}
                                           onChange={e => setPrenom(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridCourriel"}>
+                        <Form.Group as={"Col"} controlId={"formGridCourriel"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"email"} placeholder={"Courriel"} value={courriel}
                                           onChange={e => setCourriel(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridConfirmationCourriel"}>
+                        <Form.Group as={"Col"} controlId={"formGridConfirmationCourriel"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"email"} placeholder={"Confirmer courriel"} value={confirmCourriel}
                                           onChange={e => setConfirmCourriel(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridPassword"}>
+                        <Form.Group as={"Col"} controlId={"formGridPassword"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"password"} placeholder={"Mot de passe"} value={password}
                                           onChange={e => setPassword(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridConfirmationPassword"}>
+                        <Form.Group as={"Col"} controlId={"formGridConfirmationPassword"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"password"} placeholder={"Confirmer mot de passe"}
                                           value={confirmPassword}
                                           onChange={e => setConfirmPassword(e.target.value)}/>
@@ -120,39 +128,39 @@ function FormulaireSignUpBenevole(props) {
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridNumeroCivique"}>
+                        <Form.Group as={"Col"} controlId={"formGridNumeroCivique"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Numéro civique"} value={numCivique}
                                           onChange={e => setNumCivique(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridRue"}>
+                        <Form.Group as={"Col"} controlId={"formGridRue"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Rue"} value={rue}
                                           onChange={e => setRue(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridCodePostal"}>
+                        <Form.Group as={"Col"} controlId={"formGridCodePostal"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Code postal"} value={codePostal}
                                           onChange={e => setCodePostal(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridVille"}>
+                        <Form.Group as={"Col"} controlId={"formGridVille"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Ville"} value={ville}
                                           onChange={e => setVille(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridProvince"}>
+                        <Form.Group as={"Col"} controlId={"formGridProvince"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Province"} value={province}
                                           onChange={e => setProvince(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridPays"}>
+                        <Form.Group as={"Col"} controlId={"formGridPays"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Pays"} value={pays}
                                           onChange={e => setPays(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formCompetences"}>
+                        <Form.Group as={"Col"} controlId={"formCompetences"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"textarea"} placeholder={"Compétences"} value={competences}
                                           onChange={e => setCompetences(e.target.value)}/>
                         </Form.Group>
@@ -170,7 +178,6 @@ function FormulaireSignUpBenevole(props) {
 
         </Container>
         </div>
-        //TODO PROGRESS BAR
     )
 }
 
