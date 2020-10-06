@@ -45,7 +45,7 @@ function Formulaire(props) {
             props.setLoggedin(true);
             history.push('/welcome');
         }else{
-            setCredentials('Incorrect email or password, please try again.');
+            setCredentials('\n' + 'E-mail ou mot de passe incorret, veuillez réessayer.');
         }
 
     }

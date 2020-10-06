@@ -28,8 +28,6 @@ const [memberID, setMemberID]=useState('');
 
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
       <div className="App-main">
         <Router>
         <Header loggin={loggin} />

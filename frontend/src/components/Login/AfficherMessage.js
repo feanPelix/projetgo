@@ -47,17 +47,16 @@ function AfficherMessage(props){
     return(
 
         <Container>
-            <Row className="text-center">
+            <Row className="shadow p-5 mb-5 bg-white rounded p-4">
                 <Col xs={12} md={6} lg={5} >
-                    <Image fluid src='./images/avatar_woman.png' />
-
+                    <Image style={{maxWidth:"70%"}}fluid src='./images/avatar_woman.png' />
                 </Col>
 
                 <Col className="p-4" xs={12} md={6} lg={7}>
                     <h1 style={{letterSpacing: 3}}>Bon retour</h1>
 
-                    <h1 style={{letterSpacing: 3}}>{nom+" " +prenom} !</h1><br />
-                    <Badge className="badge badge-warning p-3 px-5" >{Capitalize(statutadhesion)}</Badge>
+                    <h1 style={{letterSpacing: 2}}>{nom+" " +prenom} !</h1><br />
+                    <Badge className="badge badge-warning mt-4 p-3 px-5" >{Capitalize(statutadhesion)}</Badge>
                 </Col>
             </Row>
             <Button style={{background:"orange"}} className="px-5 btn btn-danger mb-4" variant="primary" type="submit" onClick={() => history.push('/userSpace')}>

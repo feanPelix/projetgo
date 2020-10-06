@@ -7,6 +7,10 @@ function ListerProjects(props){
 
     const history = useHistory();
 
+    function goProfilMenu(){
+        history.push("/userSpace");
+    }
+
     const displayList =async()=> {
         try{
             const responsable = props.memberSpecific;
@@ -37,16 +41,16 @@ function ListerProjects(props){
 
     return(
 
-        <Container >
-            <Breadcrumb >
-                <Breadcrumb.Item href="#">Profil</Breadcrumb.Item>
+        <Container>
+            <Breadcrumb style={{fontSize:"20px"}}>
+                <Breadcrumb.Item onClick={goProfilMenu}>Profil</Breadcrumb.Item>
                 <Breadcrumb.Item active>Mes Projets</Breadcrumb.Item>
             </Breadcrumb><br/><br />
 
             <Form>
                 {listProjects.map(projects=>
                     <div key={projects.code}>
-                        <Row>
+                        <Row className="shadow p-3 mb-5 bg-white rounded p-4">
                             <Col className="mr-4" lg={5} sm={12}>
                                 <Image fluid src={projects.image} />
                             </Col><br /><br />
