@@ -13,7 +13,8 @@ function AfficherMessage(props){
 
 
 
-    const [userName , setUserName] = useState(props.memberSpecific);
+    const userID = props.loggedInMemberID;
+    console.log(userID);
     const [nom, setNom] = useState('');
     const [prenom, setPrenom] =useState('');
     const [statutadhesion, setStatutadhesion]=useState('');
@@ -21,7 +22,7 @@ function AfficherMessage(props){
     const getName = async ()=> {
         try {
             // Getting the first name, last name, userID and status of the membership from the table
-            const response = await fetch(`http://localhost:5000/login/${userName}`, {
+            const response = await fetch(`http://localhost:5000/welcomePage/${userID}`, {
                 method: 'put',
                 Header: {'Content-Type': 'application/json'}
             });
@@ -30,12 +31,10 @@ function AfficherMessage(props){
             setNom(jsonData[0].nom);
             setPrenom(jsonData[0].prenom);
             console.log(jsonData[0]);
-
-
-            if (jsonData[0].statutadhesion == 'Actif') {
+          if (jsonData[0].statutadhesion == 'Actif') {
                 setStatutadhesion('Membre');
             } else {
-                setStatutadhesion('benevole');
+                setStatutadhesion('Benevole');
             }
         } catch (err) {
             console.log(err.message);

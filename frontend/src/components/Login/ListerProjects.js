@@ -13,14 +13,13 @@ function ListerProjects(props){
 
     const displayList =async()=> {
         try{
-            const responsable = props.memberSpecific;
-            const response = await fetch(`http://localhost:5000/userSpaceProjetList/${responsable}`,{
+            const userID = props.loggedInMemberID;
+            const response = await fetch(`http://localhost:5000/userSpaceProjetList/${userID}`,{
                 method:'put',
                 Header:{'Content-Type': 'application/json'}
             });
             const jsonData=await response.json();
             setListProjects(jsonData);
-            props.setMemberID(jsonData[0].responsable);
         }catch(err){
             console.error(err.message);
         }

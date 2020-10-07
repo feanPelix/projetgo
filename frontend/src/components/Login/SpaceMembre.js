@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Form, Col, Row, Image, Button, Badge,ListGroup} from "react-bootstrap";
 import moment from "moment";
 function SpaceMembre(props){
-    const [userID , setUserID] = useState(props.memberSpecific);
+    const userID = props.loggedInMemberID;
 
     const [nom, setNom] = useState('');
     const [prenom, setPrenom] =useState('');

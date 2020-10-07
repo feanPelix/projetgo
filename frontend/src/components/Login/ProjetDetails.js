@@ -231,7 +231,7 @@ function ProjetDetails(props){
         getProjectDetail();
     },[]);
 
-    const member=props.memberID;
+    const member=props.loggedInMemberID;
     const projetID=props.projetID
 
     useEffect(()=>{
