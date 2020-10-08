@@ -1,0 +1,12 @@
+.large {
+  width: 70%;
+  flex-direction: row;
+}
+
+.large>.card-img, .large>.card-img-top {
+  width: fit-content;
+}
+
+.bkg {
+  background-color: #D2E3E2;
+}
