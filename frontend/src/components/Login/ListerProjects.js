@@ -7,16 +7,19 @@ function ListerProjects(props){
 
     const history = useHistory();
 
+    function goProfilMenu(){
+        history.push("/userSpace");
+    }
+
     const displayList =async()=> {
         try{
-            const responsable = props.memberSpecific;
-            const response = await fetch(`http://localhost:5000/userSpaceProjetList/${responsable}`,{
+            const userID = props.loggedInMemberID;
+            const response = await fetch(`http://localhost:5000/userSpaceProjetList/${userID}`,{
                 method:'put',
                 Header:{'Content-Type': 'application/json'}
             });
             const jsonData=await response.json();
             setListProjects(jsonData);
-            props.setMemberID(jsonData[0].responsable);
         }catch(err){
             console.error(err.message);
         }
@@ -37,16 +40,16 @@ function ListerProjects(props){
 
     return(
 
-        <Container >
-            <Breadcrumb >
-                <Breadcrumb.Item href="#">Profil</Breadcrumb.Item>
+        <Container>
+            <Breadcrumb style={{fontSize:"20px"}}>
+                <Breadcrumb.Item onClick={goProfilMenu}>Profil</Breadcrumb.Item>
                 <Breadcrumb.Item active>Mes Projets</Breadcrumb.Item>
             </Breadcrumb><br/><br />
 
             <Form>
                 {listProjects.map(projects=>
                     <div key={projects.code}>
-                        <Row>
+                        <Row className="shadow p-3 mb-5 bg-white rounded p-4">
                             <Col className="mr-4" lg={5} sm={12}>
                                 <Image fluid src={projects.image} />
                             </Col><br /><br />

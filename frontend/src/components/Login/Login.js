@@ -6,11 +6,8 @@ import {useHistory} from 'react-router-dom';
 
 function Formulaire(props) {
     const history = useHistory();
-    const [email, setEmail] = useState("");
+    const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
-    function validateForm() {
-        return email.length > 0 && password.length > 0;
-    }
 
     const onSubmitForm=async(event)=> {
 
@@ -18,7 +15,7 @@ function Formulaire(props) {
         event.preventDefault();
         try{
 
-            const response = await fetch(`http://localhost:5000/login/${email}/${password}`,{
+            const response = await fetch(`http://localhost:5000/login/${userName}/${password}`,{
                 method:'put',
                 Header:{'Content-Type': 'application/json'}
             });
@@ -39,13 +36,14 @@ function Formulaire(props) {
         // If true, then the username will be kept and the pageNumber will be set to 2, displaying
         // the welcome sign.
         // If not, the warning sign will be set.
-
-        if (jsonData==true) {
-            props.setMemberSpecific(email);
+        const checkResult = jsonData.check;
+        if (checkResult==true) {
+            console.log(jsonData.userID);
+            props.setLoggedInMemberID(jsonData.userID);
             props.setLoggedin(true);
             history.push('/welcome');
         }else{
-            setCredentials('Incorrect email or password, please try again.');
+            setCredentials('\n' + 'E-mail ou mot de passe incorret, veuillez réessayer.');
         }
 
     }
@@ -59,7 +57,7 @@ function Formulaire(props) {
             <p style={{fontSize:"15px"}} >{credentials}</p>
             <Form onSubmit={onSubmitForm} className="m-5">
                 <Form.Group className="mx-5 mb-4">
-                    <Form.Control value={email} onChange={e => setEmail(e.target.value)} className="px-5" placeholder="Courriel" />
+                    <Form.Control value={userName} onChange={e => setUserName(e.target.value)} className="px-5" placeholder="Courriel" />
                 </Form.Group>
                 <Form.Group className="mx-5 mb-4">
                     <Form.Control  type="password" className="px-5"  placeholder="Mot de passe" value={password} onChange={e => setPassword(e.target.value)}/>

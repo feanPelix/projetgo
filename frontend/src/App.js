@@ -21,31 +21,28 @@ import ProjetDetails from "./components/Login/ProjetDetails";
 import Footer from './components/Footer/Footer';
 
 function App() {
-const [memberSpecific, setMemberSpecific]=useState('');
 const [loggin, setLoggedin] =useState(false);
 const [projetID, setProjetID] = useState('');
-const [memberID, setMemberID]=useState('');
+const [loggedInMemberID, setLoggedInMemberID]=useState('');
 
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
       <div className="App-main">
         <Router>
         <Header loggin={loggin} />
           <Switch>
             <Route path="/" component={Home} exact/>
             <Route path="/projects" component={Projects} />
-            <Route path="/login" component={()=><Login setMemberSpecific={setMemberSpecific} setLoggedin={setLoggedin}/>}/>
-            <Route path="/welcome" component={()=><AfficherMessage memberSpecific={memberSpecific} setMemberSpecific={setMemberSpecific}/>}/>
-            <Route path="/userSpace" component={()=><SpaceMembre memberSpecific={memberSpecific}/>}/>
-            <Route path="/addProject" component={()=><AjouterProjet memberSpecific={memberSpecific}/>}/>
-            <Route path="/listMemberProject" component={()=><ListerProjects memberSpecific={memberSpecific} setProjetID={setProjetID} setMemberID={setMemberID}/>}/>
+            <Route path="/login" component={()=><Login setLoggedInMemberID={setLoggedInMemberID} setLoggedin={setLoggedin}/>}/>
+            <Route path="/welcome" component={()=><AfficherMessage loggedInMemberID={loggedInMemberID} setLoggedInMemberID={setLoggedInMemberID}/>}/>
+            <Route path="/userSpace" component={()=><SpaceMembre loggedInMemberID={loggedInMemberID}/>}/>
+            <Route path="/addProject" component={()=><AjouterProjet loggedInMemberID={loggedInMemberID}/>}/>
+            <Route path="/listMemberProject" component={()=><ListerProjects loggedInMemberID={loggedInMemberID} setProjetID={setProjetID}/>}/>
             <Route path="/inscription-benevole" component={()=><FormulaireSignUpBenevole />}/>
             <Route path="/inscription-membre" component={()=><FormulaireSignUpMembre />}/>
             <Route path="/inscription-payment" component={()=><FormulairePayment />}/>
             <Route path="/inscription" component={()=><ChoixMembership />}/>
-            <Route path="/projectDetail" component={()=><ProjetDetails  projetID={projetID} memberID={memberID} />}/>
+            <Route path="/projectDetail" component={()=><ProjetDetails  projetID={projetID} loggedInMemberID={loggedInMemberID} />}/>
 
           </Switch>
         </Router>

@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Form, Col, Row, Image, Button, Badge } from "react-bootstrap";
+import { Container, Form, Col, Row, Image, Button, Badge,ListGroup} from "react-bootstrap";
 import moment from "moment";
 function SpaceMembre(props){
-    const [userID , setUserID] = useState(props.memberSpecific);
+    const userID = props.loggedInMemberID;
 
     const [nom, setNom] = useState('');
     const [prenom, setPrenom] =useState('');
@@ -42,24 +42,26 @@ function SpaceMembre(props){
     return(
 
         <Container>
-            <Row>
-                <Col style={{textAlign: 'left'}} xs={12} md={6} lg={7} >
-                    <p>Prenom : {prenom}</p>
-                    <p>Nom : {nom}</p>
-                    <p>Adresse :  {address}</p>
-                    <p>Code Postal: {codePostal} </p>
-                    <p>Ville : {ville}</p>
-                    <p>Province : {province}</p>
-                    <p>Pays : {pays}</p>
-                    <p>Membre depuis : {date}</p>
-
-                </Col>
-
-                <Col className="p-4" xs={12} md={6} lg={4}>
+            <Row className="shadow p-3 mb-5 bg-white rounded p-4">
+                <Col className="mt-4 mr-5" xs={12} md={6} lg={4}>
                     <Image fluid src='./images/avatar_woman.png' />
+                </Col>
+                <Col  className=" ml-5" style={{textAlign: 'left'}} xs={12} md={6} lg={6} >
+                    <ListGroup variant="flush">
+                        <ListGroup.Item><b>Prenom :  </b>{prenom}</ListGroup.Item>
+                        <ListGroup.Item><b>Nom :  </b>{nom}</ListGroup.Item>
+                        <ListGroup.Item><b>Adresse :  </b> {address}</ListGroup.Item>
+                        <ListGroup.Item><b>Code Postal:  </b>{codePostal}</ListGroup.Item>
+                        <ListGroup.Item><b>Ville :  </b>{ville}</ListGroup.Item>
+                        <ListGroup.Item><b>Province :  </b>{province}</ListGroup.Item>
+                        <ListGroup.Item><b>Pays : </b> {pays}</ListGroup.Item>
+                        <ListGroup.Item><b>Membre depuis :  </b>{date}</ListGroup.Item>
+                    </ListGroup>
                 </Col>
             </Row>
         </Container>
+
+
     )
 }
 
