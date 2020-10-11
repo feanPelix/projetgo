@@ -38,10 +38,10 @@ function AjouterProjet(props) {
                     .ref("images")
                     .child(nomImage.name)
                     .getDownloadURL()
-                    .then(async image => {
+                    .then( async image => {
                         setImage(image);
                         try {
-                            const responsable = props.memberSpecific;
+                            const responsable = props.loggedInMemberID;
                             const body = {image};
                             console.log(body);
                             const response = await fetch(`http://localhost:5000/ajoutProjet/${titre}/${descCourte}/${sommaire}/${startDate}/${endDate}/${responsable}`, {
@@ -69,8 +69,7 @@ function AjouterProjet(props) {
         )
         event.preventDefault();
     }
-
-    function goProfilMenu() {
+    function goProfilMenu(){
         history.push("/userSpace");
     }
 
@@ -88,18 +87,15 @@ function AjouterProjet(props) {
                         <Form.Label>Titre du projet : </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <input value={titre} onChange={e => setTitre(e.target.value)} style={{width: '60%'}}
-                               className="form-control mt-2" type="text" placeholder="Type here"/>
+                        <input value={titre} onChange={e => setTitre(e.target.value)} style={{width:'70%'}} className="form-control mt-2" type="text" placeholder="Type here"  />
                     </Col>
                 </Row><br/>
                 <Row>
                     <Col>
-                        <Form.Label style={{textAlign: 'left'}}>Description courte: </Form.Label>
+                        <Form.Label style={{textAlign: 'left'}}>Description courte : </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <Form.Control value={descCourte} onChange={e => setDescCourte(e.target.value)}
-                                      placeholder="Type here" style={{width: '70%'}} as="textarea"
-                                      className="form-control" id="exampleFormControlTextarea1" rows="3"></Form.Control>
+                        <Form.Control value={descCourte} onChange={e => setDescCourte(e.target.value)}  placeholder="Type here" style={{width:'70%'}}  as="textarea" className="form-control" id="exampleFormControlTextarea1" rows="3"></Form.Control>
                     </Col>
                 </Row><br/>
                 <Row>
@@ -107,14 +103,12 @@ function AjouterProjet(props) {
                         <Form.Label style={{textAlign: 'left'}}>Sommaire du project (description du but, objectifs et bnefices escomptes): </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <textarea value={sommaire} onChange={e => setSommaire(e.target.value)} placeholder="Type here"
-                                  style={{width: '70%'}} className="form-control" id="exampleFormControlTextarea1"
-                                  rows="5"></textarea>
+                        <textarea value={sommaire} onChange={e => setSommaire(e.target.value)} placeholder="Type here"  style={{width:'70%'}}  className="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
                     </Col>
                 </Row><br/>
                 <Row>
                     <Col>
-                        <Form.Label style={{textAlign: 'left'}}>Photo de presentation: </Form.Label>
+                        <Form.Label style={{textAlign: 'left'}}>Photo de presentation : </Form.Label>
                     </Col>
                     <Col lg="9">
                         <input type="file" onChange={handleChange} id="exampleFormControlFile1"/>
@@ -136,7 +130,7 @@ function AjouterProjet(props) {
                     <Col lg={5}>
                         <DatePicker dateFormat="MM-dd-yyyy" selected={endDate} onChange={date => setEndDate(date)}/>
                     </Col>
-                    <Col lg={3}>
+                    <Col lg={2}>
                         <Button onClick={handleSubmit} variant="secondary" style={{backgroundColor :'orange'}}>Soumettre Projet</Button>
                     </Col>
 
