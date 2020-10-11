@@ -1,112 +1,145 @@
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Col, Row,Button,Container,Breadcrumb } from "react-bootstrap";
+import {Form, Col, Row, Button, Container, Breadcrumb} from "react-bootstrap";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import {storage} from "../../firebase";
+import {Bucket} from "react-bootstrap-icons";
 
 
-function AjouterProjet(props){
-    const[titre,setTitre]=useState('');
-    const[descCourte, setDescCourte]=useState('');
-    const[sommaire, setSommaire]=useState('');
-    const[image, setImage]=useState(null);
-    const[startDate, setStartDate]=useState(new Date());
-    const[endDate, setEndDate]=useState(new Date());
-    function onChangeFileHandler(event){
-        setImage(new FormData().append(event.target.files[0],0));
-    }
-    const handleSubmit=async(event)=> {
+function AjouterProjet(props) {
+    const [titre, setTitre] = useState('');
+    const [descCourte, setDescCourte] = useState('');
+    const [sommaire, setSommaire] = useState('');
+    const [nomImage, setNomImage] = useState(null);
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [image, setImage] = useState("");
 
-        event.preventDefault();
-        try{
-            const responsable = props.memberSpecific;
-            const response = await fetch(`http://localhost:5000/ajoutProjet/${titre}/${descCourte}/${sommaire}/${startDate}/${endDate}/${responsable}/${image}`,{
-                method:'put',
-                Header:{'Content-Type': 'application/json'}
-            });
-            const jsonData=await response.json();
-            console.log(jsonData);
-            if(jsonData){
-                alert("Submission sucessful");
-                setTitre('');
-                setDescCourte('');
-                setSommaire('');
-                setStartDate(new Date());
-                setEndDate(new Date());
-            }else{
-                alert("Please try again");
-            }
-        }catch(err){
-            console.log(err.message);
+    const handleChange = e => {
+        if (e.target.files[0]) {
+            setNomImage(e.target.files[0]);
         }
+    };
 
+    const handleSubmit = async (event) => {
+        const uploadTask = storage.ref(`images/${nomImage.name}`).put(nomImage);
+        uploadTask.on(
+            "state_changed",
+            snapshot => {
+            },
+            error => {
+                console.log(error);
+            },
+            () => {
+                storage
+                    .ref("images")
+                    .child(nomImage.name)
+                    .getDownloadURL()
+                    .then( async image => {
+                        setImage(image);
+                        try {
+                            const responsable = props.memberSpecific;
+                            const body = {image};
+                            console.log(body);
+                            const response = await fetch(`http://localhost:5000/ajoutProjet/${titre}/${descCourte}/${sommaire}/${startDate}/${endDate}/${responsable}`, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(body)
+                            });
+                            const jsonData = await response.json();
+                            console.log(jsonData);
+                            if (jsonData) {
+                                alert("Submission sucessful");
+                                setTitre('');
+                                setDescCourte('');
+                                setSommaire('');
+                                setStartDate(new Date());
+                                setEndDate(new Date());
+                            } else {
+                                alert("Please try again");
+                            }
+                        } catch (err) {
+                            console.log(err.message);
+                        }
+                    });
+            }
+        )
+        event.preventDefault();
     }
 
 
-    return(
+    return (
 
         <Container className="px-5 mx-5" fluid style={{fontSize: '18px'}}>
             <Breadcrumb className="px-3 mx-3">
                 <Breadcrumb.Item href="#">Profil</Breadcrumb.Item>
                 <Breadcrumb.Item active>Créer un projet</Breadcrumb.Item>
-            </Breadcrumb><br/><br />
+            </Breadcrumb><br/><br/>
 
             <Form className="px-5 mx-5" style={{textAlign: 'left'}} style={{textAlign: 'left'}}>
-                <Row >
+                <Row>
                     <Col>
                         <Form.Label> Titre du projet: </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <input value={titre} onChange={e => setTitre(e.target.value)} style={{width:'60%'}} className="form-control mt-2" type="text" placeholder="Type here"  />
+                        <input value={titre} onChange={e => setTitre(e.target.value)} style={{width: '60%'}}
+                               className="form-control mt-2" type="text" placeholder="Type here"/>
                     </Col>
-                </Row><br />
+                </Row><br/>
                 <Row>
                     <Col>
                         <Form.Label style={{textAlign: 'left'}}>Description courte: </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <Form.Control value={descCourte} onChange={e => setDescCourte(e.target.value)}  placeholder="Type here" style={{width:'60%'}}  as="textarea" className="form-control" id="exampleFormControlTextarea1" rows="3"></Form.Control>
+                        <Form.Control value={descCourte} onChange={e => setDescCourte(e.target.value)}
+                                      placeholder="Type here" style={{width: '60%'}} as="textarea"
+                                      className="form-control" id="exampleFormControlTextarea1" rows="3"></Form.Control>
                     </Col>
-                </Row><br />
+                </Row><br/>
                 <Row>
                     <Col>
-                        <Form.Label style={{textAlign: 'left'}}>Sommaire du project: (Description du but, Objectifs et Benefices escomptes) </Form.Label>
+                        <Form.Label style={{textAlign: 'left'}}>Sommaire du project: (Description du but, Objectifs et
+                            Benefices escomptes) </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <textarea value={sommaire} onChange={e => setSommaire(e.target.value)} placeholder="Type here"  style={{width:'60%'}}  className="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+                        <textarea value={sommaire} onChange={e => setSommaire(e.target.value)} placeholder="Type here"
+                                  style={{width: '60%'}} className="form-control" id="exampleFormControlTextarea1"
+                                  rows="5"></textarea>
                     </Col>
-                </Row><br />
+                </Row><br/>
                 <Row>
                     <Col>
                         <Form.Label style={{textAlign: 'left'}}>Photo de presentation: </Form.Label>
                     </Col>
                     <Col lg="9">
-                        <Form.File onChange={onChangeFileHandler} id="exampleFormControlFile1"  />
+                        <input type="file" onChange={handleChange} id="exampleFormControlFile1"/>
                     </Col>
 
-                </Row><br />
+                </Row><br/>
                 <Row>
                     <Col lg={3}>
-                        <Form.Label style={{textAlign: 'left'}} >Date du debut estime: </Form.Label>
+                        <Form.Label style={{textAlign: 'left'}}>Date du debut estime: </Form.Label>
                     </Col>
-                    <Col style={{color:'black'}} lg={6}>
+                    <Col style={{color: 'black'}} lg={6}>
                         <DatePicker dateFormat="MM-dd-yyyy" selected={startDate} onChange={date => setStartDate(date)}/>
                     </Col>
-                </Row><br />
+                </Row><br/>
                 <Row>
                     <Col lg={3}>
-                        <Form.Label style={{textAlign: 'left'}} >Date du fin de estime: </Form.Label>
+                        <Form.Label style={{textAlign: 'left'}}>Date du fin de estime: </Form.Label>
                     </Col>
                     <Col lg={5}>
                         <DatePicker dateFormat="MM-dd-yyyy" selected={endDate} onChange={date => setEndDate(date)}/>
                     </Col>
                     <Col lg={2}>
-                        <Button onClick={handleSubmit} variant="secondary" style={{backgroundColor :'orange'}}>Soumettre le projet</Button>
+                        <Button onClick={handleSubmit} variant="secondary" style={{backgroundColor: 'orange'}}>Soumettre
+                            le projet</Button>
                     </Col>
 
                 </Row>
 
-            </Form><br /><br />
+            </Form><br/><br/>
 
 
         </Container>

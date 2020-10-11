@@ -1,11 +1,14 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
 const pool = require("./db");
 const path = require("path");
 const moment = require("moment");
+const logger = require('morgan');
+
+const app = express();
 
 //middleware
+app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
 
@@ -170,10 +173,11 @@ app.put("/userSpaceProjetList/:userID", async (req, res)=> {
     }
 })
 
+
 //---------------------User Story 7------------------------------------
 //Ajouter project
 
-app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
+app.post("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable", async (req, res)=> {
     try {
         const titre = req.params.titre;
         const descCourte = req.params.descCourte;
@@ -184,7 +188,8 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
         const budget = 0;
         const totalfondscoll = 0;
         const totaldepense = 0;
-        const image = req.params.image;
+        const {image} = req.body;
+        console.log(req.body);
         const debutreel = moment(req.params.endDate).format("YYYY-MM-DD");
         const debutfin = moment(req.params.endDate).format("YYYY-MM-DD");
         const etatavancement = '';
