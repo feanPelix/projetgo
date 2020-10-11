@@ -4,10 +4,12 @@ import {Form, Col, Row, Button, Container, Breadcrumb} from "react-bootstrap";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {storage} from "../../firebase";
+import {useHistory} from 'react-router-dom';
 import {Bucket} from "react-bootstrap-icons";
 
 
 function AjouterProjet(props) {
+    const history = useHistory();
     const [titre, setTitre] = useState('');
     const [descCourte, setDescCourte] = useState('');
     const [sommaire, setSommaire] = useState('');
@@ -36,7 +38,7 @@ function AjouterProjet(props) {
                     .ref("images")
                     .child(nomImage.name)
                     .getDownloadURL()
-                    .then( async image => {
+                    .then(async image => {
                         setImage(image);
                         try {
                             const responsable = props.memberSpecific;
@@ -68,19 +70,22 @@ function AjouterProjet(props) {
         event.preventDefault();
     }
 
+    function goProfilMenu() {
+        history.push("/userSpace");
+    }
 
     return (
 
-        <Container className="px-5 mx-5" fluid style={{fontSize: '18px'}}>
-            <Breadcrumb className="px-3 mx-3">
-                <Breadcrumb.Item href="#">Profil</Breadcrumb.Item>
+        <Container style={{fontSize: '20px'}}>
+            <Breadcrumb >
+                <Breadcrumb.Item onClick={goProfilMenu}>Profil</Breadcrumb.Item>
                 <Breadcrumb.Item active>Créer un projet</Breadcrumb.Item>
             </Breadcrumb><br/><br/>
 
-            <Form className="px-5 mx-5" style={{textAlign: 'left'}} style={{textAlign: 'left'}}>
+            <Form style={{textAlign: 'left'}}>
                 <Row>
                     <Col>
-                        <Form.Label> Titre du projet: </Form.Label>
+                        <Form.Label>Titre du projet : </Form.Label>
                     </Col>
                     <Col lg="9">
                         <input value={titre} onChange={e => setTitre(e.target.value)} style={{width: '60%'}}
@@ -93,18 +98,17 @@ function AjouterProjet(props) {
                     </Col>
                     <Col lg="9">
                         <Form.Control value={descCourte} onChange={e => setDescCourte(e.target.value)}
-                                      placeholder="Type here" style={{width: '60%'}} as="textarea"
+                                      placeholder="Type here" style={{width: '70%'}} as="textarea"
                                       className="form-control" id="exampleFormControlTextarea1" rows="3"></Form.Control>
                     </Col>
                 </Row><br/>
                 <Row>
                     <Col>
-                        <Form.Label style={{textAlign: 'left'}}>Sommaire du project: (Description du but, Objectifs et
-                            Benefices escomptes) </Form.Label>
+                        <Form.Label style={{textAlign: 'left'}}>Sommaire du project (description du but, objectifs et bnefices escomptes): </Form.Label>
                     </Col>
                     <Col lg="9">
                         <textarea value={sommaire} onChange={e => setSommaire(e.target.value)} placeholder="Type here"
-                                  style={{width: '60%'}} className="form-control" id="exampleFormControlTextarea1"
+                                  style={{width: '70%'}} className="form-control" id="exampleFormControlTextarea1"
                                   rows="5"></textarea>
                     </Col>
                 </Row><br/>
@@ -119,7 +123,7 @@ function AjouterProjet(props) {
                 </Row><br/>
                 <Row>
                     <Col lg={3}>
-                        <Form.Label style={{textAlign: 'left'}}>Date du debut estime: </Form.Label>
+                        <Form.Label style={{textAlign: 'left'}}>Date du début estimée : </Form.Label>
                     </Col>
                     <Col style={{color: 'black'}} lg={6}>
                         <DatePicker dateFormat="MM-dd-yyyy" selected={startDate} onChange={date => setStartDate(date)}/>
@@ -132,9 +136,8 @@ function AjouterProjet(props) {
                     <Col lg={5}>
                         <DatePicker dateFormat="MM-dd-yyyy" selected={endDate} onChange={date => setEndDate(date)}/>
                     </Col>
-                    <Col lg={2}>
-                        <Button onClick={handleSubmit} variant="secondary" style={{backgroundColor: 'orange'}}>Soumettre
-                            le projet</Button>
+                    <Col lg={3}>
+                        <Button onClick={handleSubmit} variant="secondary" style={{backgroundColor :'orange'}}>Soumettre Projet</Button>
                     </Col>
 
                 </Row>
