@@ -90,11 +90,13 @@ app.post("/utilisateur/membre", async (req, res) => {
 // User story 5
 // Get all the user/passwords to validate the info. If a single row is returned from the query, the user is validate.
 // If validated, return true, else, false.
-app.put("/login/:username/:password", async (req, res) => {
+app.post("/login", async (req, res) => {
+    /*Attention !
+    * Il n'y a aucune validation/sanitation d'input. Requete a risque d'injection.*/
     try {
-        const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1",[req.params.username]);
+        const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1",[req.body.username]);
 
-        bcrypt.compare(req.params.password, cred.rows[0].password, async (err, result) => {
+        bcrypt.compare(req.body.password, cred.rows[0].password, async (err, result) => {
             if (result) {
                 await res.json({check:true, userID:cred.rows[0].user_id});
             } else {
