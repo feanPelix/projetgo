@@ -39,7 +39,7 @@ export function Header(props) {
                 <Container style={{visibility:stateVisibilityLoggedin}}>
                     <Nav variant="tabs" defaultActiveKey="/">
                         <Nav.Item><Nav.Link className="nav-dropdown" onClick={() => history.push('/')}>ACCUEIL</Nav.Link></Nav.Item>
-                        <Nav.Item ><Nav.Link  className="nav-dropdown" href="/projects">PROJETS</Nav.Link></Nav.Item>
+                        <Nav.Item ><Nav.Link  className="nav-dropdown" onClick={() => history.push('/projects')}>PROJETS</Nav.Link></Nav.Item>
                         <NavDropdown id="nav-dropdown" title="MEMBRE" id="nav-dropdown">
                             <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/userSpace')}>Profil</NavDropdown.Item>
                             <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/addProject')}>Créer un projet</NavDropdown.Item>

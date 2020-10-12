@@ -281,6 +281,25 @@ app.post("/projectDetail:projectID", async (req, res) => {
     }
 });
 
+//Edit the detail of a specific project
+
+app.post("/projectEdit:projectID", async (req, res) => {
+    try {
+
+        const projectID = req.params.projectID;
+        const {title, description, sommaire, statutprojet, debutestime, finestime, budget, totalfondscoll, totaldepense, debutreel, debutfin, etatavancement, nameimg, responsable} = req.body;
+        console.log(req.body);
+        const projectDetail = await pool.query("UPDATE PROJET SET title = $1, description = $2, sommaire = $3, statutprojet = $4, debutestime = $5, "+
+            "finestime = $6, budget = $7, totalfondscoll = $8, totaldepense = $9, debutreel = $10, debutfin = $11, etatavancement = $12, nameimg = $13, responsable = $14"+
+            "WHERE code = $15", [title, description, sommaire, statutprojet, debutestime, finestime, budget, totalfondscoll, totaldepense, debutreel, debutfin, etatavancement, nameimg, responsable, projectID]);
+        res.json(true);
+    }catch(err){
+        console.error(err.message);
+
+        res.json(false);
+    }
+});
+
 //Afficher tout les membre d'un projet
 
 app.get("/VoirMembreProjet", async (req, res) => {

@@ -41,7 +41,7 @@ function AjouterProjet(props) {
                     .then(async image => {
                         setImage(image);
                         try {
-                            const responsable = props.memberSpecific;
+                            const responsable = props.loggedInMemberID;
                             const body = {image};
                             console.log(body);
                             const response = await fetch(`http://localhost:5000/ajoutProjet/${titre}/${descCourte}/${sommaire}/${startDate}/${endDate}/${responsable}`, {
@@ -54,7 +54,8 @@ function AjouterProjet(props) {
                             if (jsonData) {
                                 alert("Submission sucessful");
                                 setTitre('');
-                                setDescCourte('');
+                                setDescCourte(
+                                    '');
                                 setSommaire('');
                                 setStartDate(new Date());
                                 setEndDate(new Date());
