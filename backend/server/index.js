@@ -203,8 +203,7 @@ app.post("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:respons
         // is one then the commit is successful. If commit is successful, return true, else false
 
         const oldProjectQuery = await pool.query ("select * from project");
-        await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll,"+
-            "totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
+        await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
             [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable])
         // GET THE ID OF CREATED PROJECT
 
