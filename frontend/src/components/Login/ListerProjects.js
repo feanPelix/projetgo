@@ -33,7 +33,7 @@ function ListerProjects(props){
     // get the specific project number and push to the detail
     function handleClick(event){
        props.setProjetID(event.target.value);
-        history.push('/projectDetail/')
+       history.push('/projectDetail/')
     }
 
 
