@@ -25,8 +25,8 @@ function FormulaireSignUpBenevole(props) {
         return (nom && prenom && courriel && password && numCivique && rue && ville && province && pays && codePostal)
     }
 
-    // True == Has Errors || False == Good to go
-    function validateFields() {
+    // False == Has Errors || True == Good to go
+    function isInputValid() {
         var hasErrors = false;
         var errorMessage = "";
 
@@ -49,14 +49,12 @@ function FormulaireSignUpBenevole(props) {
         if (hasErrors) {
             alert(errorMessage);
         }
-        return hasErrors;
+        return !hasErrors;
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validateFields()) {
-            return;
-        } else {
+        if (isInputValid()) {
             var phone = "5551113333"; //temp
             var adresse = (numCivique + " " + rue);
             var inscription = moment().format("YYYY-MM-DD");
@@ -74,6 +72,7 @@ function FormulaireSignUpBenevole(props) {
                 alert("Création de compte réussite!")
                 history.push('/login');
             } catch (err) { //A modifier
+                console.log(err);
                 if(err.code === 'ER_DUP_ENTRY') {
                     alert("Adresse email déjà utilisé. Veuillez choisir une autre.")
                 }

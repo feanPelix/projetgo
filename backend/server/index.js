@@ -15,7 +15,6 @@ app.use(express.json());
 
 // Images
 app.get('/images/:name', async (req, res) => {
-
     res.sendFile(path.join(__dirname, "../images", req.params.name));
 })
 
