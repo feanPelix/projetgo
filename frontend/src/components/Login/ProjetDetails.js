@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Form, Col, Row, Button, ListGroup, Container, Breadcrumb, Image, Dropdown,DropdownButton} from "react-bootstrap";
 import Report from '../Report/Report';
 import { useLocation } from "react-router-dom";
+import EditProjects from "./EditProjects";
+
 
 
 
@@ -229,6 +231,7 @@ function ProjetDetails(props){
     }
     useEffect(()=>{
         getProjectDetail();
+        console.log(nameimg);
     },[]);
 
     const member=props.loggedInMemberID;
@@ -243,7 +246,23 @@ function ProjetDetails(props){
         }
     }, [responsable])
 
+    const handleEdit=async ()=>{
+        try {
+            console.log(title);
+            const body = {projetID, title, description, sommaire, statutprojet, debutestime, finestime, budget, totalfondscoll, totaldepense, debutreel, debutfin, etatavancement, nameimg, responsable};
+            // Getting the first name, last name, userID and status of the membership from the table
 
+
+            const response = await fetch(`http://localhost:5000/projectEdit${projetID}`, {
+                method: 'post',
+                Header: {'Content-Type': 'application/json'},
+                body: JSON.stringify(body)
+            });
+            const jsonData = await response.json();
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
 
 
     return(
@@ -258,14 +277,11 @@ function ProjetDetails(props){
             <div style={{fontSize:'18px'}}>
                 <Row className="px-3">
 
-                    <h1>{title}</h1><p> <button style={{visibility:stateVisibility}} type="button" className="mt-3 ml-2 btn btn-info btn-sm">+</button></p>
-                    <p>{description} <button style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button></p>
+                    <h1>{title}</h1><p> <EditProjects content={title} stateVisibility={stateVisibility} setContent={setTitle}/></p>
 
-                    <h1>Heading</h1>
-                    <p> <button style={{visibility:stateVisibility}} type="button" className="mt-3 ml-2 btn btn-info btn-sm">+</button></p>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam animi atque consequatur,
-                        ea eum ipsa iusto labore magnam minima quas quis saepe sapiente sit tempora vitae. Accusamus doloremque
-                        impedit ipsam.  <button style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button></p>
+                    {/*<button style={{visibility:stateVisibility}} type="button" className="mt-3 ml-2 btn btn-info btn-sm">+</button></p>*/}
+                    <p>{description}  <EditProjects content={description} stateVisibility={stateVisibility} setContent={setDescription}/></p>
+
 
                 </Row>
                 <Row>
@@ -275,7 +291,7 @@ function ProjetDetails(props){
                     </Col><br /><br />
                     <Col className="mr-4" lg={6} sm={12}>
                         <p>{sommaire}</p>
-                        <button  style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button>
+                        <EditProjects content={sommaire} stateVisibility={stateVisibility} setContent={setSommaire}/>
                     </Col>
                 </Row><br/>
                 <Row>
@@ -329,7 +345,7 @@ function ProjetDetails(props){
                             {listNomsBenevoles}
                         </Col>
                         <Col style={{textAlign:'right'}}>
-                            <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}}  className="px-4"><b>Enregistrer</b></Button><br/><br/>
+                            <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}} onClick={handleEdit} className="px-4"><b>Enregistrer</b></Button><br/><br/>
                             <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}}  className="px-4"><b>Supprimer Projet</b></Button>
                         </Col>
                     </Row>

@@ -14,7 +14,6 @@ function AfficherMessage(props){
 
 
     const userID = props.loggedInMemberID;
-    console.log(userID);
     const [nom, setNom] = useState('');
     const [prenom, setPrenom] =useState('');
     const [statutadhesion, setStatutadhesion]=useState('');
@@ -30,7 +29,7 @@ function AfficherMessage(props){
 
             setNom(jsonData[0].nom);
             setPrenom(jsonData[0].prenom);
-            console.log(jsonData[0]);
+            console.log(jsonData[0].statutadhesion);
           if (jsonData[0].statutadhesion == 'Actif') {
                 setStatutadhesion('Membre');
             } else {
