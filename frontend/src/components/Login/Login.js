@@ -15,9 +15,13 @@ function Formulaire(props) {
         event.preventDefault();
         try{
 
-            const response = await fetch(`http://localhost:5000/login/${userName}/${password}`,{
-                method:'put',
-                Header:{'Content-Type': 'application/json'}
+            const response = await fetch('http://localhost:5000/login',{
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    "username": userName,
+                    "password": password
+                })
             });
             const jsonData=await response.json();
         // Verify the credentials
@@ -37,7 +41,7 @@ function Formulaire(props) {
         // the welcome sign.
         // If not, the warning sign will be set.
         const checkResult = jsonData.check;
-        if (checkResult==true) {
+        if (checkResult===true) {
             console.log(jsonData.userID);
             props.setLoggedInMemberID(jsonData.userID);
             props.setLoggedin(true);
