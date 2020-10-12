@@ -73,7 +73,6 @@ app.post("/utilisateur", async (req, res) => {
 //il va falloir aller chercher le user_id grace a la variable de session
 app.post("/utilisateur/membre", async (req, res) => {
     try {
-
         const {user_id} = req.body;
         const adhesion = new Date();
         const statutAdhesion = "Actif";
@@ -95,11 +94,11 @@ app.put("/login/:username/:password", async (req, res) => {
     try {
         const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1",[req.params.username]);
 
-        bcrypt.compare(req.params.password, cred.rows[0].password, (err, result) => {
+        bcrypt.compare(req.params.password, cred.rows[0].password, async (err, result) => {
             if (result) {
-                res.json({check:true, userID:cred.rows[0].user_id});
+                await res.json({check:true, userID:cred.rows[0].user_id});
             } else {
-                res.json({check:false, userID:0});
+                await res.json({check:false, userID:0});
             }
         });
     } catch (err) {
@@ -113,7 +112,7 @@ app.put("/welcomePage/:userID", async (req, res) =>{
 
         const userInfo = await pool.query("SELECT UTILISATEUR.nom, UTILISATEUR.prenom, UTILISATEUR.user_id, "+
             "member.statutadhesion FROM UTILISATEUR INNER JOIN member ON member.user_id=utilisateur.user_id WHERE utilisateur.user_id=$1", [userID]);
-        console.log(userInfo.rows.length);
+        //console.log(userInfo.rows.length);
         res.json(userInfo.rows);
     }catch(err){
         console.error(err.message);
@@ -156,7 +155,7 @@ app.put("/userSpaceProjetList/:userID", async (req, res)=> {
         const userID = req.params.userID;
         const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join participant on  participant.projet=project.code inner join login on login.user_id=participant.user_id WHERE login.user_id=$1" , [userID]);
         res.json(projetInfo.rows);
-        console.log(projetInfo.rows.length);
+        //console.log(projetInfo.rows.length);
     }catch(err){
 
         console.error(err.message);
@@ -331,7 +330,6 @@ app.get("/member/:id", async (req, res) => {
 
 
 app.listen(5000, () => {
-
     console.log("server has started on port 5000")
 });
 
