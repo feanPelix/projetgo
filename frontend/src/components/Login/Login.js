@@ -1,20 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import AfficherMessage from './AfficherMessage';
-import { Form, Col, Row,Button,InputGroup,FormControl,ListGroup } from "react-bootstrap";
-import {useHistory} from 'react-router-dom';
+//import AfficherMessage from './AfficherMessage';
+import { Form, Button } from "react-bootstrap";
+import { useHistory } from 'react-router-dom';
 
 function Formulaire(props) {
     const history = useHistory();
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
+    const [credentials,setCredentials]=useState('');
 
-    const onSubmitForm=async(event)=> {
-
-        // Check whether the password and username are correct by sending the request to the backend.
+    // Check whether the password and username are correct by sending the request to the backend.
+    const onSubmitForm = async(event) => {
         event.preventDefault();
         try{
-
             const response = await fetch('http://localhost:5000/login',{
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
@@ -24,34 +23,29 @@ function Formulaire(props) {
                 })
             });
             const jsonData=await response.json();
-        // Verify the credentials
+            // Verify the credentials
             searchCredentials(jsonData);
         }catch(err){
             console.log(err.message);
         }
-
     }
 
-
-    const [credentials,setCredentials]=useState('');
-
+    /* If the password and username are correct, true will be returned from the backend.
+     * If true, then the username will be kept and the pageNumber will be set to 2, displaying
+     * the welcome sign.
+     * If not, the warning sign will be set.
+     */
     function searchCredentials(jsonData){
-        // If the password and username are correct, true will be returned from the backend.
-        // If true, then the username will be kept and the pageNumber will be set to 2, displaying
-        // the welcome sign.
-        // If not, the warning sign will be set.
         const checkResult = jsonData.check;
-        if (checkResult===true) {
-            console.log(jsonData.userID);
+
+        if (checkResult === true) {
             props.setLoggedInMemberID(jsonData.userID);
             props.setLoggedin(true);
             history.push('/welcome');
         }else{
-            setCredentials('\n' + 'E-mail ou mot de passe incorret, veuillez réessayer.');
+            setCredentials('\nEmail ou mot de passe incorrect, veuillez réessayer.');
         }
-
     }
-
 
     return(
         <div style={{backgroundColor: '#138496'}}>
@@ -71,11 +65,6 @@ function Formulaire(props) {
                 </Button>
             </Form>
         </div>
-
-
-
-
-
     )
 }
 
