@@ -4,6 +4,10 @@ const cors = require("cors");
 const pool = require("./db");
 const path = require("path");
 const moment = require("moment");
+const bcrypt = require('bcrypt');
+
+// Cost factor for encryption algo
+const saltRounds = 10;
 
 //middleware
 app.use(cors());
@@ -46,36 +50,22 @@ app.get("/Accueil", async (req, res) => {
 //Il reste a gérer l'erreur dans le cas ou la contrainte de l'email unique est brisé
 app.post("/utilisateur", async (req, res) => {
     try {
-
         const {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays, password} = req.body;
         const newUser = await pool.query("INSERT INTO utilisateur (nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays) VALUES($1, $2 ,$3 ,$4 ,$5 ,$6 ,$7, $8, $9, $10) RETURNING *",
             [nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays]
         );
         res.json(newUser.rows[0]);
-        const linkToLogin = await  pool.query("INSERT INTO login (username, password, user_id) VALUES($1, $2 ,$3)",
-            [email, password, newUser.rows[0].user_id]
-        );
+
+        bcrypt.hash(password, saltRounds, async (err, hash) => {
+            await pool.query("INSERT INTO login (username, password, user_id) VALUES($1, $2 ,$3)",
+              [email, hash, newUser.rows[0].user_id] );
+        });
     } catch (err) {
         if(err.code === 'ER_DUP_ENTRY'){
             console.error(err.message); //TODO Add stronger handling
         }else{
             console.error(err.message);
         }
-    }
-})
-
-//create  a login
-app.post("/login", async (req, res) => {
-    try {
-
-        const {username, password, email} = req.body;
-        const user_id = await pool.query("SELECT user_id from utilisateur WHERE email = $1", [email]);
-        const newLogin = await pool.query("INSERT INTO login (username, password, user_id) VALUES($1, $2 ,$3) RETURNING *",
-            [username, password, user_id]
-        );
-        res.json(newLogin.rows[0]);
-    } catch (err) {
-        console.error(err.message);
     }
 })
 
@@ -101,18 +91,17 @@ app.post("/utilisateur/membre", async (req, res) => {
 // User story 5
 // Get all the user/passwords to validate the info. If a single row is returned from the query, the user is validate.
 // If validated, return true, else, false.
-app.put("/login/:username/:motdepass", async (req, res) => {
+app.put("/login/:username/:password", async (req, res) => {
     try {
-        const username = req.params.username;
-        const motdepass =req.params.motdepass;
-        const userInfo = await pool.query("SELECT user_id FROM login WHERE USERNAME=$1 AND PASSWORD=$2",[username, motdepass]);
+        const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1",[req.params.username]);
 
-        if(userInfo.rows.length === 1){
-            res.json({check:true, userID:userInfo.rows[0].user_id});
-        }else{
-            res.json({check:false, userID:0});
-        }
-
+        bcrypt.compare(req.params.password, cred.rows[0].password, (err, result) => {
+            if (result) {
+                res.json({check:true, userID:cred.rows[0].user_id});
+            } else {
+                res.json({check:false, userID:0});
+            }
+        });
     } catch (err) {
         console.error(err.message);
     }
