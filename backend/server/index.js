@@ -34,14 +34,14 @@ app.get("/Accueil", async (req, res) => {
 
 //---------------------User Story 2---------------------------------------
 //-Get tout les projets pour mettre sur la page projets
-    app.get("/Projets", async (req, res) => {
-        try {
-            // Hard-coded project code
-            const projectInfo = await pool.query("SELECT * from project");
-            res.json(projectInfo.rows);
-        } catch (err) {
-            console.error(err.message);
-        }
+app.get("/Projets", async (req, res) => {
+    try {
+        // Hard-coded project code
+        const projectInfo = await pool.query("SELECT * from project");
+        res.json(projectInfo.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
 })
 
 
@@ -58,12 +58,12 @@ app.post("/utilisateur", async (req, res) => {
 
         bcrypt.hash(password, saltRounds, async (err, hash) => {
             await pool.query("INSERT INTO login (username, password, user_id) VALUES($1, $2 ,$3)",
-              [email, hash, newUser.rows[0].user_id] );
+                [email, hash, newUser.rows[0].user_id]);
         });
     } catch (err) {
-        if(err.code === 'ER_DUP_ENTRY'){
+        if (err.code === 'ER_DUP_ENTRY') {
             console.error(err.message); //TODO Add stronger handling
-        }else{
+        } else {
             console.error(err.message);
         }
     }
@@ -92,13 +92,13 @@ app.post("/utilisateur/membre", async (req, res) => {
 // If validated, return true, else, false.
 app.put("/login/:username/:password", async (req, res) => {
     try {
-        const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1",[req.params.username]);
+        const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1", [req.params.username]);
 
         bcrypt.compare(req.params.password, cred.rows[0].password, async (err, result) => {
             if (result) {
-                await res.json({check:true, userID:cred.rows[0].user_id});
+                await res.json({check: true, userID: cred.rows[0].user_id});
             } else {
-                await res.json({check:false, userID:0});
+                await res.json({check: false, userID: 0});
             }
         });
     } catch (err) {
@@ -106,27 +106,27 @@ app.put("/login/:username/:password", async (req, res) => {
     }
 })
 // create user space. Get all the value necessary using the username.
-app.put("/welcomePage/:userID", async (req, res) =>{
+app.put("/welcomePage/:userID", async (req, res) => {
     try {
         const userID = req.params.userID;
 
-        const userInfo = await pool.query("SELECT UTILISATEUR.nom, UTILISATEUR.prenom, UTILISATEUR.user_id, "+
+        const userInfo = await pool.query("SELECT UTILISATEUR.nom, UTILISATEUR.prenom, UTILISATEUR.user_id, " +
             "member.statutadhesion FROM UTILISATEUR INNER JOIN member ON member.user_id=utilisateur.user_id WHERE utilisateur.user_id=$1", [userID]);
         //console.log(userInfo.rows.length);
         res.json(userInfo.rows);
-    }catch(err){
+    } catch (err) {
         console.error(err.message);
         console.error(err.message);
     }
 })
 
-app.put("/userSpace/:userID", async  (req, res) =>{
+app.put("/userSpace/:userID", async (req, res) => {
 
-    try{
+    try {
         const userID = req.params.userID;
         const userInfo = await pool.query("Select * FROM UTILISATEUR INNER JOIN login ON UTILISATEUR.user_id=login.user_id where login.user_id =$1", [userID]);
         res.json(userInfo.rows);
-    }catch(err){
+    } catch (err) {
         console.error(err.message);
     }
 })
@@ -150,13 +150,13 @@ app.get("/report/:code", async (req, res) => {
 //List de projet d'un membre
 // Get the list of the project of a certain member with given userID and return the list.
 
-app.put("/userSpaceProjetList/:userID", async (req, res)=> {
+app.put("/userSpaceProjetList/:userID", async (req, res) => {
     try {
         const userID = req.params.userID;
-        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join participant on  participant.projet=project.code inner join login on login.user_id=participant.user_id WHERE login.user_id=$1" , [userID]);
+        const projetInfo = await pool.query("SELECT * FROM PROJECT inner join participant on  participant.projet=project.code inner join login on login.user_id=participant.user_id WHERE login.user_id=$1", [userID]);
         res.json(projetInfo.rows);
         //console.log(projetInfo.rows.length);
-    }catch(err){
+    } catch (err) {
 
         console.error(err.message);
     }
@@ -165,7 +165,7 @@ app.put("/userSpaceProjetList/:userID", async (req, res)=> {
 //---------------------User Story 7------------------------------------
 //Ajouter project
 
-app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
+app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res) => {
     try {
         const titre = req.params.titre;
         const descCourte = req.params.descCourte;
@@ -185,26 +185,26 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
         // Check if the update is successful. If the difference between number of total project line before and after the commit
         // is one then the commit is successful. If commit is successful, return true, else false
 
-        const oldProjectQuery = await pool.query ("select * from project");
-        await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll,"+
+        const oldProjectQuery = await pool.query("select * from project");
+        await pool.query("INSERT INTO project (titre, description, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll," +
             "totaldepense, image, debutreel, debutfin, etatavancement, responsable) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)",
             [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable])
         // GET THE ID OF CREATED PROJECT
 
-        const projetInfo =await pool.query("SELECT code FROM PROJECT WHERE PROJECT.titre = $1 AND PROJECT.description = $2 AND PROJECT.sommaire = $3", [titre, descCourte, sommaire]);
+        const projetInfo = await pool.query("SELECT code FROM PROJECT WHERE PROJECT.titre = $1 AND PROJECT.description = $2 AND PROJECT.sommaire = $3", [titre, descCourte, sommaire]);
         const projectID = projetInfo.rows[0].code;
 
         // Updating the participant table
 
-        await pool.query("INSERT INTO PARTICIPANT (projet, user_id, comite) VALUES ($1, $2, $3)",[projectID, responsable, "Member"]);
+        await pool.query("INSERT INTO PARTICIPANT (projet, user_id, comite) VALUES ($1, $2, $3)", [projectID, responsable, "Member"]);
 
         const newProjectQuery = await pool.query("select * from project");
-        if (newProjectQuery.rows.length -oldProjectQuery.rows.length === 1){
+        if (newProjectQuery.rows.length - oldProjectQuery.rows.length === 1) {
             res.json(true);
-        }else{
+        } else {
             res.json(false);
         }
-    }catch(err){
+    } catch (err) {
         console.error(err.message);
     }
 })
@@ -223,8 +223,6 @@ app.get("/allMembers", async (req, res) => {
 })
 
 
-
-
 //Trouver tout les bénévoles de la bdd qui ne sont PAS deja dans le comité
 
 app.get("/allBenevoles", async (req, res) => {
@@ -238,11 +236,12 @@ app.get("/allBenevoles", async (req, res) => {
 })
 
 //Créer un participant (ajouter un membre au comité)
-app.post("/AjouterAuComite", async (req, res) => {
+app.post("/AjouterMembre", async (req, res) => {
     try {
 
-        const {code, user_id, role} = req.body;
-        const newComite = await pool.query("INSERT INTO participant (projet, user_id, user_id) VALUES($1, $2 ,$3) RETURNING *",
+        const {code, user_id} = req.body;
+        const role = "Membre"
+        const newComite = await pool.query("INSERT INTO participant (projet, user_id, role) VALUES($1, $2 ,$3) RETURNING *",
             [code, user_id, role]
         );
         res.json(newComite.rows[0]);
@@ -251,6 +250,20 @@ app.post("/AjouterAuComite", async (req, res) => {
     }
 })
 
+//Créer un participant (ajouter un benevole au comité)
+app.post("/AjouterBenevole", async (req, res) => {
+    try {
+
+        const {code, user_id} = req.body;
+        const role = "Benevole"
+        const newComite = await pool.query("INSERT INTO participant (projet, user_id, role) VALUES($1, $2 ,$3) RETURNING *",
+            [code, user_id, role]
+        );
+        res.json(newComite.rows[0]);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
 
 // Detail of a specific project
 app.post("/projectDetail:projectID", async (req, res) => {
@@ -259,7 +272,7 @@ app.post("/projectDetail:projectID", async (req, res) => {
         const projectID = req.params.projectID;
         const projectDetail = await pool.query("SELECT * FROM PROJECT WHERE PROJECT.code = $1", [projectID]);
         res.json(projectDetail.rows);
-    }catch(err){
+    } catch (err) {
         console.error(err.message);
     }
 });
@@ -292,11 +305,29 @@ app.get("/VoirBenevoleProjet", async (req, res) => {
 
 //Supprimer un membre d'un projet
 
+app.get("/VoirBenevoleProjet", async (req, res) => {
+    try {
+        const {codeProjet} = req.body;
+        const role = 'Benevole';
+        const participantInfo = await pool.query("SELECT * from participant WHERE projet = $1 and comite = $2 ", [codeProjet, role]);
+        res.json(participantInfo.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+})
 
-//Supprimer un benevole d'un projet
 
+//Supprimer un participant d'un projet
 
-
+app.delete("/SupprimerParticipant/:code/:id", async (req, res) => {
+    try {
+        const {projet, id} = req.params;
+        const deleteParticipant = await pool.query("DELETE FROM participant WHERE projet = $1 and user_id = $2", [projet, id]);
+        res.json("Todo was deleted!");
+    } catch (err) {
+        console.log(err.message);
+    }
+});
 
 
 //create  a member
@@ -312,12 +343,6 @@ app.get("/member/:id", async (req, res) => {
         console.error(err.message);
     }
 })
-
-
-
-
-
-
 
 
 //create a donation
