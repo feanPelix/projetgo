@@ -38,7 +38,7 @@ function Report(props) {
     <>
       <h2>Rapport de projet</h2>
       <Timeline>
-        {listReport.map((report) => {
+        { listReport.map((report) => {
           let icon;
           let iconColor;
           if (report.etatrisque === "Élevé") {

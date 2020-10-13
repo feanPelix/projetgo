@@ -90,11 +90,13 @@ app.post("/utilisateur/membre", async (req, res) => {
 // User story 5
 // Get all the user/passwords to validate the info. If a single row is returned from the query, the user is validate.
 // If validated, return true, else, false.
-app.put("/login/:username/:password", async (req, res) => {
+app.post("/login", async (req, res) => {
+    /*Attention !
+    * Il n'y a aucune validation/sanitation d'input. Requete a risque d'injection.*/
     try {
-        const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1", [req.params.username]);
+        const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1",[req.body.username]);
 
-        bcrypt.compare(req.params.password, cred.rows[0].password, async (err, result) => {
+        bcrypt.compare(req.body.password, cred.rows[0].password, async (err, result) => {
             if (result) {
                 await res.json({check: true, userID: cred.rows[0].user_id});
             } else {
@@ -120,13 +122,13 @@ app.put("/welcomePage/:userID", async (req, res) => {
     }
 })
 
-app.put("/userSpace/:userID", async (req, res) => {
+app.put("/userSpace/:userID", async  (req, res) =>{
 
-    try {
+    try{
         const userID = req.params.userID;
         const userInfo = await pool.query("Select * FROM UTILISATEUR INNER JOIN login ON UTILISATEUR.user_id=login.user_id where login.user_id =$1", [userID]);
         res.json(userInfo.rows);
-    } catch (err) {
+    }catch(err){
         console.error(err.message);
     }
 })
@@ -150,13 +152,13 @@ app.get("/report/:code", async (req, res) => {
 //List de projet d'un membre
 // Get the list of the project of a certain member with given userID and return the list.
 
-app.put("/userSpaceProjetList/:userID", async (req, res) => {
+app.put("/userSpaceProjetList/:userID", async (req, res)=> {
     try {
         const userID = req.params.userID;
-        const projetInfo = await pool.query("SELECT * FROM PROJECT inner join participant on  participant.projet=project.code inner join login on login.user_id=participant.user_id WHERE login.user_id=$1", [userID]);
+        const projetInfo = await pool.query ("SELECT * FROM PROJECT inner join participant on  participant.projet=project.code inner join login on login.user_id=participant.user_id WHERE login.user_id=$1" , [userID]);
         res.json(projetInfo.rows);
         //console.log(projetInfo.rows.length);
-    } catch (err) {
+    }catch(err){
 
         console.error(err.message);
     }
@@ -165,7 +167,7 @@ app.put("/userSpaceProjetList/:userID", async (req, res) => {
 //---------------------User Story 7------------------------------------
 //Ajouter project
 
-app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res) => {
+app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsable/:image", async (req, res)=> {
     try {
         const titre = req.params.titre;
         const descCourte = req.params.descCourte;
@@ -223,6 +225,8 @@ app.get("/allMembers", async (req, res) => {
 })
 
 
+
+
 //Trouver tout les bénévoles de la bdd qui ne sont PAS deja dans le comité
 
 app.get("/allBenevoles", async (req, res) => {
@@ -265,6 +269,7 @@ app.post("/AjouterBenevole", async (req, res) => {
     }
 })
 
+
 // Detail of a specific project
 app.post("/projectDetail:projectID", async (req, res) => {
     try {
@@ -305,17 +310,8 @@ app.get("/VoirBenevoleProjet", async (req, res) => {
 
 //Supprimer un membre d'un projet
 
-app.get("/VoirBenevoleProjet", async (req, res) => {
-    try {
-        const {codeProjet} = req.body;
-        const role = 'Benevole';
-        const participantInfo = await pool.query("SELECT * from participant WHERE projet = $1 and comite = $2 ", [codeProjet, role]);
-        res.json(participantInfo.rows);
-    } catch (err) {
-        console.error(err.message);
-    }
-})
 
+//Supprimer un benevole d'un projet
 
 //Supprimer un participant d'un projet
 
@@ -343,6 +339,12 @@ app.get("/member/:id", async (req, res) => {
         console.error(err.message);
     }
 })
+
+
+
+
+
+
 
 
 //create a donation
