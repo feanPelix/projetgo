@@ -213,12 +213,13 @@ app.put("/ajoutProjet/:titre/:descCourte/:sommaire/:startDate/:endDate/:responsa
 
 //Trouver tout les membres de la bdd qui ne sont PAS deja dans le comité
 
-app.get("/allMembers", async (req, res) => {
+app.get("/allMembers/:projectID", async (req, res) => {
     try {
-        const {codeProjet} = req.body;
+        const codeProjet = req.params.projectID;
         const userInfo = await pool.query("SELECT * from member left join participant on member.user_id = participant.user_id " +
             "WHERE participant.projet is null or participant.projet !=$1", [codeProjet]);
         res.json(userInfo.rows);
+        console.log(userInfo.rows)
     } catch (err) {
         console.error(err.message);
     }
@@ -229,9 +230,9 @@ app.get("/allMembers", async (req, res) => {
 
 //Trouver tout les bénévoles de la bdd qui ne sont PAS deja dans le comité
 
-app.get("/allBenevoles", async (req, res) => {
+app.get("/allBenevoles/:projectID", async (req, res) => {
     try {
-        const {codeProjet} = req.body;
+        const codeProjet = req.params.projectID;
         const userInfo = await pool.query("SELECT * from utilisateur left join participant on utilisateur.user_id = participant.user_id WHERE participant.projet is null or participant.projet !=$1", [codeProjet]);
         res.json(userInfo.rows);
     } catch (err) {
@@ -284,11 +285,12 @@ app.post("/projectDetail:projectID", async (req, res) => {
 
 //Afficher tout les membre d'un projet
 
-app.get("/VoirMembreProjet", async (req, res) => {
+app.get("/VoirMembreProjet/:projectID", async (req, res) => {
     try {
-        const {codeProjet} = req.body;
-        const role = 'Membre';
-        const participantInfo = await pool.query("SELECT * from participant WHERE projet = $1 and comite = $2 ", [codeProjet, role]);
+        const codeProjet = req.params.projectID;
+        const role = 'Member';
+        const participantInfo = await pool.query("SELECT Utilisateur.nom, UTILISATEUR.PRENOM from UTILISATEUR INNER JOIN participant "
+            +"ON participant.user_id=UTILISATEUR.user_id WHERE participant.projet = $1 and participant.comite = $2 ", [codeProjet, role]);
         res.json(participantInfo.rows);
     } catch (err) {
         console.error(err.message);
@@ -297,11 +299,12 @@ app.get("/VoirMembreProjet", async (req, res) => {
 
 //Afficher tout les benevoles d'un projet
 
-app.get("/VoirBenevoleProjet", async (req, res) => {
+app.get("/VoirBenevoleProjet/:projectID", async (req, res) => {
     try {
-        const {codeProjet} = req.body;
-        const role = 'Benevole';
-        const participantInfo = await pool.query("SELECT * from participant WHERE projet = $1 and comite = $2 ", [codeProjet, role]);
+        const codeProjet = req.params.projectID;
+        const role = 'benevole';
+        const participantInfo = await pool.query("SELECT Utilisateur.nom, UTILISATEUR.PRENOM from UTILISATEUR INNER JOIN participant "
+            +"ON participant.user_id=UTILISATEUR.user_id WHERE participant.projet = $1 and participant.comite = $2 ", [codeProjet, role]);
         res.json(participantInfo.rows);
     } catch (err) {
         console.error(err.message);

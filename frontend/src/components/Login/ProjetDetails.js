@@ -4,6 +4,7 @@ import {Form, Col, Row, Button, ListGroup, Container, Breadcrumb, Image, Dropdow
 import Report from '../Report/Report';
 import { useLocation } from "react-router-dom";
 import EditProjects from "./EditProjects";
+import {storage} from "../../firebase";
 
 
 
@@ -20,27 +21,17 @@ function ProjetDetails(props){
     const [benevoleID, setBenevoleID]=useState('');
     const [initialValueMember, setInitialValueMember] = useState(true);
     const [check, setCheck] = useState(true);
-    const [arrayAddedAlreadyMembers, setArrayAddedAlreadyMembers]=useState([
-        {name:"PepitaMembre",id:3},
-        {name:"JuanitaMembre",id:4}
-    ]);
 
-    const [arrayAddedAlreadyBenevoles, setArrayAddedAlreadyBenevoles]=useState([
-        {name:"JoshBenevole",id:3},
-        {name:"PauloBenevole",id:4}
-    ]);
+
+    const [arrayAddedAlreadyBenevoles, setArrayAddedAlreadyBenevoles]=useState([]);
 
     //Searching for new members to add
-    const [arrayMembersDB, setArrayMembersDB]=useState([
-        {name:"JohnMembre",id:1},
-        {name:"SueMembre",id:2}
-    ]);
+    const [arrayMembersDB, setArrayMembersDB]=useState([] );
 
 
-    const [arrayBenevolesDB,setArrayBenevolesDB]=useState([
-        {name:"PepiBenevole",id:1},
-        {name:"JuaniBenevole",id:2}
-    ]);
+    const [arrayBenevolesDB,setArrayBenevolesDB]=useState([]);
+
+    const [arrayAddedAlreadyMembers, setArrayAddedAlreadyMembers]=useState([]);
 
     //Adding members from the list
     const handleChangeMember = event =>{
@@ -94,7 +85,7 @@ function ProjetDetails(props){
             <option value=''>Choisissez un membre</option>
             {arrayMembersDB.map((option, id) =>
                 <option  value={id}  key={id}>
-                    {option.name}
+                    {option.nom} {option.prenom}
                 </option>
             )}
         </Form.Control>
@@ -103,8 +94,9 @@ function ProjetDetails(props){
     const listofAlreadyAddedMembres = (
         <ListGroup>
             {arrayAddedAlreadyMembers.map((membres) =>
+
                 <ListGroup.Item key={membres.id}>
-                    {membres.name}  <Button onClick={()=>supprimerMember(membres.id)} className="mb-2"  variant="info">-</Button>
+                    {membres.nom} {membres.prenom}  <Button onClick={()=>supprimerMember(membres.id)} className="mb-2"  variant="info">-</Button>
                 </ListGroup.Item>
             )}
         </ListGroup>
@@ -151,7 +143,7 @@ function ProjetDetails(props){
             <option value='' disabled selected>Choisissez un bénévole</option>
             {arrayBenevolesDB.map((option, id) =>
                 <option value={id}  key={id}>
-                    {option.name}
+                    {option.nom} {option.prenom}
                 </option>
             )}
         </Form.Control>
@@ -161,7 +153,7 @@ function ProjetDetails(props){
         <ListGroup>
             {arrayAddedAlreadyBenevoles.map((benevole) =>
                 <ListGroup.Item key={benevole.id}>
-                    {benevole.name}  <Button onClick={()=>supprimerBenevole(benevole.id)} className="mb-2" variant="info">-</Button>
+                    {benevole.nom} {benevole.prenom} <Button onClick={()=>supprimerBenevole(benevole.id)} className="mb-2" variant="info">-</Button>
                 </ListGroup.Item>
             )}
         </ListGroup>
@@ -189,15 +181,16 @@ function ProjetDetails(props){
     const [budget, setBudget] = useState('');
     const [totalfondscoll, setTotalfondscoll] = useState('');
     const [totaldepense, setTotaldepense] = useState('');
-    const [image, setImage] = useState('');
     const [debutreel, setDebutreel] = useState(null);
     const [debutfin, setDebutfin] = useState(null);
     const [etatavancement, setEtatavancement] = useState('');
-    const [nameimg, setNameimg] = useState('');
+    const [nomImage, setNomImage] = useState('');
     const [responsable, setResponsable] = useState('');
+    const [image, setImage] = useState('');
 
     const getProjectDetail = async ()=> {
         try {
+
             const body = {projetID};
             // Getting the first name, last name, userID and status of the membership from the table
             const response = await fetch(`http://localhost:5000/projectDetail${projetID}`, {
@@ -216,22 +209,46 @@ function ProjetDetails(props){
             setBudget(jsonData[0].budget);
             setTotalfondscoll(jsonData[0].totalfondscoll);
             setTotaldepense(jsonData[0].totaldepense);
-            setImage(jsonData[0].image);
             setDebutreel(jsonData[0].debutreel);
             setDebutfin(jsonData[0].debutfin);
             setEtatavancement(jsonData[0].etatavancement);
-            setNameimg(jsonData[0].nameimg);
+            setNomImage(jsonData[0].nameimg);
+            setImage(jsonData[0].image);
             setResponsable(jsonData[0].responsable);
 
+            const responseMembre = await fetch(`http://localhost:5000/VoirMembreProjet/${projetID}`);
+            const jsonDataMembreList = await responseMembre.json();
 
+            setArrayAddedAlreadyMembers(jsonDataMembreList);
+
+            const responseBenevole = await fetch(`http://localhost:5000/VoirBenevoleProjet/${projetID}`);
+            const jsonDataBenevoleList = await responseBenevole.json();
+            setArrayAddedAlreadyBenevoles(jsonDataBenevoleList)
+
+
+            const responseAllMembre = await fetch(`http://localhost:5000/allMembers/${projetID}`);
+
+            const jsonDataAllMemberList = await responseAllMembre.json();
+            setArrayMembersDB(jsonDataAllMemberList);
+
+            const responseAllBenevole = await fetch(`http://localhost:5000/allBenevoles/${projetID}`);
+
+            const jsonDataAllBenevoleList = await responseAllBenevole.json();
+            setArrayBenevolesDB(jsonDataAllBenevoleList);
 
         } catch (err) {
             console.log(err.message);
         }
     }
+
+    const handleChange = e => {
+
+        if (e.target.files[0]) {
+            setNomImage(e.target.files[0]);
+        }
+    };
     useEffect(()=>{
         getProjectDetail();
-        console.log(nameimg);
     },[]);
 
     const member=props.loggedInMemberID;
@@ -246,22 +263,45 @@ function ProjetDetails(props){
         }
     }, [responsable])
 
-    const handleEdit=async ()=>{
-        try {
-            console.log(title);
-            const body = {projetID, title, description, sommaire, statutprojet, debutestime, finestime, budget, totalfondscoll, totaldepense, debutreel, debutfin, etatavancement, nameimg, responsable};
-            // Getting the first name, last name, userID and status of the membership from the table
+    const handleEdit=async (event) => {
+        const uploadTask = storage.ref(`images/${nomImage.name}`).put(nomImage);
+        uploadTask.on(
+            "state_changed",
+            snapshot => {
+            },
+            error => {
+                console.log(error);
+            },
+            () => {
+                storage
+                    .ref("images")
+                    .child(nomImage.name)
+                    .getDownloadURL()
+                    .then( async image => {
+                        try {
+                            const responsable = props.loggedInMemberID;
+                            const body = {title, description, sommaire, statutprojet, debutestime, finestime, budget, totalfondscoll, totaldepense, debutreel, debutfin, etatavancement, responsable, image};
 
+                            const response = await fetch("http://localhost:5000/editProjet/", {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(body)
+                            });
+                            const jsonData = await response.json();
+                            if (jsonData) {
+                                alert("Edit sucessful");
 
-            const response = await fetch(`http://localhost:5000/projectEdit${projetID}`, {
-                method: 'post',
-                Header: {'Content-Type': 'application/json'},
-                body: JSON.stringify(body)
-            });
-            const jsonData = await response.json();
-        } catch (err) {
-            console.log(err.message);
-        }
+                            } else {
+                                alert("Please try again");
+                            }
+                        } catch (err) {
+                            console.log(err.message);
+                        }
+                    });
+            }
+        )
+        event.preventDefault();
+
     }
 
 
@@ -269,88 +309,89 @@ function ProjetDetails(props){
 
         <Container style={{textAlign:'left'}} >
             <Col>
-            <br/>
-            <Breadcrumb >
-                <Breadcrumb.Item href="#">Profil</Breadcrumb.Item>
-                <Breadcrumb.Item active>Project X</Breadcrumb.Item>
-            </Breadcrumb><br/>
-            <div style={{fontSize:'18px'}}>
-                <Row className="px-3">
+                <br/>
+                <Breadcrumb >
+                    <Breadcrumb.Item href="#">Profil</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Project X</Breadcrumb.Item>
+                </Breadcrumb><br/>
+                <div style={{fontSize:'18px'}}>
+                    <Row className="px-3">
 
-                    <h1>{title}</h1><p> <EditProjects content={title} stateVisibility={stateVisibility} setContent={setTitle}/></p>
+                        <h1>{title}</h1><p> <EditProjects content={title} stateVisibility={stateVisibility} setContent={setTitle}/></p>
 
-                    {/*<button style={{visibility:stateVisibility}} type="button" className="mt-3 ml-2 btn btn-info btn-sm">+</button></p>*/}
-                    <p>{description}  <EditProjects content={description} stateVisibility={stateVisibility} setContent={setDescription}/></p>
-
-
-                </Row>
-                <Row>
-                    <Col className="mr-4" lg={5} sm={12}>
-                        <Image fluid src={image} />
-                        <button  style={{visibility:stateVisibility}} type="button" className="btn btn-info btn-circle btn-sm">+</button>
-                    </Col><br /><br />
-                    <Col className="mr-4" lg={6} sm={12}>
-                        <p>{sommaire}</p>
-                        <EditProjects content={sommaire} stateVisibility={stateVisibility} setContent={setSommaire}/>
-                    </Col>
-                </Row><br/>
-                <Row>
-                    <Col>
-                        <Button style={{backgroundColor:'orange'}} className="px-4"><b>Faire un Don</b></Button>
-                    </Col>
-                    <Col style={{visibility:stateVisibility}}>
-                        <div style={{display:'inline-block'}}>
-                            <DropdownButton  style={{float:'left'}} variant="info" onSelect={handleSelect} id="dropdown-basic-button" title="Statut Project">
-                                <Dropdown.Item eventKey="Proposé">Proposé</Dropdown.Item>
-                                <Dropdown.Item eventKey="Soumis">Soumis</Dropdown.Item>
-                                <Dropdown.Item eventKey="Approuvé">Approuvé</Dropdown.Item>
-                                <Dropdown.Item eventKey="Actif">Actif</Dropdown.Item>
-                                <Dropdown.Item eventKey="Terminé">Terminé</Dropdown.Item>
-                                <Dropdown.Item eventKey="Gelé">Gelé</Dropdown.Item>
-                            </DropdownButton>
-                            <span style={{float:'right'}} className="pl-2 pt-2">{value}</span>
-                        </div>
-                    </Col>
-                </Row><br/>
-                <Row>
-                    <Col>
-                        <p><b>Date début estimée:</b> {debutestime}</p>
-                    </Col>
-                    <Col>
-                        <p><b>Date fin estimé:</b> {finestime}</p>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <p><b>Montant amassé:</b> {totalfondscoll}</p>
-                    </Col>
-                </Row><br/>
+                        <p>{description}  <EditProjects content={description} stateVisibility={stateVisibility} setContent={setDescription}/></p>
 
 
-            </div><br/>
+                    </Row>
+                    <Row>
+                        <Col className="mr-4" lg={5} sm={12}>
+                            <Image fluid src={image} />
+                            <input style={{visibility:stateVisibility}} type="file" onChange={handleChange} className="btn btn-info btn-circle btn-sm" id="exampleFormControlFile1"/>
 
-            <div style={{visibility:stateVisibility}} className="AjouterMembres" >
-                <Container>
+
+                        </Col><br /><br />
+                        <Col className="mr-4" lg={6} sm={12}>
+                            <p>{sommaire}</p>
+                            <EditProjects content={sommaire} stateVisibility={stateVisibility} setContent={setSommaire}/>
+                        </Col>
+                    </Row><br/>
                     <Row>
                         <Col>
-                            {listToAddMembers}<br/>
-                            <Button className="mb-2" style={{minWidth: '200px'}} variant="info" onClick={ajouterMembre}><b>+ </b>Ajouter</Button><br/>
-                            {listofAlreadyAddedMembres}
+                            <Button style={{backgroundColor:'orange'}} className="px-4"><b>Faire un Don</b></Button>
                         </Col>
-
-
+                        <Col style={{visibility:stateVisibility}}>
+                            <div style={{display:'inline-block'}}>
+                                <DropdownButton  style={{float:'left'}} variant="info" onSelect={handleSelect} id="dropdown-basic-button" title="Statut Project">
+                                    <Dropdown.Item eventKey="Proposé">Proposé</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Soumis">Soumis</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Approuvé">Approuvé</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Actif">Actif</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Terminé">Terminé</Dropdown.Item>
+                                    <Dropdown.Item eventKey="Gelé">Gelé</Dropdown.Item>
+                                </DropdownButton>
+                                <span style={{float:'right'}} className="pl-2 pt-2">{value}</span>
+                            </div>
+                        </Col>
+                    </Row><br/>
+                    <Row>
                         <Col>
-                            {listAddBenevoles}<br/>
-                            <Button className="mb-2" style={{minWidth: '200px'}} variant="info" onClick={ajouterBenevole}><b>+ </b>Ajouter</Button><br/>
-                            {listNomsBenevoles}
+                            <p><b>Date début estimée:</b> {debutestime}</p>
                         </Col>
-                        <Col style={{textAlign:'right'}}>
-                            <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}} onClick={handleEdit} className="px-4"><b>Enregistrer</b></Button><br/><br/>
-                            <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}}  className="px-4"><b>Supprimer Projet</b></Button>
+                        <Col>
+                            <p><b>Date fin estimé:</b> {finestime}</p>
                         </Col>
                     </Row>
-                </Container>
-            </div><br/><br/>
+                    <Row>
+                        <Col>
+                            <p><b>Montant amassé:</b> {totalfondscoll}</p>
+                        </Col>
+                    </Row><br/>
+
+
+                </div><br/>
+
+                <div style={{visibility:stateVisibility}} className="AjouterMembres" >
+                    <Container>
+                        <Row>
+                            <Col>
+                                {listToAddMembers}<br/>
+                                <Button className="mb-2" style={{minWidth: '200px'}} variant="info" onClick={ajouterMembre}><b>+ </b>Ajouter</Button><br/>
+                                {listofAlreadyAddedMembres}
+                            </Col>
+
+
+                            <Col>
+                                {listAddBenevoles}<br/>
+                                <Button className="mb-2" style={{minWidth: '200px'}} variant="info" onClick={ajouterBenevole}><b>+ </b>Ajouter</Button><br/>
+                                {listNomsBenevoles}
+                            </Col>
+                            <Col style={{textAlign:'right'}}>
+                                <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}} onClick={handleEdit} className="px-4"><b>Enregistrer</b></Button><br/><br/>
+                                <Button style={{visibility:stateVisibility}} className="p-5" style={{backgroundColor:'orange'}}  className="px-4"><b>Supprimer Projet</b></Button>
+                            </Col>
+                        </Row>
+                    </Container>
+                </div><br/><br/>
             </Col>
             <Col>
                 <Report project={projetID} />

@@ -17,7 +17,7 @@ function EditProjects(props){
     }
     return (
         <>
-            <Button variant="primary" style={{visibility:props.stateVisibility}} onClick={handleShow}>
+            <Button variant="primary" className="btn btn-info btn-circle btn-sm" style={{visibility:props.stateVisibility}} onClick={handleShow}>
                 +
             </Button>
 
