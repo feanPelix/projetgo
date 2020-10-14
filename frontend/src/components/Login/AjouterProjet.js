@@ -50,7 +50,7 @@ function AjouterProjet(props) {
                                 body: JSON.stringify(body)
                             });
                             const jsonData = await response.json();
-                            console.log(jsonData);
+                            console.log(jsonData[0]);
                             if (jsonData) {
                                 alert("Submission sucessful");
                                 setTitre('');
