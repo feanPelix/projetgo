@@ -1,17 +1,16 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
+import ButtonPG from '../ButtonPG/ButtonPG';
 import './ButtonDonation.css';
 
 export function ButtonDonation() {
   const handleClick = () => {};
 
   return (
-    <Button
-      variant="donation"
+    <ButtonPG
+      text="Faire un don"
+      variant="orange"
       onClick={handleClick}
-    >
-      Faire un don
-    </Button>
+    />
   );
 }
 

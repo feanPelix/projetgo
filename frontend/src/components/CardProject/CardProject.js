@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import './CardProject.css';
-import ButtonDonation from '../ButtonDonation/ButtonDonation';
+import ButtonDonation from '../Buttons/ButtonDonation/ButtonDonation';
 
 
 

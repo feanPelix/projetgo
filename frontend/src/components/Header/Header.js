@@ -4,6 +4,7 @@ import { Image } from 'react-bootstrap';
 import logo from '../../assets/logo-projetgo.png';
 import {useHistory} from "react-router-dom";
 import {withRouter} from 'react-router';
+import Login from '../Login/Login';
 
 export function Header(props) {
     const[stateVisibilityLoggedin, setStateVisibilityLoggedin]=useState('hidden');
@@ -33,7 +34,7 @@ export function Header(props) {
                         <Nav.Item><Nav.Link className="nav-dropdown" href="/">ACCUEIL</Nav.Link></Nav.Item>
                         <Nav.Item><Nav.Link  className="nav-dropdown" href="/projects" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
                         <Nav.Item><Nav.Link  className="nav-dropdown" href="/inscription" >INSCRIPTION</Nav.Link></Nav.Item>
-                        <Nav.Item><Nav.Link className="nav-dropdown"  href="/login" >LOGIN</Nav.Link></Nav.Item>
+                        <Nav.Item><Login /></Nav.Item>
                     </Nav>
                 </Container>
                 <Container style={{visibility:stateVisibilityLoggedin}}>
