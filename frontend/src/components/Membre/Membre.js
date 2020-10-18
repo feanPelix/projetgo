@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Breadcrumb, BreadcrumbItem, Container } from 'react-bootstrap';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import AfficherMessage from "../Login/AfficherMessage";
 import Profile from "../Login/Profile";
 import ListerProjects from "../Login/ListerProjects";
 import AjouterProjet from "../Login/AjouterProjet";
 import ProjectContainer from '../ProjectContainer/ProjectContainer';
-import ProjetDetails from "../Login/ProjetDetails";
-
+import { AuthContext } from '../context/AuthContext/AuthContext';
 
 export default function Membre({ match }) {
+  const {state: {isAuthenticated}} = useContext(AuthContext);
+  if (!isAuthenticated) {
+    return (
+      <Redirect to="/" />
+    );
+  }
+
   return(
     <Container>
       <Breadcrumb>
