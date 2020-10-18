@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import {Container, Col, Row, CardDeck} from 'react-bootstrap';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import CardProject from '../CardProject/CardProject';
 import './Home.css';
@@ -48,7 +48,9 @@ export function Home() {
         </Col>
       </Row>
       <Row>
-        {highlightProjects}
+        <CardDeck>
+          {highlightProjects}
+        </CardDeck>
       </Row>
     </Container>
   );
