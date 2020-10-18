@@ -24,7 +24,7 @@ export default function NewFundraising({ history, match }) {
     event.preventDefault();
     try {
       //Write request
-      const response = await fetch('http://localhost:5000/projects/:projectId/campaign', {
+      const response = await fetch('/project/:projectId/campaign', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'

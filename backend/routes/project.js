@@ -167,7 +167,7 @@ router.get("/:projectID/member", async (req, res) => {
     } catch (err) {
         console.error(err.message);
     }
-})
+});
 
 // get /project/benevole
 //Afficher tout les benevoles d'un projet
@@ -181,9 +181,103 @@ router.get("/:projectID/benevole", async (req, res) => {
     } catch (err) {
         console.error(err.message);
     }
-})
+});
+
+//create a donation
+/*POST new fundraising */
+router.post('/:projectId/campaign', async (req, res) => {
+    //Check data received
+    const errors = [];
+
+    if (!req.body.begin) {
+        errors.push('No start date provided');
+    }
+
+    if (!req.body.end) {
+        errors.push('No end date provided');
+    }
+
+    if (!req.body.goal) {
+        errors.push('No amount provided');
+    }
+
+    //Create new campaign
+    const newCampaign = {
+        projectId: req.body.projectId,
+        start: req.body.start,
+        end: req.body.end,
+        goal: req.body.goal
+    };
+
+    const sql = 'INSERT INTO fundraising (projet, debut, fin, objectif) VALUES ($1,$2,$3,$4)';
+    const params = Object.keys(newCampaign).map((key) => {
+        return newCampaign[key];
+    });
+
+    try {
+        await pool.query(sql, params, (err, result) => {
+            if (err) {
+                res.status(400).json({error: err.message});
+                return;
+            }
+            res.json({
+                message: "success",
+                campaign: {
+                    ...newCampaign,
+                    id: this.lastID,
+                },
+            });
+        });
+    } catch (error) {
+
+    }
+});
 
 
+/* GET current campaign for a project */
+router.get('/:projectId/campaign', async (req, res) => {
+    const projectId = req.params.projectId;
+    try {
+        const result = await pool.query("SELECT * FROM fundraising WHERE projet = $1 AND fin > NOW()", [projectId]);
+        if (!result || !result.rowCount) {
+            res.json({
+                message: "No current campaign",
+                campaign: null,
+            });
+            return;
+        }
 
-// export our router to be mounted by the parent application
+        res.json({
+            message: "Campaign found",
+            campaign: result.rows[0]
+        });
+    } catch(error) {
+        res.status(500).json({error: error.message});
+    }
+});
+
+
+/* GET donations for a project */
+router.get('/:projectId/donations', async (req, res) => {
+    const projectId = req.params.projectId;
+    try {
+        const result = await pool.query("SELECT * FROM don WHERE fundraising IN (SELECT fundraising_id FROM fundraising WHERE projet = $1)", [projectId]);
+        if (!result || !result.rowCount) {
+            res.json({
+                message: "No Donations",
+                donations: [],
+            });
+            return;
+        }
+
+        res.json({
+            message: "Donations found",
+            donations: result.rows[0]
+        });
+    } catch(error) {
+        res.status(500).json({error: error.message});
+    }
+});
+
+
 module.exports = router;

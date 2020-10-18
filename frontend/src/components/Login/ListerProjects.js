@@ -7,7 +7,7 @@ function ListerProjects({ match, history }) {
   const displayList = async () => {
     try {
       const userID = props.loggedInMemberID;
-      const response = await fetch(`http://localhost:5000/userSpaceProjetList/${userID}`, {
+      const response = await fetch(`/user/${userID}/project`, {
         method: 'put',
         Header: { 'Content-Type': 'application/json' }
       });
@@ -31,7 +31,7 @@ function ListerProjects({ match, history }) {
 
     <Container>
       <Breadcrumb style={{ fontSize: "20px" }}>
-        <Breadcrumb.Item onClick={(history.push("/userSpace")}>Profil</Breadcrumb.Item>
+        <Breadcrumb.Item onClick={history.push("/userSpace")}>Profil</Breadcrumb.Item>
         <Breadcrumb.Item active>Mes Projets</Breadcrumb.Item>
       </Breadcrumb><br /><br />
 

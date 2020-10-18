@@ -58,8 +58,6 @@ router.get("/:userID", async (req, res) => {
 });
 
 
-// TODO A checker. On ne devrait pas faire de jointure avec la table de login.
-// ???
 // get /member/:memberID/project
 //List de projet d'un membre
 // Get the list of the project of a certain member with given userID and return the list.
