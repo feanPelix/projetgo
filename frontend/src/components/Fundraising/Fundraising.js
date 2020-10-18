@@ -43,7 +43,7 @@ export default function Fundraising({ match, history }) {
   });
 
   const handleCreateClick = () => {
-    history.push(`${match.url}new`);
+    history.push(`${match.url}/nouveau`);
   };
   
   return (
