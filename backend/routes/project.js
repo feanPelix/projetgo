@@ -215,7 +215,7 @@ router.post('/:projectId/campaign', async (req, res) => {
     });
 
     try {
-        await pool.query(sql, params, (err, result) => {
+        await db.query(sql, params, (err, result) => {
             if (err) {
                 res.status(400).json({error: err.message});
                 return;
@@ -238,7 +238,7 @@ router.post('/:projectId/campaign', async (req, res) => {
 router.get('/:projectId/campaign', async (req, res) => {
     const projectId = req.params.projectId;
     try {
-        const result = await pool.query("SELECT * FROM fundraising WHERE projet = $1 AND fin > NOW()", [projectId]);
+        const result = await db.query("SELECT * FROM fundraising WHERE projet = $1 AND fin > NOW()", [projectId]);
         if (!result || !result.rowCount) {
             res.json({
                 message: "No current campaign",
@@ -261,7 +261,7 @@ router.get('/:projectId/campaign', async (req, res) => {
 router.get('/:projectId/donations', async (req, res) => {
     const projectId = req.params.projectId;
     try {
-        const result = await pool.query("SELECT * FROM don WHERE fundraising IN (SELECT fundraising_id FROM fundraising WHERE projet = $1)", [projectId]);
+        const result = await db.query("SELECT * FROM don WHERE fundraising IN (SELECT fundraising_id FROM fundraising WHERE projet = $1)", [projectId]);
         if (!result || !result.rowCount) {
             res.json({
                 message: "No Donations",
