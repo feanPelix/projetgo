@@ -14,8 +14,8 @@ function ListerProjects(props){
     const displayList =async()=> {
         try{
             const userID = props.loggedInMemberID;
-            const response = await fetch(`http://localhost:5000/userSpaceProjetList/${userID}`,{
-                method:'put',
+            const response = await fetch(`/user/${userID}/project`,{
+                method:'get',
                 Header:{'Content-Type': 'application/json'}
             });
             const jsonData=await response.json();

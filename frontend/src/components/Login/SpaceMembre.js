@@ -17,8 +17,8 @@ function SpaceMembre(props){
     const getInfo = async ()=>{
 
         try{
-            const response = await fetch(`http://localhost:5000/userSpace/${userID}`,{
-                method:'put',
+            const response = await fetch(`/user/${userID}`,{
+                method:'get',
                 Header:{'Content-Type': 'application/json'}
             });
             const jsonData=await response.json();

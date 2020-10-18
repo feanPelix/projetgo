@@ -11,7 +11,7 @@ export function Footer() {
 
   const getProjects = async () => {
     try {
-      const response = await fetch("http://localhost:5000/Accueil");
+      const response = await fetch("/project/top3");
       const jsonData = await response.json();
 
       setProjects(jsonData);

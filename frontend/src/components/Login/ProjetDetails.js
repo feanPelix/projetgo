@@ -193,8 +193,8 @@ function ProjetDetails(props){
 
             const body = {projetID};
             // Getting the first name, last name, userID and status of the membership from the table
-            const response = await fetch(`http://localhost:5000/projectDetail${projetID}`, {
-                method: 'post',
+            const response = await fetch(`/project/${projetID}`, {
+                method: 'get',
                 Header: {'Content-Type': 'application/json'},
                 body: JSON.stringify(body)
             });
@@ -216,22 +216,22 @@ function ProjetDetails(props){
             setImage(jsonData[0].image);
             setResponsable(jsonData[0].responsable);
 
-            const responseMembre = await fetch(`http://localhost:5000/VoirMembreProjet/${projetID}`);
+            const responseMembre = await fetch(`/project/${projetID}/member`);
             const jsonDataMembreList = await responseMembre.json();
 
             setArrayAddedAlreadyMembers(jsonDataMembreList);
 
-            const responseBenevole = await fetch(`http://localhost:5000/VoirBenevoleProjet/${projetID}`);
+            const responseBenevole = await fetch(`/project/${projetID}/benevole`);
             const jsonDataBenevoleList = await responseBenevole.json();
             setArrayAddedAlreadyBenevoles(jsonDataBenevoleList)
 
 
-            const responseAllMembre = await fetch(`http://localhost:5000/allMembers/${projetID}`);
+            const responseAllMembre = await fetch(`/project/${projetID}/available-member`);
 
             const jsonDataAllMemberList = await responseAllMembre.json();
             setArrayMembersDB(jsonDataAllMemberList);
 
-            const responseAllBenevole = await fetch(`http://localhost:5000/allBenevoles/${projetID}`);
+            const responseAllBenevole = await fetch(`/project/${projetID}/available-benevole`);
 
             const jsonDataAllBenevoleList = await responseAllBenevole.json();
             setArrayBenevolesDB(jsonDataAllBenevoleList);

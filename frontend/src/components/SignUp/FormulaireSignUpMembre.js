@@ -62,7 +62,7 @@ function FormulaireSignUpMembre(props) {
                 var adresse = numCivique + rue;
                 var date = moment().format("DD/MM/YYYY");
                 const body = {nom, prenom, courriel, phone, adresse, date}; //inscription = date
-                const response = await fetch("http://localhost:5000/utilisateur/", {
+                const response = await fetch("/user", {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(body)

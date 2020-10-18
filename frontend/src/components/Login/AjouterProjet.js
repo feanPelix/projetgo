@@ -16,7 +16,7 @@ function AjouterProjet(props) {
     const [nomImage, setNomImage] = useState(null);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
-    const [image, setImage] = useState("");
+    const [imageURL, setImageURL] = useState("");
 
     const handleChange = e => {
         if (e.target.files[0]) {
@@ -38,20 +38,20 @@ function AjouterProjet(props) {
                     .ref("images")
                     .child(nomImage.name)
                     .getDownloadURL()
-                    .then( async image => {
-                        setImage(image);
+                    .then(
+                      async image => {
+                        setImageURL(image);
                         try {
                             const responsable = props.loggedInMemberID;
-                            const body = {image};
+                            // TODO Refacto pour mettre tous les infos dans le body
+                            const body = {titre, descCourte, sommaire, startDate, endDate, responsable, image};
                             console.log(body);
-                            const response = await fetch(`http://localhost:5000/ajoutProjet/${titre}/${descCourte}/${sommaire}/${startDate}/${endDate}/${responsable}`, {
+                            const res = await fetch('/projet', {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
                                 body: JSON.stringify(body)
                             });
-                            const jsonData = await response.json();
-                            console.log(jsonData[0]);
-                            if (jsonData) {
+                            if (res.ok) {
                                 alert("Submission sucessful");
                                 setTitre('');
                                 setDescCourte(

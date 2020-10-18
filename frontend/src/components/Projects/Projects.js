@@ -8,7 +8,7 @@ export function Projects() {
 
   const getProjects = async () => {
     try {
-      const response = await fetch("http://localhost:5000/Projets");
+      const response = await fetch("/project");
       const jsonData = await response.json();
 
       setProjects(jsonData);

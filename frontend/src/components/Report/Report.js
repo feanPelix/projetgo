@@ -18,7 +18,7 @@ function Report(props) {
 
   const getReports = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/report/${props.project}`);
+      const response = await fetch(`/report/${props.project}`);
       const jsonData = await response.json();
       console.log(jsonData);
 
