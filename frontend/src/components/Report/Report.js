@@ -13,12 +13,12 @@ import './Report.css';
     - état des risques(etatrisque).
 */
 
-function Report(props) {
+function Report({ match }) {
   const [listReport, setListReport] = useState([]);
 
   const getReports = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/report/${props.project}`);
+      const response = await fetch(`http://localhost:5000/report/${match.params.projectId}`);
       const jsonData = await response.json();
       console.log(jsonData);
 

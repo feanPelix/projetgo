@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Form, Col, Row, Button, Container, Breadcrumb, Image } from "react-bootstrap";
-import { useHistory } from "react-router-dom";
+import { Col, Row, Container, Image } from "react-bootstrap";
+import ButtonPG from '../Buttons/ButtonPG/ButtonPG';
 
-function ListerProjects({ match, history }) {
+function ListerProjects({ match, history, loggedInMemberID }) {
   const displayList = async () => {
     try {
-      const userID = props.loggedInMemberID;
+      const userID = loggedInMemberID = '3';
       const response = await fetch(`http://localhost:5000/userSpaceProjetList/${userID}`, {
         method: 'put',
         Header: { 'Content-Type': 'application/json' }
@@ -30,12 +30,6 @@ function ListerProjects({ match, history }) {
   return (
 
     <Container>
-      <Breadcrumb style={{ fontSize: "20px" }}>
-        <Breadcrumb.Item onClick={(history.push("/userSpace")}>Profil</Breadcrumb.Item>
-        <Breadcrumb.Item active>Mes Projets</Breadcrumb.Item>
-      </Breadcrumb><br /><br />
-
-      <Form>
         {listProjects.map(project =>
           <div key={project.code}>
             <Row className="shadow p-3 mb-5 bg-white rounded p-4">
@@ -50,15 +44,13 @@ function ListerProjects({ match, history }) {
                   <div style={{ textAlign: 'left', fontSize: '18px' }}>{project.description}</div>
                 </Row><br />
                 <Row>
-                  <ButtonPG onClick={() => history.push(`/projectDetails/${project.code}`)}>
+                  <ButtonPG onClick={() => history.push(`${match.url}/${project.code}`)}>
                     Details
                   </ButtonPG>
                 </Row>
               </Col>
             </Row><br />
           </div>)}
-      </Form><br /><br />
-
     </Container>
 
   )

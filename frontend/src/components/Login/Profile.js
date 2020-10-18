@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Form, Col, Row, Image, Button, Badge,ListGroup} from "react-bootstrap";
 import moment from "moment";
-function SpaceMembre(props){
+function Profile(props){
     const userID = props.loggedInMemberID;
 
     const [nom, setNom] = useState('');
@@ -65,4 +65,4 @@ function SpaceMembre(props){
     )
 }
 
-export default SpaceMembre;
+export default Profile;

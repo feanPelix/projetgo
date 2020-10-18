@@ -57,7 +57,7 @@ function AfficherMessage(props){
                     <Badge className="badge badge-warning mt-4 p-3 px-5" >{Capitalize(statutadhesion)}</Badge>
                 </Col>
             </Row>
-            <Button style={{background:"orange"}} className="px-5 btn btn-danger mb-4" variant="primary" type="submit" onClick={() => history.push('/userSpace')}>
+            <Button style={{background:"orange"}} className="px-5 btn btn-danger mb-4" variant="primary" type="submit" onClick={() => history.push('/membre')}>
                 SPACE MEMBRE
             </Button>
 
