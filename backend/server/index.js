@@ -90,23 +90,67 @@ app.post("/utilisateur/membre", async (req, res) => {
 // User story 5
 // Get all the user/passwords to validate the info. If a single row is returned from the query, the user is validate.
 // If validated, return true, else, false.
-app.post("/login", async (req, res) => {
-    /*Attention !
-    * Il n'y a aucune validation/sanitation d'input. Requete a risque d'injection.*/
-    try {
-        const cred = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1", [req.body.username]);
+const crypto = require('crypto');
 
-        bcrypt.compare(req.body.password, cred.rows[0].password, async (err, result) => {
-            if (result) {
-                await res.json({check: true, userID: cred.rows[0].user_id});
-            } else {
-                await res.json({check: false, userID: 0});
-            }
-        });
-    } catch (err) {
-        console.error(err.message);
+
+const generateAuthToken = () => {
+  return crypto.randomBytes(30).toString('hex');
+}
+
+const authTokens = {};
+
+app.post("/login", async (req, res) => {
+  /*Attention !
+  * Il n'y a aucune validation/sanitation d'input. Requete a risque d'injection.*/
+  const { username, password } = req.body;
+  let login;
+  
+  try {
+    //Find the login
+    login = await pool.query("SELECT password, user_id FROM login WHERE USERNAME=$1", [username]);    
+  } catch (err) {
+    console.error(err.message);
+  }
+  
+  if (!login || !login.rowCount) {
+    res.status(401).json({
+      message: 'Invalid username or password',
+    });
+    return;
+  }
+
+  const userLogin = {
+    userID: login.rows[0].user_id,
+    username: login.rows[0].username,
+    password: login.rows[0].password,
+  };
+  
+  //Check Password  
+  let authToken;
+  bcrypt.compare(password, userLogin.password, async (err, result) => {
+    if (!result) {
+      res.status(401).json({
+        message: 'Invalid username or password',
+      });
+      return;
     }
-})
+
+    authToken = generateAuthToken();
+    authTokens[authToken] = userLogin
+  });
+  
+  // TODO find user
+  try {
+    const user = await pool.query("SELECT * FROM utilisateur WHERE user_id=$1", [userLogin.userID]);
+    res.cookie('Authtoken', authToken).json({
+      user: user.rows[0],      
+    });
+  } catch (err) {
+    console.error(err.message);
+  }
+
+});
+
 // create user space. Get all the value necessary using the username.
 app.put("/welcomePage/:userID", async (req, res) => {
     try {

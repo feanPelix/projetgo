@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Container, Col, Row, Nav, NavDropdown } from 'react-bootstrap';
-import { Image } from 'react-bootstrap';
 import logo from '../../assets/logo-projetgo.png';
-import { Link, useHistory } from "react-router-dom";
-import { withRouter } from 'react-router';
+import { useHistory } from "react-router-dom";
 import Login from '../Login/Login';
+import { AuthContext } from '../context/AuthContext/AuthContext';
 
-export function Header(props) {
-  const [stateVisibilityLoggedin, setStateVisibilityLoggedin] = useState('hidden');
-  const [stateVisibilityNotLoggedin, setStateVisibilityNotLoggedin] = useState('visible');
-  const member = props.loggin;
+export function Header() {
+  const {state: authState, dispatch} = useContext(AuthContext);
   const history = useHistory();
 
-
-  useEffect(() => {
-    if (member) {
-      setStateVisibilityLoggedin('visible');
-      setStateVisibilityNotLoggedin('hidden')
-    }
-  })
-
+  const handleLogout = () => {
+    dispatch({
+      type: 'LOGOUT',
+    });
+  };
 
   return (
     <Container className="mt-4 mb-5" fluid >
@@ -31,25 +25,29 @@ export function Header(props) {
           <div>
             <Container className="mt-5" style={{ visibility: 'hidden' }}>
               <Nav variant="tabs" defaultActiveKey="/">
-                <Nav.Item>
-                  <Nav.Link className="nav-dropdown" href="/">ACCUEIL</Nav.Link>
-                </Nav.Item>
-                <Nav.Item><Nav.Link className="nav-dropdown" href="/projects" eventKey="link-1">PROJETS</Nav.Link></Nav.Item>
-                <Nav.Item><Nav.Link className="nav-dropdown" href="/inscription" >INSCRIPTION</Nav.Link></Nav.Item>
-                <Nav.Item><Login /></Nav.Item>
               </Nav>
             </Container>
             <Container style={{ visibility: 'visible' }}>
               <Nav variant="tabs" defaultActiveKey="/">
-                <Nav.Item><Nav.Link className="nav-dropdown" onClick={() => history.push('/')}>ACCUEIL</Nav.Link></Nav.Item>
-                <Nav.Item ><Nav.Link className="nav-dropdown" onClick={() => history.push('/projects')}>PROJETS</Nav.Link></Nav.Item>
-                <NavDropdown id="nav-dropdown" title="MEMBRE" id="nav-dropdown">
-                  <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/profil')}>Profil</NavDropdown.Item>
-                  <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/mesProjets')} >Mes projets</NavDropdown.Item>
-                  <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/mesProjets/nouveau')}>Créer un projet</NavDropdown.Item>
-                </NavDropdown>
-                <Nav.Item><Nav.Link className="nav-dropdown" href="/" > DÉCONNEXION</Nav.Link></Nav.Item>
-
+                <Nav.Item><Nav.Link onClick={() => history.push('/')}>ACCUEIL</Nav.Link></Nav.Item>
+                <Nav.Item ><Nav.Link onClick={() => history.push('/projects')}>PROJETS</Nav.Link></Nav.Item>
+                {
+                  authState.isAuthenticated ? (
+                    <>
+                      <NavDropdown id="nav-dropdown" title="MEMBRE" id="nav-dropdown">
+                        <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/profil')}>Profil</NavDropdown.Item>
+                        <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/mesProjets')} >Mes projets</NavDropdown.Item>
+                        <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/mesProjets/nouveau')}>Créer un projet</NavDropdown.Item>
+                      </NavDropdown>
+                      <Nav.Item><Nav.Link onClick={handleLogout}>DÉCONNEXION</Nav.Link></Nav.Item>
+                    </>
+                  ) : (
+                    <>
+                      <Nav.Item><Nav.Link href="/inscription" >INSCRIPTION</Nav.Link></Nav.Item>
+                      <Nav.Item><Login /></Nav.Item>
+                    </>
+                  )
+                }
               </Nav>
             </Container>
           </div>
