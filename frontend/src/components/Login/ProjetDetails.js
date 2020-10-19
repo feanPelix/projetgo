@@ -192,6 +192,7 @@ function ProjetDetails({ match, loggedInMemberID }){
 
     const getProjectDetail = async ()=> {
         try {
+            // TODO Regler le probleme ici
             // Getting the first name, last name, userID and status of the membership from the table
             const response = await fetch(`/project/${projetId}`, {
                 method: 'get',
@@ -215,22 +216,22 @@ function ProjetDetails({ match, loggedInMemberID }){
             setImage(jsonData[0].image);
             setResponsable(jsonData[0].responsable);
 
-            const responseMembre = await fetch(`http://localhost:5000/VoirMembreProjet/${projetId}`);
+            const responseMembre = await fetch(`/project/${projetId}/member`);
             const jsonDataMembreList = await responseMembre.json();
 
             setArrayAddedAlreadyMembers(jsonDataMembreList);
 
-            const responseBenevole = await fetch(`http://localhost:5000/VoirBenevoleProjet/${projetId}`);
+            const responseBenevole = await fetch(`/project/${projetId}/benevole`);
             const jsonDataBenevoleList = await responseBenevole.json();
             setArrayAddedAlreadyBenevoles(jsonDataBenevoleList)
 
 
-            const responseAllMembre = await fetch(`http://localhost:5000/allMembers/${projetId}`);
+            const responseAllMembre = await fetch(`/project/${projetId}/available-member`);
 
             const jsonDataAllMemberList = await responseAllMembre.json();
             setArrayMembersDB(jsonDataAllMemberList);
 
-            const responseAllBenevole = await fetch(`http://localhost:5000/allBenevoles/${projetId}`);
+            const responseAllBenevole = await fetch(`/project/${projetId}/available-benevole`);
 
             const jsonDataAllBenevoleList = await responseAllBenevole.json();
             setArrayBenevolesDB(jsonDataAllBenevoleList);
