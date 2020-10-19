@@ -8,7 +8,6 @@ import CheckoutComponent from "./CheckoutComponent";
 function FormulaireSignUpMembre(props) {
     const [showPayButton, setShowPayButton] = useState(false);
     const [userId,setUserId] = useState("");
-    var userTest;
 
     const [nom, setNom] = useState("");
     const [prenom, setPrenom] = useState("");
@@ -59,8 +58,7 @@ function FormulaireSignUpMembre(props) {
         if (validateFields()) {
             return;
         } else {
-            //TODO member id linking
-            let phone = "5551113333"; //temp
+            let phone = "5552221111"; //temp
             let adresse = (numCivique + " " + rue);
             let inscription = moment().format("YYYY-MM-DD");
 
@@ -73,10 +71,6 @@ function FormulaireSignUpMembre(props) {
                 });
                 const jsonData=await response.json();
                 setUserId(jsonData.user_id);
-                userTest=jsonData.user_id;
-                //console.log(jsonData.user_id);
-                //console.log(userTest);
-                //console.log(userId);
                 console.log(jsonData);
                 alert("Création de compte réussite!");
                 setShowPayButton(true);

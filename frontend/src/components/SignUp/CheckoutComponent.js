@@ -1,49 +1,63 @@
 import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import {useHistory} from "react-router-dom";
-import moment from "moment";
 import OnMemberPayment from "./onMemberPayment";
 
 
 const CheckoutComponent = ({price, source, user_id}) => {
     const history = useHistory();
-    const priceForStripe = price * 100;
+    const priceForStripe = price*100;
     const type = source;
     const publishableKey = 'pk_test_51HYwKuBamjKTPrkZqdhyI3YZ8enwYg3TAeGcNt7mwP5cOgPliDZDW1oEJ5ZwHMleyKUYceYkHUkSe1rVVOVb6Yxt000IGUfKG3';
 
-    /*
-    const successPayment = data => {
-        alert('Payement réussi!');
-    };
 
-    const errorPayment = data => {
-        alert('Payment Error');
-    };
-*/
-
-    const onToken = (token) => {
-        console.log(token);
-        if (type === "membership") {
+    const successPayment = () => {
+        if(type === 'membership'){
             alert('Payement réussi!');
-            //console.log(user_id);
             OnMemberPayment(user_id);
             history.push('/');
-        } else if (type === "don") {
-            alert('Don réussi!');
+        } else{
+            alert('Donation réussi!');
         }
     };
 
-    /*
+    const declinedPayment = () => {
+        if(type === 'membership'){
+            alert('Payement refusé! \n Carte refusé');
+        } else{
+            alert('Donation échoué! \n Carte refusé');
+        }
+
+    };
+    const errorPayment = () => {
+        alert('Erreur de contact avec Stripe');
+    };
+
     const onToken = async (token) => {
 
-        const response = await fetch(`/pay`, {
+        const body = {
+            amount: priceForStripe,
+            token: token.id
+        };
+        const response = await fetch(`/payment`, {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: token
-            }).then(successPayment).catch(errorPayment);
-        }
-    }
-*/
+                headers: {"Content-Type": 'application/json'},
+                body: JSON.stringify({stripeToken: token.id,
+                    amount:priceForStripe,
+                description:source})
+            })
+            .then (res => {
+                if(!res.ok) {
+                    declinedPayment();
+                }
+                else{
+                    successPayment();
+                }
+            })
+            .catch(errorPayment);
+        };
+
+
     return (
         <StripeCheckout
             label='Payer Maintenant 💳'
