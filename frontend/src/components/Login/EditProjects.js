@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {Modal, Button} from "react-bootstrap";
+import { Edit2 } from "react-feather";
 import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
 
 function EditProjects(props){
@@ -21,7 +22,7 @@ function EditProjects(props){
     return (
         <>
             <ButtonPG variant="teal" size="xs" onClick={handleShow}>
-                +
+              <Edit2 />
             </ButtonPG>
 
             <Modal show={show} onHide={handleClose}>

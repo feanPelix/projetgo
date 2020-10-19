@@ -218,7 +218,7 @@ function ProjetDetails({ match }) {
           <Col className="mr-4" lg={5} sm={12}>
             <Image fluid src={currentProject.image} />
             {isCurrentUserResponsable && (
-              <input type="file" onChange={handleChangeFile} className="btn btn-info btn-circle btn-sm" id="exampleFormControlFile1" />
+              <input type="file" onChange={handleChangeFile} className="btn btn-teal btn-sm" id="exampleFormControlFile1" />
             )}
           </Col>
           <Col className="mr-4" lg={6} sm={12}>
@@ -235,7 +235,7 @@ function ProjetDetails({ match }) {
           <Col>
             {isCurrentUserResponsable && (
               <div style={{ display: 'inline-block' }}>
-                <DropdownButton style={{ float: 'left' }} variant="info" onSelect={(value) => editProjectInfo('statutprojet', value)} id="dropdown-basic-button" title="Statut Projet">
+                <DropdownButton style={{ float: 'left' }} variant="teal" onSelect={(value) => editProjectInfo('statutprojet', value)} id="dropdown-basic-button" title="Statut Projet">
                   <Dropdown.Item eventKey="Proposé">Proposé</Dropdown.Item>
                   <Dropdown.Item eventKey="Soumis">Soumis</Dropdown.Item>
                   <Dropdown.Item eventKey="Approuvé">Approuvé</Dropdown.Item>
@@ -272,7 +272,7 @@ function ProjetDetails({ match }) {
             <p><b>Montant amassé:</b></p>
           </Col>
           <Col lg={9} >
-            <ProgressBar className="mt-2" striped variant="success" now={currentProject.totalfondscoll ?? 0} max={currentFundraising.objectif ?? 0} label={`${currentProject.totalfondscoll ?? 0}$`} />
+            <ProgressBar className="mt-2" striped variant="info" now={currentProject.totalfondscoll ?? 0} max={currentFundraising.objectif ?? 0} label={`${currentProject.totalfondscoll ?? 0}$`} />
           </Col>
         </Row>
       </div>
