@@ -42,16 +42,21 @@ function AjouterProjet({ history }) {
             setImage(image);
             try {
               const responsable = user.user_id;
-              const body = { image };
-              console.log(body);
-              const response = await fetch(`http://localhost:5000/ajoutProjet/${titre}/${descCourte}/${sommaire}/${startDate}/${endDate}/${responsable}`, {
+              const body = {
+                titre,
+                descCourte,
+                sommaire,
+                startDate,
+                endDate,
+                responsable,
+                image
+              };
+              const response = await fetch('/project', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
               });
-              const jsonData = await response.json();
-              console.log(jsonData[0]);
-              if (jsonData) {
+              if (response.ok) {
                 alert("Submission sucessful");
                 setTitre('');
                 setDescCourte('');
