@@ -70,7 +70,7 @@ function FormulaireSignUpBenevole(props) {
                 console.log(jsonData);
                 //window.location = "/";
                 alert("Création de compte réussite!")
-                history.push('/login');
+                history.push('/');
             } catch (err) { //A modifier
                 console.log(err);
                 if(err.code === 'ER_DUP_ENTRY') {
