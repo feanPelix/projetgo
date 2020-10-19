@@ -1,24 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Timeline, TimelineEvent} from 'react-event-timeline';
-import {Check, ConeStriped, ExclamationTriangle} from 'react-bootstrap-icons';
+import {Check, ConeStriped, ExclamationTriangle, GearFill, Plus, TrashFill} from 'react-bootstrap-icons';
 import moment from 'moment';
 import './Report.css';
-
-/*Les comptes rendu de statut de projet doivent avoir les informations :
-    - date compte rendu(datereport),
-    - informations à jour du projet(update),
-    - sommaire contenant les réalisations complétées(completed),
-    - les réalisations reportées(reported),
-    - état des risques(etatrisque).
-*/
+import ReportAction from "./ReportAction/ReportAction";
 
 function Report({ match }) {
   const [listReport, setListReport] = useState([]);
+  const [show, setShow] = useState(false);
+  const [action, setAction] = useState({});
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const getReports = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/report/${match.params.projectId}`);
+      const response = await fetch(`/report/${match.params.projectId}`);
       const jsonData = await response.json();
       console.log(jsonData);
 
@@ -32,11 +29,41 @@ function Report({ match }) {
     getReports();
   }, []);
 
+  const deleteReport = async (id) => {
+    handleShow();
+    setAction({
+      desc:'delete',
+      projet: match.params.projectId,
+      reportID: id
+    });
+  };
 
-  //console.log(props.project.titre);
+  const modifReport = async (id) => {
+    handleShow();
+    setAction({
+      desc: 'modif',
+      projet: match.params.projectId,
+      reportID: id
+    });
+  };
+
+  const ajouterReport = async () => {
+    handleShow();
+    setAction({
+      desc: 'ajout',
+      projet: match.params.projectId
+    });
+  };
+
   return (
     <>
-      <h2>Rapport de projet</h2>
+      <ReportAction
+        visibility={show}
+        handleClose={handleClose}
+        handleReload={getReports}
+        action={action}
+      />
+      <h2>Rapports de projet</h2>
       <Timeline>
         { listReport.map((report) => {
           let icon;
@@ -46,7 +73,7 @@ function Report({ match }) {
             iconColor = "red";
           } else if (report.etatrisque === "Moyen") {
             icon = <ConeStriped />;
-            iconColor = "yellow";
+            iconColor = "orange";
           } else {
             icon = <Check />;
             iconColor = "green";
@@ -54,17 +81,35 @@ function Report({ match }) {
 
           return (
             <TimelineEvent
-              title={report.update}
+              title={<strong>{report.update}</strong>}
               createdAt={moment(report.datereport).calendar()}
               icon={icon}
-              iconColor={iconColor}>
-              Sommaire : {report.completed}
+              iconColor={iconColor}
+              buttons= {<>
+                    <GearFill
+                      className='clickable'
+                      onClick={() => modifReport(report.id)}
+                    />
+                    <TrashFill
+                      className='clickable'
+                      onClick={() => deleteReport(report.id)}
+                    />
+                  </>}
+            >
+              <strong>Sommaire :</strong> {report.completed}
               <br />
-              Reporté : {report.reported}
+              <strong>Reporté :</strong> {report.reported}
             </TimelineEvent>
           );
         })}
-
+        <TimelineEvent
+          className={"clickable"}
+          title={<p><strong>Créer un nouveau rapport</strong></p>}
+          icon={<Plus />}
+          iconColor='blue'
+          onIconClick={ajouterReport}
+          onClick={ajouterReport}
+        />
       </Timeline>
     </>
   );
