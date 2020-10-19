@@ -11,8 +11,8 @@ function ListerProjects({ match, history }) {
   const fetchProjects = async () => {
     try {
       console.log('user: ', user.user_id);
-      const response = await fetch(`http://localhost:5000/userSpaceProjetList/${user.user_id}`, {
-        method: 'put',
+      const response = await fetch(`/user/${user.user_id}/project`, {
+        method: 'get',
         Header: { 'Content-Type': 'application/json' }
       });
       const jsonData = await response.json();

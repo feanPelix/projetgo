@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
         // is one then the commit is successful. Return if the commit is successful.
 
         // Insert new project
-        const projectID = await db.query("INSERT INTO project (" +
+        const project = await db.query("INSERT INTO project (" +
           "titre, " +
           "description, " +
           "sommaire, " +
@@ -66,14 +66,15 @@ router.post("/", async (req, res) => {
           "responsable" +
           ") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)  RETURNING code",
           [titre, descCourte, sommaire, debutestime, finestime, statutprojet, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, responsable]
-        ).rows[0].code;
+        );
 
         // Updating the participant table
-        await db.query("INSERT INTO PARTICIPANT (projet, user_id, comite) VALUES ($1, $2, $3)", [projectID, responsable, "Responsable"]);
+        await db.query("INSERT INTO PARTICIPANT (projet, user_id, comite) VALUES ($1, $2, $3)", [project.rows[0].code, responsable, "Responsable"]);
 
         res.sendStatus(200);
     } catch (err) {
-        console.error(err.message);
+        console.error(err.stack);
+        res.sendStatus(500);
     }
 });
 
