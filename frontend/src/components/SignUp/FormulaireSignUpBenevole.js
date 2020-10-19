@@ -9,8 +9,8 @@ function FormulaireSignUpBenevole(props) {
 
     const [nom, setNom] = useState("");
     const [prenom, setPrenom] = useState("");
-    const [courriel, setCourriel] = useState("");
-    const [confirmCourriel, setConfirmCourriel] = useState("");
+    const [email, setEmail] = useState("");
+    const [confirmEmail, setConfirmEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [numCivique, setNumCivique] = useState("");
@@ -22,7 +22,7 @@ function FormulaireSignUpBenevole(props) {
     const [competences, setCompetences] = useState("");
 
     function validateEmptyField() {
-        return (nom && prenom && courriel && password && numCivique && rue && ville && province && pays && codePostal)
+        return (nom && prenom && email && password && numCivique && rue && ville && province && pays && codePostal)
     }
 
     // False == Has Errors || True == Good to go
@@ -34,11 +34,11 @@ function FormulaireSignUpBenevole(props) {
             errorMessage += "Mot de passe ne concorde pas. \n";
             hasErrors = true;
         }
-        if (courriel !== confirmCourriel) {
+        if (email !== confirmEmail) {
             errorMessage += "Courriel ne concorde pas. \n";
             hasErrors = true;
         }
-        if (!(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(courriel))) {
+        if (!(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email))) {
             errorMessage += "Format de courriel invalide. \n";
             hasErrors = true;
         }
@@ -55,10 +55,10 @@ function FormulaireSignUpBenevole(props) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (isInputValid()) {
-            var phone = "5551113333"; //temp
+            var phone = "5551113333";
             var adresse = (numCivique + " " + rue);
             var inscription = moment().format("YYYY-MM-DD");
-            var email = courriel; //for query
+
             try {
                 const body = {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays, password}; //inscription = date d'inscription
                 const response = await fetch(`/user`, {
@@ -68,18 +68,17 @@ function FormulaireSignUpBenevole(props) {
                 });
                 const jsonData=await response.json();
                 console.log(jsonData);
-                //window.location = "/";
-                alert("Création de compte réussite!")
-                history.push('/');
-            } catch (err) { //A modifier
-                console.log(err);
-                if(err.code === 'ER_DUP_ENTRY') {
-                    alert("Adresse email déjà utilisé. Veuillez choisir une autre.")
+
+                if(!response.ok){
+                    alert("Ce courriel est déjà utilisé.");
+                    return;
+                } else{
+                    alert("Création de compte réussite!")
+                    history.push('/');
                 }
-                else{
-                    alert("Problème lors de la connection au serveur.")
-                }
+            } catch (err) {
                 console.log(err.message);
+                alert("Problème lors de la connection au serveur.");
             }
         }
     }
@@ -105,12 +104,12 @@ function FormulaireSignUpBenevole(props) {
 
                     <Form.Row>
                         <Form.Group as={"Col"} controlId={"formGridCourriel"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"email"} placeholder={"Courriel"} value={courriel}
-                                          onChange={e => setCourriel(e.target.value)}/>
+                            <Form.Control type={"email"} placeholder={"Courriel"} value={email}
+                                          onChange={e => setEmail(e.target.value)}/>
                         </Form.Group>
                         <Form.Group as={"Col"} controlId={"formGridConfirmationCourriel"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"email"} placeholder={"Confirmer courriel"} value={confirmCourriel}
-                                          onChange={e => setConfirmCourriel(e.target.value)}/>
+                            <Form.Control type={"email"} placeholder={"Confirmer courriel"} value={confirmEmail}
+                                          onChange={e => setConfirmEmail(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 

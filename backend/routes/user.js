@@ -32,8 +32,9 @@ router.post("/", async (req, res) => {
         res.json(newUser.rows[0]);
 
     } catch (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
-            console.error(err.message); //TODO Add stronger handling
+        if (err.code === '23505') {
+            console.log("Duplicate")
+            res.status(500).send({ error: err.code });
         } else {
             console.error(err.message);
         }
@@ -42,10 +43,10 @@ router.post("/", async (req, res) => {
 
 router.post("/memberCreation", async (req, res) => {
     try {
-        const {userID, date, statusAd} = req.body;
+        const {user_id, date, statusAd} = req.body;
 
         const userInfo = await db.query("INSERT INTO member (user_id, adhesion, statutadhesion) VALUES ($1, $2 ,$3)",
-            [userID, date, statusAd]);
+            [user_id, date, statusAd]);
         //console.log(userInfo.rows.length);
     } catch (err) {
         console.error(err.message);
