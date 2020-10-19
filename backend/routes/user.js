@@ -40,6 +40,18 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.post("/memberCreation", async (req, res) => {
+    try {
+        const {userID, date, statusAd} = req.body;
+
+        const userInfo = await db.query("INSERT INTO member (user_id, adhesion, statutadhesion) VALUES ($1, $2 ,$3)",
+            [userID, date, statusAd]);
+        //console.log(userInfo.rows.length);
+    } catch (err) {
+        console.error(err.message);
+    }
+});
+
 
 // get /user/:id
 // return user.name, user.prenom, user.user_id et member.statutadhesion
