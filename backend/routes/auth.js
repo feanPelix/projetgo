@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
 
     // TODO find user
     try {
-        const user = await pool.query("SELECT * FROM utilisateur WHERE user_id=$1", [userLogin.userID]);
+        const user = await db.query("SELECT * FROM utilisateur WHERE user_id=$1", [userLogin.userID]);
         res.cookie('Authtoken', authToken).json({
             user: user.rows[0],
         });
