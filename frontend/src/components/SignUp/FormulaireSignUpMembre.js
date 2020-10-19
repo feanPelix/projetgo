@@ -2,15 +2,17 @@ import React, {useState} from "react";
 import {Button, Container, Form} from 'react-bootstrap';
 import {useHistory} from "react-router-dom";
 import moment from "moment";
+import CheckoutComponent from "./CheckoutComponent";
 
 
 function FormulaireSignUpMembre(props) {
-    const history = useHistory();
+    const [showPayButton, setShowPayButton] = useState(false);
+    const [userId,setUserId] = useState("");
 
     const [nom, setNom] = useState("");
     const [prenom, setPrenom] = useState("");
-    const [courriel, setCourriel] = useState("");
-    const [confirmCourriel, setConfirmCourriel] = useState("");
+    const [email, setEmail] = useState("");
+    const [confirmEmail, setConfirmEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [numCivique, setNumCivique] = useState("");
@@ -21,23 +23,23 @@ function FormulaireSignUpMembre(props) {
     const [codePostal, setCodePostal] = useState("");
 
     function validateEmptyField() {
-        return (nom && prenom && courriel && password && numCivique && rue && ville && province && pays && codePostal)
+        return (nom && prenom && email && password && numCivique && rue && ville && province && pays && codePostal)
     }
 
     // True == Has Errors || False == Good to go
     function validateFields() {
-        var hasErrors = false;
-        var errorMessage = "";
+        let hasErrors = false;
+        let errorMessage = "";
 
         if (password !== confirmPassword) {
             errorMessage += "Mot de passe ne concorde pas. \n";
             hasErrors = true;
         }
-        if (courriel !== confirmCourriel) {
+        if (email !== confirmEmail) {
             errorMessage += "Courriel ne concorde pas. \n";
             hasErrors = true;
         }
-        if (!(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(courriel))) {
+        if (!(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email))) {
             errorMessage += "Format de courriel invalide. \n";
             hasErrors = true;
         }
@@ -57,19 +59,23 @@ function FormulaireSignUpMembre(props) {
             return;
         } else {
             //TODO member id linking
+            let phone = "5551113333"; //temp
+            let adresse = (numCivique + " " + rue);
+            let inscription = moment().format("YYYY-MM-DD");
+
             try {
-                var phone = "555-111-3333"; //temp
-                var adresse = numCivique + rue;
-                var date = moment().format("DD/MM/YYYY");
-                const body = {nom, prenom, courriel, phone, adresse, date}; //inscription = date
-                const response = await fetch("/user", {
+                const body = {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays, password};  //inscription = date
+                const response = await fetch(`/user`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(body)
                 });
-
-                window.location = "/";
-                history.push('/inscription/payment');
+                const jsonData=await response.json();
+                setUserId(jsonData.user_id);
+                console.log(userId);
+                console.log(jsonData);
+                alert("Création de compte réussite!");
+                setShowPayButton(true);
             } catch (err) {
                 console.log(err.message);
                 alert("Problème lors de la connection au serveur.")
@@ -79,39 +85,39 @@ function FormulaireSignUpMembre(props) {
 
     return (
         <div style={{backgroundColor: '#138496'}}>
-        <Container>
+            <Container>
                 <hr style={{backgroundColor: 'white '}}/>
                 <h4 style={{color: 'white'}}>INSCRIPTION MEMBRE</h4>
                 <hr style={{backgroundColor: 'white'}}/>
                 <Form onSubmit={handleSubmit} controlId={"FormSignUp"} className="m-5">
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridNom"}>
+                        <Form.Group as={"Col"} controlId={"formGridNom"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Nom"} value={nom}
                                           onChange={e => setNom(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridPrenom"}>
+                        <Form.Group as={"Col"} controlId={"formGridPrenom"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Prenom"} value={prenom}
                                           onChange={e => setPrenom(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridCourriel"}>
-                            <Form.Control type={"email"} placeholder={"Courriel"} value={courriel}
-                                          onChange={e => setCourriel(e.target.value)}/>
+                        <Form.Group as={"Col"} controlId={"formGridCourriel"} style={{margin:"0px 20px 10px 5px"}}>
+                            <Form.Control type={"email"} placeholder={"Courriel"} value={email}
+                                          onChange={e => setEmail(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridConfirmationCourriel"}>
-                            <Form.Control type={"email"} placeholder={"Confirmer courriel"} value={confirmCourriel}
-                                          onChange={e => setConfirmCourriel(e.target.value)}/>
+                        <Form.Group as={"Col"} controlId={"formGridConfirmationCourriel"} style={{margin:"0px 20px 10px 5px"}}>
+                            <Form.Control type={"email"} placeholder={"Confirmer courriel"} value={confirmEmail}
+                                          onChange={e => setConfirmEmail(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridPassword"}>
+                        <Form.Group as={"Col"} controlId={"formGridPassword"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"password"} placeholder={"Mot de passe"} value={password}
                                           onChange={e => setPassword(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridConfirmationPassword"}>
+                        <Form.Group as={"Col"} controlId={"formGridConfirmationPassword"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"password"} placeholder={"Confirmer mot de passe"}
                                           value={confirmPassword}
                                           onChange={e => setConfirmPassword(e.target.value)}/>
@@ -119,33 +125,33 @@ function FormulaireSignUpMembre(props) {
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridNumeroCivique"}>
+                        <Form.Group as={"Col"} controlId={"formGridNumeroCivique"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Numéro civique"} value={numCivique}
                                           onChange={e => setNumCivique(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridRue"}>
+                        <Form.Group as={"Col"} controlId={"formGridRue"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Rue"} value={rue}
                                           onChange={e => setRue(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridCodePostal"}>
+                        <Form.Group as={"Col"} controlId={"formGridCodePostal"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Code postal"} value={codePostal}
                                           onChange={e => setCodePostal(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridVille"}>
+                        <Form.Group as={"Col"} controlId={"formGridVille"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Ville"} value={ville}
                                           onChange={e => setVille(e.target.value)}/>
                         </Form.Group>
                     </Form.Row>
 
                     <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridProvince"}>
+                        <Form.Group as={"Col"} controlId={"formGridProvince"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Province"} value={province}
                                           onChange={e => setProvince(e.target.value)}/>
                         </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridPays"}>
+                        <Form.Group as={"Col"} controlId={"formGridPays"} style={{margin:"0px 20px 10px 5px"}}>
                             <Form.Control type={"text"} placeholder={"Pays"} value={pays}
                                           onChange={e => setPays(e.target.value)}/>
                         </Form.Group>
@@ -155,9 +161,12 @@ function FormulaireSignUpMembre(props) {
                         Continuer
                     </Button>
                 </Form>
-        </Container>
+
+                <h4 style={{color: 'white'}}> Paiement unique de 50$ </h4>
+                <h5 style={{color: 'white'}}> Valdide pour 1 an </h5>
+                { showPayButton && ( <CheckoutComponent price={50} source={"membership"} user_id={userId}/>)}
+            </Container>
         </div>
-        //TODO PROGRESS BAR
     )
 }
 

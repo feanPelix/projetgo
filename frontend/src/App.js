@@ -7,7 +7,6 @@ import Projects from './components/Projects/Projects';
 import Header from './components/Header/Header';
 import FormulaireSignUpMembre from "./components/SignUp/FormulaireSignUpMembre";
 import FormulaireSignUpBenevole from "./components/SignUp/FormulaireSignUpBenevole";
-import FormulairePayment from "./components/SignUp/FomulairePayment";
 import ChoixMembership from "./components/SignUp/ChoixMembership";
 
 import Footer from './components/Footer/Footer';
@@ -26,7 +25,6 @@ function App() {
               <Route path="/projects" component={Projects} />
               <Route path="/inscription-benevole" component={FormulaireSignUpBenevole} />
               <Route path="/inscription-membre" component={FormulaireSignUpMembre} />
-              <Route path="/inscription-payment" component={FormulairePayment} />
               <Route path="/inscription" component={ChoixMembership} />
               
               <Route path="/membre" component={Membre} />
