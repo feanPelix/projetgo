@@ -192,13 +192,10 @@ function ProjetDetails({ match, loggedInMemberID }){
 
     const getProjectDetail = async ()=> {
         try {
-
-            const body = {projetID: projetId};
             // Getting the first name, last name, userID and status of the membership from the table
-            const response = await fetch(`http://localhost:5000/projectDetail${projetId}`, {
-                method: 'post',
+            const response = await fetch(`/project/${projetId}`, {
+                method: 'get',
                 Header: {'Content-Type': 'application/json'},
-                body: JSON.stringify(body)
             });
             const jsonData = await response.json();
 
