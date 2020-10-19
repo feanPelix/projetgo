@@ -12,7 +12,7 @@ const generateAuthToken = () => {
 const authTokens = {};
 
 // Login
-//old -> app.post("/login", async (req, res) => {
+//old -> app.post("/login"f, async (req, res) => {
 router.post("/", async (req, res) => {
     /*Attention !
     * Il n'y a aucune validation/sanitation d'input. Requete a risque d'injection.*/
