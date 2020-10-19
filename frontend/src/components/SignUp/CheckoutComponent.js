@@ -47,6 +47,7 @@ const CheckoutComponent = ({price, source, user_id}) => {
                 description:source})
         })
             .then (res => {
+                console.dir(res.ok);
                 if(!res.ok) {
                     declinedPayment();
                 }

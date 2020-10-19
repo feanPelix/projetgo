@@ -21,9 +21,12 @@ router.post('/', async (req, res) => {
         });
         res.json(charge);
     } catch (error) {
-        console.log(error.code);
-        console.log("Erreur lors de contact API");
-    }
+        if(error.code === "card_declined"){
+            res.status(500).send({ error: error.code });
+        } else {
+            console.log("Erreur lors de contact API");
+        }
+    };
 })
 
 module.exports = router;
