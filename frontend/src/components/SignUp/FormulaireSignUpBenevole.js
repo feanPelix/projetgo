@@ -68,18 +68,17 @@ function FormulaireSignUpBenevole(props) {
                 });
                 const jsonData=await response.json();
                 console.log(jsonData);
-                //window.location = "/";
-                alert("Création de compte réussite!")
-                history.push('/');
-            } catch (err) { //A modifier
-                console.log(err);
-                if(err.code === 'ER_DUP_ENTRY') {
-                    alert("Adresse email déjà utilisé. Veuillez choisir une autre.")
+
+                if(!response.ok){
+                    alert("Ce courriel est déjà utilisé.");
+                    return;
+                } else{
+                    alert("Création de compte réussite!")
+                    history.push('/');
                 }
-                else{
-                    alert("Problème lors de la connection au serveur.")
-                }
+            } catch (err) {
                 console.log(err.message);
+                alert("Problème lors de la connection au serveur.");
             }
         }
     }

@@ -70,11 +70,18 @@ function FormulaireSignUpMembre(props) {
                     body: JSON.stringify(body)
                 });
                 const jsonData=await response.json();
-                setUserId(jsonData.user_id);
-                console.log(userId);
-                console.log(jsonData);
-                alert("Création de compte réussite!");
-                setShowPayButton(true);
+
+                if(!response.ok){
+                    alert("Ce courriel est déjà utilisé.");
+                    return;
+                }
+                else{
+                    setUserId(jsonData.user_id);
+                    console.log(userId);
+                    console.log(jsonData);
+                    alert("Création de compte réussite!");
+                    setShowPayButton(true);
+                }
             } catch (err) {
                 console.log(err.message);
                 alert("Problème lors de la connection au serveur.")

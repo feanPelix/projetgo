@@ -32,8 +32,9 @@ router.post("/", async (req, res) => {
         res.json(newUser.rows[0]);
 
     } catch (err) {
-        if (err.code === 'ER_DUP_ENTRY') {
-            console.error(err.message); //TODO Add stronger handling
+        if (err.code === '23505') {
+            console.log("Duplicate")
+            res.status(500).send({ error: err.code });
         } else {
             console.error(err.message);
         }
