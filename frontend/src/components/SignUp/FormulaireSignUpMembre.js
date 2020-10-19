@@ -58,8 +58,7 @@ function FormulaireSignUpMembre(props) {
         if (validateFields()) {
             return;
         } else {
-            //TODO member id linking
-            let phone = "5551113333"; //temp
+            let phone = "5551113333";
             let adresse = (numCivique + " " + rue);
             let inscription = moment().format("YYYY-MM-DD");
 
