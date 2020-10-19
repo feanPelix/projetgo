@@ -39,7 +39,7 @@ export default function Fundraising({ match, history }) {
         }
 
         const resJson = await response.json();
-        setDonations(resJson.donations);
+        setDonations(resJson);
 
       } catch (error) {
         console.log(error.message || error.statusText);

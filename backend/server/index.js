@@ -197,33 +197,3 @@ app.get("/member/:id", async (req, res) => {
         console.error(err.message);
     }
 })
-
-
-
-/* GET donations for a project */
-app.get('/projects/:projectId/donations', async (req, res) => {
-  const projectId = req.params.projectId;
-  try {
-    const result = await pool.query("SELECT * FROM don WHERE fundraising IN (SELECT fundraising_id FROM fundraising WHERE projet = $1)", [projectId]);
-    if (!result || !result.rowCount) {
-      res.json({
-        message: "No Donations",
-        donations: [],
-      });
-      return;
-    }
-    
-    res.json({
-      message: "Donations found",
-      donations: result.rows[0]
-    });
-  } catch(error) {
-    res.status(500).json({error: error.message});
-  }
-});
-
-
-// app.listen(5000, () => {
-//     console.log("server has started on port 5000")
-// });
-

@@ -291,7 +291,7 @@ router.get('/:projectId/campaign', async (req, res) => {
     try {
         const result = await db.query("SELECT * FROM fundraising WHERE projet=$1 AND fin > NOW()", [projectId]);
         if (!result || !result.rowCount) {
-            res.json({
+            res.status(404).json({
                 message: "No current campaign",
             });
             return;
@@ -310,17 +310,13 @@ router.get('/:projectId/donations', async (req, res) => {
     try {
         const result = await db.query("SELECT * FROM don WHERE fundraising IN (SELECT fundraising_id FROM fundraising WHERE projet = $1)", [projectId]);
         if (!result || !result.rowCount) {
-            res.json({
+            res.status(404).json({
                 message: "No Donations",
-                donations: [],
             });
             return;
         }
 
-        res.json({
-            message: "Donations found",
-            donations: result.rows[0]
-        });
+        res.json(result.rows);
     } catch(error) {
         res.status(500).json({error: error.message});
     }
