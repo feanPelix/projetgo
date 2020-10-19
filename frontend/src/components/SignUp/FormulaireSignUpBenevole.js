@@ -61,7 +61,7 @@ function FormulaireSignUpBenevole(props) {
             var email = courriel; //for query
             try {
                 const body = {nom, prenom, email, phone, adresse, inscription, codePostal, ville, province, pays, password}; //inscription = date d'inscription
-                const response = await fetch(`http://localhost:5000/utilisateur`, {
+                const response = await fetch(`/user`, {
                     method: "POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify(body)
