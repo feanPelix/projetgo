@@ -1,32 +1,63 @@
 const Router = require('express-promise-router');
 const bcrypt = require('bcrypt');
 const db = require('../db');
+const crypto = require('crypto');
 
-// create a new express-promise-router
-// this has the same API as the normal express router except
-// it allows you to use async functions as route handlers
 const router = new Router();
 
+const generateAuthToken = () => {
+    return crypto.randomBytes(30).toString('hex');
+}
 
+const authTokens = {};
 
 // Login
 //old -> app.post("/login", async (req, res) => {
 router.post("/", async (req, res) => {
     /*Attention !
     * Il n'y a aucune validation/sanitation d'input. Requete a risque d'injection.*/
-    console.log(req.body);
+    const { username, password } = req.body;
+    let login;
 
-    const username = req.body.username;
-    console.log(username);
     try {
-        const cred = await db.query("SELECT password, user_id FROM login WHERE USERNAME=$1", [username]);
+        //Find the login
+        login = await db.query("SELECT password, user_id FROM login WHERE USERNAME=$1", [username]);
+    } catch (err) {
+        console.error(err.message);
+    }
 
-        bcrypt.compare(req.body.password, cred.rows[0].password, async (err, result) => {
-            if (result) {
-                res.json({check: true, userID: cred.rows[0].user_id});
-            } else {
-                res.json({check: false, userID: 0});
-            }
+    if (!login || !login.rowCount) {
+        res.status(401).json({
+            message: 'Invalid username or password',
+        });
+        return;
+    }
+
+    const userLogin = {
+        userID: login.rows[0].user_id,
+        username: login.rows[0].username,
+        password: login.rows[0].password,
+    };
+
+    //Check Password
+    let authToken;
+    bcrypt.compare(password, userLogin.password, async (err, result) => {
+        if (!result) {
+            res.status(401).json({
+                message: 'Invalid username or password',
+            });
+            return;
+        }
+
+        authToken = generateAuthToken();
+        authTokens[authToken] = userLogin
+    });
+
+    // TODO find user
+    try {
+        const user = await pool.query("SELECT * FROM utilisateur WHERE user_id=$1", [userLogin.userID]);
+        res.cookie('Authtoken', authToken).json({
+            user: user.rows[0],
         });
     } catch (err) {
         console.error(err.message);
