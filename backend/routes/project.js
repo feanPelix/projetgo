@@ -114,7 +114,7 @@ router.get("/:projectID/available-benevoles", async (req, res) => {
 router.post("/:projectID/member", async (req, res) => {
     try {
         const code = req.params.projectID;
-        const user_id = req.body;
+        const { user_id } = req.body;
         const role = "Membre"
         const newComite = await db.query("INSERT INTO participant (projet, user_id, comite) VALUES($1, $2 ,$3) RETURNING *",
           [code, user_id, role]
@@ -131,7 +131,7 @@ router.post("/:projectID/member", async (req, res) => {
 router.post("/:projectID/benevole", async (req, res) => {
     try {
         const code = req.params.projectID;
-        const user_id = req.body;
+        const { user_id } = req.body;
         const role = "Benevole"
         const newComite = await db.query("INSERT INTO participant (projet, user_id, comite) VALUES($1, $2 ,$3) RETURNING *",
           [code, user_id, role]
@@ -148,7 +148,7 @@ router.get("/:projectID", async (req, res) => {
     try {
         const projectID = req.params.projectID;
         const projectDetail = await db.query("SELECT * FROM PROJECT WHERE PROJECT.code = $1", [projectID]);
-        res.json(projectDetail.rows);
+        res.json(projectDetail.rows[0]);
     } catch (err) {
         console.error(err.message);
         res.status(500).json({error: error.message});
