@@ -42,7 +42,7 @@ function AjouterProjet({ history }) {
             setImage(image);
             try {
               const responsable = user.user_id;
-              const body = { image, titre, descCourte, sommaire, startDate, endDate, responsable, image };
+              const body = {titre, descCourte, sommaire, startDate, endDate, responsable, image};
               console.log(body);
               const response = await fetch('/project', {
                 method: 'POST',
