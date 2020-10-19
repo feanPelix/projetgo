@@ -12,7 +12,7 @@ const generateAuthToken = () => {
 const authTokens = {};
 
 // Login
-//old -> app.post("/login", async (req, res) => {
+//old -> app.post("/login"f, async (req, res) => {
 router.post("/", async (req, res) => {
     /*Attention !
     * Il n'y a aucune validation/sanitation d'input. Requete a risque d'injection.*/
@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
 
     // TODO find user
     try {
-        const user = await pool.query("SELECT * FROM utilisateur WHERE user_id=$1", [userLogin.userID]);
+        const user = await db.query("SELECT * FROM utilisateur WHERE user_id=$1", [userLogin.userID]);
         res.cookie('Authtoken', authToken).json({
             user: user.rows[0],
         });
