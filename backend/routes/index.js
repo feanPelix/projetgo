@@ -1,10 +1,12 @@
-import users from './users';
-import projects from './projects';
-import auth from './auth';
+const user = require('./user');
+const project = require('./project');
+const auth = require('./auth');
+const report = require('./report');
 
 module.exports = app => {
-    app.use('/users', users);
-    app.use('/projects', projects);
     app.use('/auth', auth);
+    app.use('/report', report);
+    app.use('/user', user);
+    app.use('/project', project);
     // etc..
 }

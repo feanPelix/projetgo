@@ -11,8 +11,6 @@ function AfficherMessage(props){
         return str.toUpperCase();
     }
 
-
-
     const userID = props.loggedInMemberID;
     const [nom, setNom] = useState('');
     const [prenom, setPrenom] =useState('');
@@ -21,8 +19,8 @@ function AfficherMessage(props){
     const getName = async ()=> {
         try {
             // Getting the first name, last name, userID and status of the membership from the table
-            const response = await fetch(`http://localhost:5000/welcomePage/${userID}`, {
-                method: 'put',
+            const response = await fetch(`/user/${userID}`, {
+                method: 'get',
                 Header: {'Content-Type': 'application/json'}
             });
             const jsonData = await response.json();
@@ -30,7 +28,7 @@ function AfficherMessage(props){
             setNom(jsonData[0].nom);
             setPrenom(jsonData[0].prenom);
             console.log(jsonData[0].statutadhesion);
-          if (jsonData[0].statutadhesion == 'Actif') {
+          if (jsonData[0].statutadhesion === 'Actif') {
                 setStatutadhesion('Membre');
             } else {
                 setStatutadhesion('Benevole');

@@ -11,7 +11,7 @@ export default function Fundraising({ match, history }) {
   //Need the fundraising for the project
   useEffect( async() => {
     try {
-      const response = await fetch(`http://localhost:5000/projects/${match.params.projectId}/campaign`);
+      const response = await fetch(`/project/${match.params.projectId}/campaign`);
 
       if (!response.ok) {
         throw response;
@@ -28,7 +28,7 @@ export default function Fundraising({ match, history }) {
   //Need the donations for the project
   useEffect( async() => {
     try {
-      const response = await fetch(`http://localhost:5000/projects/${match.params.projectId}/donations`);
+      const response = await fetch(`/project/${match.params.projectId}/donations`);
       
       if (!response.ok) {
         throw response;
