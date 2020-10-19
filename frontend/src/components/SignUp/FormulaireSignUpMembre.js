@@ -8,6 +8,7 @@ import CheckoutComponent from "./CheckoutComponent";
 function FormulaireSignUpMembre(props) {
     const [showPayButton, setShowPayButton] = useState(false);
     const [userId,setUserId] = useState("");
+    var userTest;
 
     const [nom, setNom] = useState("");
     const [prenom, setPrenom] = useState("");
@@ -72,7 +73,10 @@ function FormulaireSignUpMembre(props) {
                 });
                 const jsonData=await response.json();
                 setUserId(jsonData.user_id);
-                console.log(userId);
+                userTest=jsonData.user_id;
+                //console.log(jsonData.user_id);
+                //console.log(userTest);
+                //console.log(userId);
                 console.log(jsonData);
                 alert("Création de compte réussite!");
                 setShowPayButton(true);

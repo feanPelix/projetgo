@@ -10,20 +10,40 @@ const CheckoutComponent = ({price, source, user_id}) => {
     const priceForStripe = price * 100;
     const type = source;
     const publishableKey = 'pk_test_51HYwKuBamjKTPrkZqdhyI3YZ8enwYg3TAeGcNt7mwP5cOgPliDZDW1oEJ5ZwHMleyKUYceYkHUkSe1rVVOVb6Yxt000IGUfKG3';
-    const userId = user_id;
+
+    /*
+    const successPayment = data => {
+        alert('Payement réussi!');
+    };
+
+    const errorPayment = data => {
+        alert('Payment Error');
+    };
+*/
 
     const onToken = (token) => {
         console.log(token);
         if (type === "membership") {
             alert('Payement réussi!');
-            OnMemberPayment(userId);
+            //console.log(user_id);
+            OnMemberPayment(user_id);
             history.push('/');
         } else if (type === "don") {
             alert('Don réussi!');
         }
-
     };
 
+    /*
+    const onToken = async (token) => {
+
+        const response = await fetch(`/pay`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: token
+            }).then(successPayment).catch(errorPayment);
+        }
+    }
+*/
     return (
         <StripeCheckout
             label='Payer Maintenant 💳'
