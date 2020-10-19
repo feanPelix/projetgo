@@ -5,16 +5,13 @@ import ButtonPG from '../Buttons/ButtonPG/ButtonPG';
 import { AuthContext } from '../context/AuthContext/AuthContext';
 
 function ListerProjects({ match, history }) {
-  const { state: { user } } = useContext(AuthContext);
+  const { state: { user, member } } = useContext(AuthContext);
   const [listProjects, setListProjects] = useState([]);
 
   const fetchProjects = async () => {
     try {
       console.log('user: ', user.user_id);
-      const response = await fetch(`/user/${user.user_id}/project`, {
-        method: 'get',
-        Header: { 'Content-Type': 'application/json' }
-      });
+      const response = await fetch(`/project/myProjects/${user.user_id}`);
       const jsonData = await response.json();
       setListProjects(jsonData);
     } catch (err) {
@@ -31,13 +28,15 @@ function ListerProjects({ match, history }) {
       {listProjects.length === 0 && (
         <Alert variant="info">
           <p>Aucun projet à afficher.</p>
-          <ButtonPG 
-            variant="teal" 
-            size="lg" 
-            onClick={() => history.push(`${match.url}/nouveau`)}
-          >
-            Créer un projet
-          </ButtonPG>
+          {!!member && (
+            <ButtonPG 
+              variant="teal" 
+              size="lg" 
+              onClick={() => history.push(`${match.url}/nouveau`)}
+            >
+              Créer un projet
+            </ButtonPG>
+          )}
         </Alert>
       )}
       {listProjects.map(project =>

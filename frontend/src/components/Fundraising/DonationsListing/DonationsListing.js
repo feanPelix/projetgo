@@ -1,5 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
+import moment from 'moment';
 
 export default function DonationsListing({donations}) {
   return(
@@ -18,14 +19,15 @@ export default function DonationsListing({donations}) {
         </tr>
       </thead>
       <tbody>
+        {donations.length === 0 && <tr><td colSpan="5">Aucun don</td></tr>}
         {donations.map(donation => {
           return (
             <tr>
               <td>{donation.nom}</td>
               <td>{donation.prenom}</td>
               <td>{donation.email}</td>
-              <td>{donation.datedon}</td>
-              <td>{donation.montant}</td>
+              <td>{moment(donation.datedon).format('lll')}</td>
+              <td>{donation.montant}$</td>
             </tr>
           );  
         })}

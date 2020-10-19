@@ -1,70 +1,82 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import moment from 'moment';
+import { Container, Row, ListGroup } from 'react-bootstrap';
 import ButtonPG from '../Buttons/ButtonPG/ButtonPG';
 import DonationsListing from './DonationsListing/DonationsListing';
-import NewFundraising from './NewFundraising/NewFundraising';
 
 export default function Fundraising({ match, history }) {
+  const { projectId } = match.params;
   const [currentCampaign, setCurrentCampaign] = useState(null);
-  const [donations, setDonations] =useState([]);
+  const [donations, setDonations] = useState([]);
  
   //Need the fundraising for the project
-  useEffect( async() => {
-    try {
-      const response = await fetch(`/project/${match.params.projectId}/campaign`);
+  useEffect(() => {
+    async function fetchCampaign() {
+      try {
+        const response = await fetch(`/project/${projectId}/campaign`);
 
-      if (!response.ok) {
-        throw response;
+        if (!response.ok) {
+          throw response;
+        }
+
+        const campaign = await response.json();
+        setCurrentCampaign(campaign);
+      } catch (error) {
+        console.log(error.message || error.statusText);
       }
-
-      const resJson = await response.json();
-      setCurrentCampaign(resJson.data.campaign);
-    
-    } catch(error) {
-      console.log(error.message || error.statusText);
     }
-  });
+    fetchCampaign();
+  }, [projectId]);
 
   //Need the donations for the project
-  useEffect( async() => {
-    try {
-      const response = await fetch(`/project/${match.params.projectId}/donations`);
-      
-      if (!response.ok) {
-        throw response;
+  useEffect(() => {
+    async function fetchDonations() {
+      try {
+        const response = await fetch(`/project/${projectId}/donations`);
+
+        if (!response.ok) {
+          throw response;
+        }
+
+        const resJson = await response.json();
+        setDonations(resJson.donations);
+
+      } catch (error) {
+        console.log(error.message || error.statusText);
       }
-
-      const resJson = await response.json();
-      setDonations(resJson.data.donations);
-
-    } catch (error) {
-      console.log(error.message || error.statusText);
     }
-  });
+    fetchDonations();
+  }, [projectId]);
 
   const handleCreateClick = () => {
     history.push(`${match.url}/nouveau`);
   };
   
   return (
-    <Container>
-      <Row>
-      ProjectId: {match.params.projectId}
-      {
-        currentCampaign ? 
-        'campaign' : 
-        <ButtonPG 
-          size="lg" 
-          onClick={handleCreateClick}
-        >
-          Créer une campagne
-        </ButtonPG>
-      }
-      </Row>
-      
-      <Row>
+    <div>
+      <div className="mb-4">
+        <h2>Financement</h2>
+        <h3>Campagne</h3>
+        {
+          currentCampaign ? (
+            <ListGroup horizontal>
+              <ListGroup.Item>Date de debut: {moment(currentCampaign.debut).format('ll')}</ListGroup.Item>
+              <ListGroup.Item>Date de fin: {moment(currentCampaign.fin).format('ll')}</ListGroup.Item>
+              <ListGroup.Item>Objectif: {currentCampaign.objectif}$</ListGroup.Item>
+            </ListGroup>
+          ) : (
+            <ButtonPG
+              size="lg"
+              onClick={handleCreateClick}
+            >
+              Créer une campagne
+            </ButtonPG>
+          )}
+      </div>
+      <div className="mb-4">
+        <h3>Dons</h3>
         <DonationsListing donations={donations}/>
-      </Row>
-    </Container>
+      </div>
+    </div>
   );
 }

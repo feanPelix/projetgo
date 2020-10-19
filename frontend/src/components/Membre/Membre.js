@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Breadcrumb, BreadcrumbItem, Container } from 'react-bootstrap';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import AfficherMessage from "../Login/AfficherMessage";
+import Welcome from "../Login/Welcome";
 import Profile from "../Login/Profile";
 import ListerProjects from "../Login/ListerProjects";
 import AjouterProjet from "../Login/AjouterProjet";
@@ -9,7 +9,7 @@ import ProjectContainer from '../ProjectContainer/ProjectContainer';
 import { AuthContext } from '../context/AuthContext/AuthContext';
 
 export default function Membre({ match }) {
-  const {state: {isAuthenticated}} = useContext(AuthContext);
+  const {state: { isAuthenticated, member }} = useContext(AuthContext);
   if (!isAuthenticated) {
     return (
       <Redirect to="/" />
@@ -59,11 +59,18 @@ export default function Membre({ match }) {
         </Switch>
       </Breadcrumb>
       <Switch>
-        <Route exact path={`${match.path}/bienvenue`} component={AfficherMessage}/>
+        <Route exact path={`${match.path}/bienvenue`} component={Welcome}/>
         <Route exact path={`${match.path}/profil`} component={Profile}/>
-        <Route exact path={`${match.path}/mesProjets/nouveau`} component={AjouterProjet}/>
+        {
+          !!member ? (
+            <Route exact path={`${match.path}/mesProjets/nouveau`} component={AjouterProjet}/>
+          ) : (
+            <Redirect from={`${match.path}/mesProjets/nouveau`} to={`${match.path}/profil`} />
+          )
+        }
         <Route exact path={`${match.path}/mesProjets`} component={ListerProjects}/>
         <Route path={`${match.path}/mesProjets/:projectId`} component={ProjectContainer}/>
+        <Redirect to={`${match.path}/profil`}/>
       </Switch>
     </Container>
  );

@@ -2,10 +2,9 @@ import React, { createContext, useReducer } from 'react';
 
 export const AuthContext = createContext();
 
-const loadUserFromStorage = () => {
+const loadFromStorage = (key) => {
   try {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user;
+    return JSON.parse(localStorage.getItem(key));
   } catch (err) {
     localStorage.clear();
     return null;
@@ -13,18 +12,21 @@ const loadUserFromStorage = () => {
 };
 
 const initialState = {
-  isAuthenticated: !!loadUserFromStorage(),
-  user: loadUserFromStorage(),
+  isAuthenticated: !!loadFromStorage('user'),
+  user: loadFromStorage('user'),
+  member: loadFromStorage('member'),
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN':
       localStorage.setItem('user', JSON.stringify(action.payload.user));
+      localStorage.setItem('member', JSON.stringify(action.payload.member));
       return {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
+        member: action.payload.member,
       };
 
     case 'LOGOUT':
@@ -33,6 +35,7 @@ const reducer = (state, action) => {
         ...state,
         isAuthenticated: false,
         user: null,
+        member: null,
       };
 
     default:

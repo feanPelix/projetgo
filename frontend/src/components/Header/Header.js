@@ -37,7 +37,9 @@ export function Header() {
                       <NavDropdown id="nav-dropdown" title="MEMBRE" id="nav-dropdown">
                         <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/profil')}>Profil</NavDropdown.Item>
                         <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/mesProjets')} >Mes projets</NavDropdown.Item>
-                        <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/mesProjets/nouveau')}>Créer un projet</NavDropdown.Item>
+                        {!!authState.member && (
+                          <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/mesProjets/nouveau')}>Créer un projet</NavDropdown.Item>
+                        )}
                       </NavDropdown>
                       <Nav.Item><Nav.Link onClick={handleLogout}>DÉCONNEXION</Nav.Link></Nav.Item>
                     </>

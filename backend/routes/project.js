@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
         // is one then the commit is successful. Return if the commit is successful.
 
         // Insert new project
-        const project = await db.query("INSERT INTO project (" +
+        const result = await db.query("INSERT INTO project (" +
           "titre, " +
           "description, " +
           "sommaire, " +
@@ -69,9 +69,9 @@ router.post("/", async (req, res) => {
         );
 
         // Updating the participant table
-        await db.query("INSERT INTO PARTICIPANT (projet, user_id, comite) VALUES ($1, $2, $3)", [project.rows[0].code, responsable, "Responsable"]);
+        await db.query("INSERT INTO PARTICIPANT (projet, user_id, comite) VALUES ($1, $2, $3)", [result.rows[0].code, responsable, "Responsable"]);
 
-        res.sendStatus(200);
+        res.json(result.rows[0]);
     } catch (err) {
         console.error(err.stack);
         res.sendStatus(500);
@@ -81,13 +81,14 @@ router.post("/", async (req, res) => {
 
 // get /project/:projectID/available-member
 //Trouver tout les membres de la bdd qui ne sont PAS deja dans le comité d'un projet
-router.get("/:projectID/available-member", async (req, res) => {
+router.get("/:projectID/available-members", async (req, res) => {
     try {
         const codeProjet = req.params.projectID;
-        const userInfo = await db.query("SELECT (u.user_id, u.nom, u.prenom)FROM utilisateur u " +
-          "inner join member m on u.user_id = m.user_id where m.user_id NOT IN (" +
-          "select p.user_id from participant p where p.projet=$1)", [codeProjet]);
-        res.json(userInfo.rows);
+        const members = await db.query("SELECT DISTINCT u.user_id, u.nom, u.prenom FROM utilisateur u " +
+            "inner join member m on u.user_id = m.user_id where m.user_id NOT IN (" +
+            "select p.user_id from participant p where p.projet=$1" +
+            " group by p.user_id)", [codeProjet]);
+        res.json(members.rows);
     } catch (err) {
         console.error(err.message);
     }
@@ -95,15 +96,13 @@ router.get("/:projectID/available-member", async (req, res) => {
 
 // get /project/:projectID/available-benevole
 //Trouver tout les bénévoles de la bdd qui ne sont PAS deja dans le comité d'un projet
-router.get("/:projectID/available-benevole", async (req, res) => {
+router.get("/:projectID/available-benevoles", async (req, res) => {
     try {
         const codeProjet = req.params.projectID;
-        const userInfo = await db.query(
-          "SELECT (user_id, nom, prenom)FROM utilisateur " +
-                "WHERE user_id NOT IN (" +
-                    "SELECT p.user_id FROM participant p WHERE p.projet=$1" +
-                ")", [codeProjet]);
-        res.json(userInfo.rows);
+        const benevoles = await db.query("SELECT DISTINCT user_id, nom, prenom FROM utilisateur where user_id NOT IN (" +
+        "select p.user_id from participant p where p.projet=$1" +
+        " group by p.user_id)", [codeProjet]);
+        res.json(benevoles.rows);
     } catch (err) {
         console.error(err.message);
     }
@@ -152,17 +151,57 @@ router.get("/:projectID", async (req, res) => {
         res.json(projectDetail.rows);
     } catch (err) {
         console.error(err.message);
+        res.status(500).json({error: error.message});
     }
 });
 
+router.post("/:projectID/", async (req, res) =>{
+  const projectID = req.params.projectID;
+  try {
+    const { titre, description, sommaire, statutprojet, debutestime, finestime, budget, totalfondscoll, totaldepense,
+      debutreel, debutfin, etatavancement, image } = req.body;
+
+    const result = await db.query("UPDATE PROJECT SET titre =$1, description=$2, sommaire=$3, statutprojet=$4, debutestime=$5, finestime=$6, budget=$7, totalfondscoll=$8, totaldepense=$9," +
+      " image=$10, debutreel=$11, debutfin=$12, etatavancement=$13 WHERE code=$14", [titre, description, sommaire, statutprojet, debutestime, finestime, budget, totalfondscoll, totaldepense, image, debutreel, debutfin, etatavancement, projectID]);
+
+    res.json(result.rows);
+  } catch (err) {
+      console.error(err.message)
+  }
+});
+
+//Supprimer le projet
+router.delete("/:projectID", async (req, res) => {
+  const projectID = req.params.projectID;
+  console.log('beforeDelete', projectID);
+  try {
+      await db.query("DELETE FROM participant WHERE projet = $1", [projectID]);
+      await db.query("DELETE FROM FUNDRAISING WHERE PROJET = $1", [projectID]);
+      const beforeDelete = await db.query("SELECT * FROM PROJECT");
+      console.log('beforeDelete', beforeDelete);
+
+      await db.query("DELETE FROM PROJECT WHERE CODE = $1",[projectID]);
+      const afterDelete = await db.query("SELECT * FROM PROJECT");
+      console.log('afterDelete', afterDelete);
+
+      if(afterDelete.rows.length < beforeDelete.rows.length){
+          res.json({check: true});
+      } else {
+          res.json({check: true});
+      }
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).json({error: error.message});
+  }
+});
 
 // get /project/member
 //Afficher tout les membre d'un projet
-router.get("/:projectID/member", async (req, res) => {
+router.get("/:projectID/members", async (req, res) => {
     try {
         const codeProjet = req.params.projectID;
-        const role = 'Member';
-        const participantInfo = await db.query("SELECT Utilisateur.nom, UTILISATEUR.PRENOM from UTILISATEUR INNER JOIN participant "
+        const role = 'Membre';
+        const participantInfo = await db.query("SELECT Utilisateur.user_id, Utilisateur.nom, UTILISATEUR.PRENOM from UTILISATEUR INNER JOIN participant "
           + "ON participant.user_id=UTILISATEUR.user_id WHERE participant.projet = $1 and participant.comite = $2 ", [codeProjet, role]);
         res.json(participantInfo.rows);
     } catch (err) {
@@ -172,15 +211,26 @@ router.get("/:projectID/member", async (req, res) => {
 
 // get /project/benevole
 //Afficher tout les benevoles d'un projet
-router.get("/:projectID/benevole", async (req, res) => {
+router.get("/:projectID/benevoles", async (req, res) => {
     try {
         const codeProjet = req.params.projectID;
-        const role = 'benevole';
-        const participantInfo = await db.query("SELECT Utilisateur.nom, UTILISATEUR.PRENOM from UTILISATEUR INNER JOIN participant "
+        const role = 'Benevole';
+        const participantInfo = await db.query("SELECT Utilisateur.user_id, Utilisateur.nom, UTILISATEUR.PRENOM from UTILISATEUR INNER JOIN participant "
           + "ON participant.user_id=UTILISATEUR.user_id WHERE participant.projet = $1 and participant.comite = $2 ", [codeProjet, role]);
         res.json(participantInfo.rows);
     } catch (err) {
         console.error(err.message);
+    }
+});
+
+//Supprimer un participant d'un projet 
+router.delete("/:projectId/user/:userId", async (req, res) => {
+    try {
+        const {projectId, userId} = req.params;
+        const deleteParticipant = await db.query("DELETE FROM participant WHERE projet = $1 and user_id = $2", [projectId, userId]);
+        res.json(deleteParticipant.rows);
+    } catch (err) {
+        console.log(err.message);
     }
 });
 
@@ -230,7 +280,7 @@ router.post('/:projectId/campaign', async (req, res) => {
             });
         });
     } catch (error) {
-
+        res.status(500).json({error: error.message});
     }
 });
 
@@ -239,19 +289,15 @@ router.post('/:projectId/campaign', async (req, res) => {
 router.get('/:projectId/campaign', async (req, res) => {
     const projectId = req.params.projectId;
     try {
-        const result = await db.query("SELECT * FROM fundraising WHERE projet = $1 AND fin > NOW()", [projectId]);
+        const result = await db.query("SELECT * FROM fundraising WHERE projet=$1 AND fin > NOW()", [projectId]);
         if (!result || !result.rowCount) {
             res.json({
                 message: "No current campaign",
-                campaign: null,
             });
             return;
         }
 
-        res.json({
-            message: "Campaign found",
-            campaign: result.rows[0]
-        });
+        res.json(result.rows[0]);
     } catch(error) {
         res.status(500).json({error: error.message});
     }
@@ -280,5 +326,17 @@ router.get('/:projectId/donations', async (req, res) => {
     }
 });
 
+//---------------------User Story 6------------------------------------
+//List de projet d'un membre
+// Get the list of the project of a certain member with given userID and return the list.
+router.get("/myProjects/:userID", async (req, res) => {
+    const userID = req.params.userID;
+    try {
+        const projetInfo = await db.query("SELECT * FROM PROJECT inner join participant on  participant.projet=project.code inner join login on login.user_id=participant.user_id WHERE login.user_id=$1", [userID]);
+        res.json(projetInfo.rows);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+})
 
 module.exports = router;

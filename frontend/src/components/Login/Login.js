@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext/AuthContext';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import AfficherMessage from './AfficherMessage';
-import { Form, Col, Row, Button, InputGroup, FormControl, ListGroup, Nav } from "react-bootstrap";
+import { Form, InputGroup, Nav } from "react-bootstrap";
 import { Modal, ModalBody } from 'react-bootstrap';
 import ButtonPG from '../Buttons/ButtonPG/ButtonPG';
 import './Login.css';
+import { useHistory } from 'react-router-dom';
 
 export default function Login() {
   const { dispatch } = useContext(AuthContext);
   const [show, setShow] = useState(false);
+  const history = useHistory();
 
   const initialState = {
     email: "",
@@ -54,6 +54,8 @@ export default function Login() {
           type: 'LOGIN',
           payload: resJson,
         });
+        
+        history.push('/membre/bienvenue');
       } else {
         throw response;
       }      

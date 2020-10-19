@@ -2,13 +2,12 @@ import React, { useContext } from 'react';
 import { Container, Col, Row, ListGroup } from 'react-bootstrap';
 import { Facebook, Twitter, Instagram } from 'react-feather';
 import { useState, useEffect } from 'react';
-import { Link, BrowserRouter } from 'react-router-dom';
-import User from '../User';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 import { AuthContext } from '../context/AuthContext/AuthContext';
 
 export function Footer() {
-  const { state: { isAuthenticated } } = useContext(AuthContext);
+  const { state: { isAuthenticated, member } } = useContext(AuthContext);
   const [projects, setProjects] = useState([]);
 
   const getProjects = async () => {
@@ -36,9 +35,8 @@ export function Footer() {
     );
   });
 
-
   return(
-    <Container fluid>
+    <Container fluid className="mt-5 footer">
       <Row>
         <Col lg={4} md={4}>
           <h4>Campagnes</h4>
@@ -52,11 +50,16 @@ export function Footer() {
             {isAuthenticated ? (
               <>
                 <li>
-                  <Link to="/membre/mesProjets">Mes projets</Link>
+                  <Link to="/membre/profil">Profil</Link>
                 </li>
                 <li>
-                  <Link to="/membre/mesProjets/nouveau">Creer nouveau projet</Link>
+                  <Link to="/membre/mesProjets">Mes projets</Link>
                 </li>
+                {!!member && (
+                  <li>
+                    <Link to="/membre/mesProjets/nouveau">Creer nouveau projet</Link>
+                  </li>
+                )}
               </>
             ) : (
               <>

@@ -3,16 +3,14 @@ import { Col, InputGroup, Form } from 'react-bootstrap';
 import ButtonPG from '../../Buttons/ButtonPG/ButtonPG';
 
 export default function NewFundraising({ history, match }) {
-  console.log('match', match);
+  const { projectId } = match.params;
   const initialState = {
-    projectId: match.params.projectId,
     start: '',
     end: '',
     goal: '',
-  }
+  };
 
   const [data, setData] = useState(initialState);
-  
   const handleChange = event => {
     setData({
       ...data,
@@ -24,25 +22,22 @@ export default function NewFundraising({ history, match }) {
     event.preventDefault();
     try {
       //Write request
-      const response = await fetch('/project/:projectId/campaign', {
+      const response = await fetch(`/project/${projectId}/campaign`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          projectId: data.projectId,
+          projectId,
           start: data.start,
           end: data.end,
           goal: data.goal,
-
         }),
       });
 
       if (!response.ok) {
         throw response;
       }
-      
-      const resJson = await response.json();
       
       history.go(-1);
 
@@ -54,9 +49,8 @@ export default function NewFundraising({ history, match }) {
   
   
   return (
-    <Form
-      onSubmit={handleFormSubmit}
-    >
+    <Form onSubmit={handleFormSubmit}>
+      <h2>Nouvelle campagne</h2>
       <Form.Row>
         <Col sm={4}>
           <Form.Label

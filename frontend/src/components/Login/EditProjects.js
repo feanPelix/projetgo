@@ -1,5 +1,6 @@
-import React, { useState, useEffect} from "react";
+import React, { useState } from "react";
 import {Modal, Button} from "react-bootstrap";
+import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
 
 function EditProjects(props){
     const [show, setShow] = useState(false);
@@ -7,30 +8,33 @@ function EditProjects(props){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const updateContent = async (e)=>{
+    const updateContent = async (e)=> {
         e.preventDefault();
-        try{
+        try {
             props.setContent(newContent);
-        }catch (e){
+            handleClose();
+        } catch (e){
             console.error(e.message);
         }
-    }
+    };
+
     return (
         <>
-            <Button variant="primary" className="btn btn-info btn-circle btn-sm" style={{visibility:props.stateVisibility}} onClick={handleShow}>
+            <ButtonPG variant="teal" size="xs" onClick={handleShow}>
                 +
-            </Button>
+            </ButtonPG>
 
             <Modal show={show} onHide={handleClose}>
-
-                <Modal.Body><input type="text" className="form-control" value={newContent} onChange={e=>setNewContent(e.target.value)}/></Modal.Body>
+                <Modal.Body>
+                  <input type="text" className="form-control" value={newContent} onChange={e=>setNewContent(e.target.value)}/>
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={e=> updateContent(e)}>
+                    <ButtonPG variant="teal" onClick={e => updateContent(e)}>
                         Save Changes
-                    </Button>
+                    </ButtonPG>
                 </Modal.Footer>
             </Modal>
         </>

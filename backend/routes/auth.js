@@ -12,22 +12,21 @@ const generateAuthToken = () => {
 const authTokens = {};
 
 // Login
-//old -> app.post("/login"f, async (req, res) => {
 router.post("/", async (req, res) => {
     /*Attention !
     * Il n'y a aucune validation/sanitation d'input. Requete a risque d'injection.*/
     const { username, password } = req.body;
     let login;
-
+    
     try {
-        //Find the login
-        login = await db.query("SELECT password, user_id FROM login WHERE USERNAME=$1", [username]);
+      //Find the login
+      login = await db.query("SELECT password, user_id FROM login WHERE USERNAME=$1", [username]);
     } catch (err) {
-        console.error(err.message);
+      console.error(err.message);
     }
-
+    
     if (!login || !login.rowCount) {
-        res.status(401).json({
+      res.status(401).json({
             message: 'Invalid username or password',
         });
         return;
@@ -50,14 +49,16 @@ router.post("/", async (req, res) => {
         }
 
         authToken = generateAuthToken();
-        authTokens[authToken] = userLogin
+        authTokens[authToken] = userLogin;
     });
 
     // TODO find user
     try {
         const user = await db.query("SELECT * FROM utilisateur WHERE user_id=$1", [userLogin.userID]);
+        const member = await db.query("SELECT * FROM member WHERE user_id = $1", [userLogin.userID]);
         res.cookie('Authtoken', authToken).json({
             user: user.rows[0],
+            member: member.rows[0],   
         });
     } catch (err) {
         console.error(err.message);

@@ -42,27 +42,23 @@ function AjouterProjet({ history }) {
             setImage(image);
             try {
               const responsable = user.user_id;
-              const body = {
-                titre,
-                descCourte,
-                sommaire,
-                startDate,
-                endDate,
-                responsable,
-                image
-              };
+              const body = { image, titre, descCourte, sommaire, startDate, endDate, responsable, image };
+              console.log(body);
               const response = await fetch('/project', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
               });
-              if (response.ok) {
+              const jsonData = await response.json();
+
+              if (jsonData) {
                 alert("Submission sucessful");
                 setTitre('');
                 setDescCourte('');
                 setSommaire('');
                 setStartDate(new Date());
                 setEndDate(new Date());
+                history.push(`/membre/mesProjets/${jsonData.code}`);
               } else {
                 alert("Please try again");
               }
