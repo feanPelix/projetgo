@@ -3,6 +3,7 @@ import { Col, Form} from 'react-bootstrap';
 import {useHistory} from "react-router-dom";
 import moment from "moment";
 import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
+import './Signup.css';
 
 
 function FormulaireSignUpBenevole(props) {
