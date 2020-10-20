@@ -32,6 +32,7 @@ export function Projects() {
             srcImage={key.image}
             title={key.titre}
             summary={key.description}
+            projectId={key.code}
           />
         </Col>
     );

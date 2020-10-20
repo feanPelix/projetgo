@@ -2,23 +2,24 @@ import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import {useHistory} from "react-router-dom";
 import OnMemberPayment from "./onMemberPayment";
+import OnDonation from "../Fundraising/OnDonation"
 
-
-const CheckoutComponent = ({price, source, user_id}) => {
+const CheckoutComponent = ({price, source, user_id, fundraising_id}) => {
     const history = useHistory();
-    const priceForStripe = price*100;
+    const priceForStripe = price * 100;
     const type = source;
     const publishableKey = 'pk_test_51HYwKuBamjKTPrkZqdhyI3YZ8enwYg3TAeGcNt7mwP5cOgPliDZDW1oEJ5ZwHMleyKUYceYkHUkSe1rVVOVb6Yxt000IGUfKG3';
 
-
-    const successPayment = () => {
+    function successPayment (res) {
         if(type === 'membership'){
             alert('Payement réussi!');
             OnMemberPayment(user_id);
-            history.push('/');
         } else{
-            alert('Donation réussi!');
+            alert('Donation réussie!');
+            let adresseCard = res.card.address_city;
+            OnDonation(res, fundraising_id, price, adresseCard);
         }
+        history.push('/');
     };
 
     const declinedPayment = () => {
@@ -29,6 +30,15 @@ const CheckoutComponent = ({price, source, user_id}) => {
         }
 
     };
+
+    const montantInvalide = () => {
+        alert('Payement refusé! \n Montant invalide.');
+    }
+
+    const erreurInfos = () => {
+        alert('Informations fournies invalides.');
+    }
+
     const errorPayment = () => {
         alert('Erreur de contact avec Stripe');
     };
@@ -42,17 +52,20 @@ const CheckoutComponent = ({price, source, user_id}) => {
         const response = await fetch(`/payment`, {
             method: "POST",
             headers: {"Content-Type": 'application/json'},
-            body: JSON.stringify({stripeToken: token.id,
+            body: JSON.stringify(
+                {stripeToken: token.id,
                 amount:priceForStripe,
                 description:source})
-        })
-            .then (res => {
-                console.dir(res.ok);
-                if(!res.ok) {
+        } ).then (res => {
+                console.log(res);
+                if(res.status === 500) {
                     declinedPayment();
-                }
-                else{
-                    successPayment();
+                } else if (res.status === 501) {
+                    montantInvalide();
+                } else if (!res.ok) {
+                    erreurInfos();
+                } else{
+                    successPayment(token);
                 }
             })
             .catch(errorPayment);
