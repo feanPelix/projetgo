@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext/AuthContext';
 
 import Fundraising from '../Fundraising/Fundraising';
 import NewFundraising from '../Fundraising/NewFundraising/NewFundraising';
-import ProjetDetails from '../Login/ProjetDetails';
+import ProjetDetails from '../DetailProjet/MainPage/ProjetDetails';
 import Report from '../Report/Report';
 
 export default function ProjectContainer({ match }) {

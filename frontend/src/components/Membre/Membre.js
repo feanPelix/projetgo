@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Breadcrumb, BreadcrumbItem, Container } from 'react-bootstrap';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Welcome from "../Login/Welcome";
-import Profile from "../Login/Profile";
-import ListerProjects from "../Login/ListerProjects";
-import AjouterProjet from "../Login/AjouterProjet";
+import Welcome from "../Welcome/Welcome";
+import Profile from "../ProfilMembre/Profile";
+import ListerProjects from "../ListerProjets/ListerProjects";
+import AjouterProjet from "../AjouterProjet/AjouterProjet";
 import ProjectContainer from '../ProjectContainer/ProjectContainer';
 import { AuthContext } from '../context/AuthContext/AuthContext';
 
