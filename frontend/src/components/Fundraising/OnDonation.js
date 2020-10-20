@@ -6,7 +6,7 @@ async function OnDonation( res,fundraising_id,price,resCard ) {
 
     const fundraising = fundraising_id;
     const montant = price;
-    const typepaiement = "card";
+    const typepaiement = res.type;
     const nom = res.card.name;
     const prenom = "N/A";
     const email = res.email;
@@ -16,9 +16,6 @@ async function OnDonation( res,fundraising_id,price,resCard ) {
 
 
     try{
-        console.log(res);
-        console.log(res.card.name);
-        console.log(resCard);
         const body = {fundraising,datedon,montant,typepaiement,nom,prenom,email,phone,adresse};
 
         const response = await fetch(`/payment/don`, {
