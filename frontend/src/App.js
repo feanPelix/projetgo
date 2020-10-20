@@ -12,6 +12,7 @@ import ChoixMembership from "./components/SignUp/ChoixMembership";
 import Footer from './components/Footer/Footer';
 import Membre from './components/Membre/Membre';
 import { AuthContextProvider } from './components/context/AuthContext/AuthContext';
+import MontantDonation from "./components/Fundraising/MontantDonation";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
               <Route path="/inscription-benevole" component={FormulaireSignUpBenevole} />
               <Route path="/inscription-membre" component={FormulaireSignUpMembre} />
               <Route path="/inscription" component={ChoixMembership} />
-              
+              <Route path="/donation" component={MontantDonation} />
               <Route path="/membre" component={Membre} />
             </Switch>
             <Footer />

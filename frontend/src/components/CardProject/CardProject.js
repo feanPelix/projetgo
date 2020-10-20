@@ -5,7 +5,7 @@ import ButtonDonation from '../Buttons/ButtonDonation/ButtonDonation';
 
 
 
-export function ProjectCard({srcImage, title, summary}) {
+export function ProjectCard({srcImage, title, summary, projectId}) {
   const summary_size = 250;
   const size = null;
   let styles = `bkg ${size}`;
@@ -34,7 +34,7 @@ export function ProjectCard({srcImage, title, summary}) {
         <Card.Text>
           {formattedSummary}
         </Card.Text>
-          <ButtonDonation />
+          <ButtonDonation projectID={projectId}/>
       </Card.Body>
     </Card>
   );
