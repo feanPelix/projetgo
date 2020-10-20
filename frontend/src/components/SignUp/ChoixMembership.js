@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { Link, useHistory } from "react-router-dom";
+import { Form } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
+import './Signup.css';
 
 
 function ChoixMembership(props) {
@@ -28,44 +29,42 @@ function ChoixMembership(props) {
   }
 
   return (
-    <div style={{ backgroundColor: '#138499', fontSize: '30px', color: "white" }}>
-      <Form style={{ margin: "auto", padding: "1rem"}}>
-        <Form.Group controlId={"choixMembership"} className={"m8"}>
-          <Col>
-            <Form.Check
-              name="temp"
-              value="/inscription-benevole"
-              type="radio"
-              label="Devenir un bénévole"
-              onChange={handleChange}
-              checked={choixMembership === "/inscription-benevole"}
-              className="mx-5 mb-5"
-              style={{ margin: "20px 10px 20px 10px" }}
-            />
-          </Col>
-          <Col>
-            <Form.Check
-              name="temp"
-              value="/inscription-membre"
-              type="radio"
-              label="Devenir un membre"
-              onChange={handleChange}
-              checked={choixMembership === "/inscription-membre"}
-              className="mx-5 mb-5"
-              style={{ margin: "20px 10px 20px 10px" }}
-            />
-          </Col>
+    <Form className="signup">
+      <Form.Row>
+        <Form.Group controlId={"choixMembership"} className="mt-3">
+          <Form.Check
+            name="temp"
+            value="/inscription-benevole"
+            type="radio"
+            label="Devenir un bénévole"
+            onChange={handleChange}
+            checked={choixMembership === "/inscription-benevole"}
+            className="p-5 sep"
+            inline
+          />
+          <Form.Check
+            name="temp"
+            value="/inscription-membre"
+            type="radio"
+            label="Devenir un membre"
+            onChange={handleChange}
+            checked={choixMembership === "/inscription-membre"}
+            className="p-5"
+            inline
+          />
         </Form.Group>
-
+      </Form.Row>
+      <Form.Row className="justify-content-md-center p-2">
         <ButtonPG
-          size="lg"           
-          disabled={!disableButton()} 
+          className="btn-go"
+          size="lg"
+          disabled={!disableButton()}
           onClick={(e) => { history.push(choixMembership) }}
         >
           Go
-        </ButtonPG> 
-      </Form>
-    </div>
+        </ButtonPG>
+      </Form.Row>
+    </Form>
   )
 }
 

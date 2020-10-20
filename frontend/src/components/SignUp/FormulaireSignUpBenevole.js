@@ -1,7 +1,9 @@
 import React, {useState} from "react";
-import {Button, Container, Form} from 'react-bootstrap';
+import { Col, Form} from 'react-bootstrap';
 import {useHistory} from "react-router-dom";
 import moment from "moment";
+import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
+import './Signup.css';
 
 
 function FormulaireSignUpBenevole(props) {
@@ -84,98 +86,96 @@ function FormulaireSignUpBenevole(props) {
     }
 
     return (
-        <div style={{backgroundColor: '#138496'}}>
-        <Container>
+        <Form onSubmit={handleSubmit} controlId={"FormSignUp"} className="m-5 signup">
+            <hr/>
+            <h4>INSCRIPTION BÉNÉVOLES</h4>
+            <hr/>
+            <Form.Row >
+                <Form.Group as={Col} controlId={"formGridNom"} >
+                    <Form.Control type={"text"} placeholder={"Nom"} value={nom}
+                        onChange={e => setNom(e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col} controlId={"formGridPrenom"} >
+                    <Form.Control type={"text"} placeholder={"Prenom"} value={prenom}
+                        onChange={e => setPrenom(e.target.value)} />
+                </Form.Group>
+            </Form.Row>
 
-                <hr style={{backgroundColor: 'white '}}/>
-                <h4 style={{color: 'white'}}>INSCRIPTION BÉNÉVOLES</h4>
-                <hr style={{backgroundColor: 'white'}}/>
-                <Form onSubmit={handleSubmit} controlId={"FormSignUp"} className="m-5" style={{margin:"auto"}} >
-                    <Form.Row >
-                        <Form.Group as={"Col"} controlId={"formGridNom"} style={{margin:"0px 20px 2px 5px"}}>
-                            <Form.Control type={"text"} placeholder={"Nom"} value={nom}
-                                          onChange={e => setNom(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridPrenom"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"text"} placeholder={"Prenom"} value={prenom}
-                                          onChange={e => setPrenom(e.target.value)}/>
-                        </Form.Group>
-                    </Form.Row>
+            <Form.Row>
+                <Form.Group as={Col} controlId={"formGridCourriel"}>
+                    <Form.Control type={"email"} placeholder={"Courriel"} value={email}
+                        onChange={e => setEmail(e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col} controlId={"formGridConfirmationCourriel"}>
+                    <Form.Control type={"email"} placeholder={"Confirmer courriel"} value={confirmEmail}
+                        onChange={e => setConfirmEmail(e.target.value)} />
+                </Form.Group>
+            </Form.Row>
 
-                    <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridCourriel"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"email"} placeholder={"Courriel"} value={email}
-                                          onChange={e => setEmail(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridConfirmationCourriel"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"email"} placeholder={"Confirmer courriel"} value={confirmEmail}
-                                          onChange={e => setConfirmEmail(e.target.value)}/>
-                        </Form.Group>
-                    </Form.Row>
+            <Form.Row>
+                <Form.Group as={Col} controlId={"formGridPassword"}>
+                    <Form.Control type={"password"} placeholder={"Mot de passe"} value={password}
+                        onChange={e => setPassword(e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col} controlId={"formGridConfirmationPassword"}>
+                    <Form.Control type={"password"} placeholder={"Confirmer mot de passe"}
+                        value={confirmPassword}
+                        onChange={e => setConfirmPassword(e.target.value)} />
+                </Form.Group>
+            </Form.Row>
 
-                    <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridPassword"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"password"} placeholder={"Mot de passe"} value={password}
-                                          onChange={e => setPassword(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridConfirmationPassword"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"password"} placeholder={"Confirmer mot de passe"}
-                                          value={confirmPassword}
-                                          onChange={e => setConfirmPassword(e.target.value)}/>
-                        </Form.Group>
-                    </Form.Row>
+            <Form.Row>
+                <Form.Group as={Col} controlId={"formGridNumeroCivique"}>
+                    <Form.Control type={"text"} placeholder={"Numéro civique"} value={numCivique}
+                        onChange={e => setNumCivique(e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col} controlId={"formGridRue"}>
+                    <Form.Control type={"text"} placeholder={"Rue"} value={rue}
+                        onChange={e => setRue(e.target.value)} />
+                </Form.Group>
+            </Form.Row>
 
-                    <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridNumeroCivique"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"text"} placeholder={"Numéro civique"} value={numCivique}
-                                          onChange={e => setNumCivique(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridRue"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"text"} placeholder={"Rue"} value={rue}
-                                          onChange={e => setRue(e.target.value)}/>
-                        </Form.Group>
-                    </Form.Row>
+            <Form.Row>
+                <Form.Group as={Col} controlId={"formGridCodePostal"}>
+                    <Form.Control type={"text"} placeholder={"Code postal"} value={codePostal}
+                        onChange={e => setCodePostal(e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col} controlId={"formGridVille"}>
+                    <Form.Control type={"text"} placeholder={"Ville"} value={ville}
+                        onChange={e => setVille(e.target.value)} />
+                </Form.Group>
+            </Form.Row>
 
-                    <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridCodePostal"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"text"} placeholder={"Code postal"} value={codePostal}
-                                          onChange={e => setCodePostal(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridVille"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"text"} placeholder={"Ville"} value={ville}
-                                          onChange={e => setVille(e.target.value)}/>
-                        </Form.Group>
-                    </Form.Row>
+            <Form.Row>
+                <Form.Group as={Col} controlId={"formGridProvince"}>
+                    <Form.Control type={"text"} placeholder={"Province"} value={province}
+                        onChange={e => setProvince(e.target.value)} />
+                </Form.Group>
+                <Form.Group as={Col} controlId={"formGridPays"}>
+                    <Form.Control type={"text"} placeholder={"Pays"} value={pays}
+                        onChange={e => setPays(e.target.value)} />
+                </Form.Group>
+            </Form.Row>
 
-                    <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formGridProvince"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"text"} placeholder={"Province"} value={province}
-                                          onChange={e => setProvince(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridPays"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"text"} placeholder={"Pays"} value={pays}
-                                          onChange={e => setPays(e.target.value)}/>
-                        </Form.Group>
-                    </Form.Row>
-                    <Form.Row>
-                        <Form.Group as={"Col"} controlId={"formCompetences"} style={{margin:"0px 20px 10px 5px"}}>
-                            <Form.Control type={"textarea"} placeholder={"Compétences"} value={competences}
-                                          onChange={e => setCompetences(e.target.value)}/>
-                        </Form.Group>
-                        <Form.Group as={"Col"} controlId={"formGridText"}>
-                            <Form.Label>
-                                *Que vous pouvez apporter à un projet.
-                            </Form.Label>
-                        </Form.Group>
-                    </Form.Row>
-
-                    <Button variant={"warning"} type={"submit"} disabled={!validateEmptyField()}>
-                        S'inscrire
-                    </Button>
-                </Form>
-
-        </Container>
-        </div>
+            <Form.Row>
+                <Form.Group as={Col} controlId={"formCompetences"}>
+                    <Form.Control type={"textarea"} placeholder={"Compétences"} value={competences}
+                        onChange={e => setCompetences(e.target.value)} />
+                    <Form.Text >
+                        *Que vous pouvez apporter à un projet.
+                    </Form.Text>
+                </Form.Group>
+            </Form.Row>
+            <Form.Row className="justify-content-md-center p-2">
+                <ButtonPG
+                    className="btn-go"
+                    type="submit"
+                    disabled={!validateEmptyField()}
+                >
+                    S'inscrire
+            </ButtonPG>
+            </Form.Row>
+        </Form>
     )
 }
 
