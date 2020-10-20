@@ -3,14 +3,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Col, Row, Button, ListGroup, Image, Dropdown, DropdownButton, ProgressBar } from "react-bootstrap";
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
-
-import { storage } from "../../firebase";
-import { AuthContext } from '../context/AuthContext/AuthContext';
-import ButtonPG from '../Buttons/ButtonPG/ButtonPG';
-import EditProjects from "./EditProjects";
-import ModifierDate from "./ModifierDate";
-import ParticipantDisponibleList from "./ParticipantDisponibleList";
-import ParticipantList from "./ParticipantList";
+import './ProjetDetails.css';
+import { storage } from "../../../firebase";
+import { AuthContext } from '../../context/AuthContext/AuthContext';
+import ButtonPG from '../../Buttons/ButtonPG/ButtonPG';
+import EditProjects from "../ModificationProjet/ModificationText/EditProjects";
+import ModifierDate from "../ModificationProjet/ModificationDate/ModifierDate";
+import ParticipantDisponibleList from "../ModificationProjet/ModificationParticipant/ParticipantDisponibleList";
+import ParticipantList from "../ModificationProjet/ParticipantList/ParticipantList";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -200,9 +200,9 @@ function ProjetDetails({ match }) {
   }, [projetId])
 
   return (
-    <div style={{ textAlign: 'left' }} >
-      <div style={{ fontSize: '18px' }}>
-        <h1 className="mb-2">
+    <div className="detail-projet-body" style={{ textAlign: 'justify' }} >
+      <div>
+        <h1 className="mb-4">
           {currentProject.titre}
           {isCurrentUserResponsable && (
             <EditProjects content={currentProject.titre} setContent={(value) => editProjectInfo('titre', value)} />
@@ -218,7 +218,7 @@ function ProjetDetails({ match }) {
           <Col className="mr-4" lg={5} sm={12}>
             <Image fluid src={currentProject.image} />
             {isCurrentUserResponsable && (
-              <input type="file" onChange={handleChangeFile} className="btn btn-info btn-circle btn-sm" id="exampleFormControlFile1" />
+              <input type="file" onChange={handleChangeFile} className="btn" id="exampleFormControlFile1" />
             )}
           </Col>
           <Col className="mr-4" lg={6} sm={12}>
@@ -231,11 +231,9 @@ function ProjetDetails({ match }) {
         <hr />
         <Row>
           <Col>
-          </Col>
-          <Col>
             {isCurrentUserResponsable && (
               <div style={{ display: 'inline-block' }}>
-                <DropdownButton style={{ float: 'left' }} variant="info" onSelect={(value) => editProjectInfo('statutprojet', value)} id="dropdown-basic-button" title="Statut Projet">
+                <DropdownButton variant="teal" style={{ float: 'left'}} onSelect={(value) => editProjectInfo('statutprojet', value)} id="dropdown-basic-button"  title="Statut Projet">
                   <Dropdown.Item eventKey="Proposé">Proposé</Dropdown.Item>
                   <Dropdown.Item eventKey="Soumis">Soumis</Dropdown.Item>
                   <Dropdown.Item eventKey="Approuvé">Approuvé</Dropdown.Item>
@@ -247,7 +245,8 @@ function ProjetDetails({ match }) {
               </div>
             )}
           </Col>
-        </Row><br />
+        </Row>
+        <hr/>
         <Row>
         <Col>
             <p>
@@ -265,6 +264,7 @@ function ProjetDetails({ match }) {
               )}
             </p>
           </Col>
+
         </Row>
         <hr />
         <Row>
@@ -282,12 +282,12 @@ function ProjetDetails({ match }) {
         <Row >
           <Col>
             <ParticipantDisponibleList participantList={arrayMembersDB} setID={setSelectedMemberIndex} optionName="Choisissez un membre" selectedValue={selectedMemberIndex} /><br />
-            <ButtonPG style={{minWidth: '200px'}} className="mb-2" variant="teal" onClick={ajouterMembre}><b>+</b> Ajouter</ButtonPG><br />
+            <ButtonPG className="mb-2" variant="teal" onClick={ajouterMembre}><b>+</b> Ajouter</ButtonPG><br />
             <ParticipantList participantList={arrayAddedAlreadyMembers} supprimerParticipant={supprimerParticipant} />
           </Col>
           <Col>
             <ParticipantDisponibleList participantList={arrayBenevolesDB} setID={setSelectedBenevoleIndex} optionName="Choisissez un bénévole" selectedValue={selectedBenevoleIndex}/><br />
-            <ButtonPG style={{minWidth: '200px'}} className="mb-2" variant="teal" onClick={ajouterBenevole}><b>+</b> Ajouter</ButtonPG><br />
+            <ButtonPG className="mb-2" variant="teal" onClick={ajouterBenevole}><b>+</b> Ajouter</ButtonPG><br />
             <ParticipantList participantList={arrayAddedAlreadyBenevoles} supprimerParticipant={supprimerParticipant} />
           </Col>
           <Col style={{ textAlign: 'center' }}>

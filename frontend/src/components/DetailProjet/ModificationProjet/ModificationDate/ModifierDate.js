@@ -2,6 +2,7 @@ import React, { useState} from "react";
 import {Modal, Button} from "react-bootstrap";
 import DatePicker from 'react-datepicker';
 import moment from "moment";
+import ButtonPG from "../../../Buttons/ButtonPG/ButtonPG";
 
 function ModifierDate(props){
     const [show, setShow] = useState(false);
@@ -21,9 +22,9 @@ function ModifierDate(props){
 
     return(
         <>
-            <Button className="btn-sm mt-2 btn-info ml-3" style={{ borderRadius:"50%"}} onClick={handleShow}>
+            <ButtonPG variant="teal" size="xs" onClick={handleShow} className="btn-sm ml-3" style={{borderRadius:"50%"}}>
                 +
-            </Button>
+            </ButtonPG>
 
             <Modal show={show} onHide={handleClose}>
                 <div className="modal-header">
@@ -44,9 +45,9 @@ function ModifierDate(props){
                     <Button variant="secondary" onClick={handleClose}>
                         Fermer
                     </Button>
-                    <Button variant="primary" onClick={e=> updateDate(e)}>
+                    <ButtonPG variant="teal" onClick={e=> updateDate(e)}>
                         Sauvegarder
-                    </Button>
+                    </ButtonPG>
                 </Modal.Footer>
             </Modal>
         </>

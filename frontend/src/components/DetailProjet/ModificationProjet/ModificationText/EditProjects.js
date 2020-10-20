@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {Modal, Button} from "react-bootstrap";
-import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
+import ButtonPG from "../../../Buttons/ButtonPG/ButtonPG";
 
 function EditProjects(props){
     const [show, setShow] = useState(false);
@@ -20,7 +20,7 @@ function EditProjects(props){
 
     return (
         <>
-            <ButtonPG variant="teal" size="xs" onClick={handleShow}>
+            <ButtonPG variant="teal" size="xs" onClick={handleShow} className="btn-sm ml-3" style={{borderRadius:"50%"}}>
                 +
             </ButtonPG>
 
@@ -30,10 +30,10 @@ function EditProjects(props){
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
-                        Close
+                        Fermer
                     </Button>
                     <ButtonPG variant="teal" onClick={e => updateContent(e)}>
-                        Save Changes
+                        Sauvegarder
                     </ButtonPG>
                 </Modal.Footer>
             </Modal>

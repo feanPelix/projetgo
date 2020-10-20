@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Col, Row, Image, ListGroup } from "react-bootstrap";
+import './Profile.css';
 import moment from "moment";
 import { AuthContext } from '../context/AuthContext/AuthContext';
 
@@ -15,7 +16,7 @@ function Profile(props){
                 <Col className="mt-4 mr-5" xs={12} md={6} lg={4}>
                     <Image fluid src='/images/avatar_woman.png' />
                 </Col>
-                <Col  className=" ml-5" style={{textAlign: 'left'}} xs={12} md={6} lg={6} >
+                <Col  className="ml-5"xs={12} md={6} lg={6} >
                     <ListGroup variant="flush">
                         <ListGroup.Item><b>Prenom :  </b>{user.prenom}</ListGroup.Item>
                         <ListGroup.Item><b>Nom :  </b>{user.nom}</ListGroup.Item>

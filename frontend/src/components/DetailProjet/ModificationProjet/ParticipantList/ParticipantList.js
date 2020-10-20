@@ -1,6 +1,6 @@
 import {ListGroup} from "react-bootstrap";
 import React from "react";
-import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
+import ButtonPG from "../../../Buttons/ButtonPG/ButtonPG";
 
 
 

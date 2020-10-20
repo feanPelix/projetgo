@@ -3,8 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form, Col, Row, Button, Container } from "react-bootstrap";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import './AjouterProjet.css';
 import {storage} from "../../firebase";
 import { AuthContext } from '../context/AuthContext/AuthContext';
+import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
 
 
 function AjouterProjet({ history }) {
@@ -42,8 +44,7 @@ function AjouterProjet({ history }) {
             setImage(image);
             try {
               const responsable = user.user_id;
-              const body = {titre, descCourte, sommaire, startDate, endDate, responsable, image};
-              console.log(body);
+              const body = {titre, descCourte, sommaire, startDate, endDate, responsable, image };
               const response = await fetch('/project', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -52,7 +53,7 @@ function AjouterProjet({ history }) {
               const jsonData = await response.json();
 
               if (jsonData) {
-                alert("Submission sucessful");
+                alert("\n" + "Projet soumis avec succès");
                 setTitre('');
                 setDescCourte('');
                 setSommaire('');
@@ -71,35 +72,35 @@ function AjouterProjet({ history }) {
   }
 
   return (
-    <Container style={{ fontSize: '20px' }}>
-      <Form style={{ textAlign: 'left' }}>
+    <Container className="ajouter-projet-body mt-5">
+      <Form>
         <Row>
           <Col>
             <Form.Label>Titre du projet : </Form.Label>
           </Col>
           <Col lg="9">
-            <input value={titre} onChange={e => setTitre(e.target.value)} style={{ width: '70%' }} className="form-control mt-2" type="text" placeholder="Type here" />
+            <input value={titre} onChange={e => setTitre(e.target.value)} className="form-control mt-2 input-columns" type="text" placeholder="Saisir ici" />
           </Col>
         </Row><br />
         <Row>
           <Col>
-            <Form.Label style={{ textAlign: 'left' }}>Description courte : </Form.Label>
+            <Form.Label >Description courte : </Form.Label>
           </Col>
           <Col lg="9">
-            <Form.Control value={descCourte} onChange={e => setDescCourte(e.target.value)} placeholder="Type here" style={{ width: '70%' }} as="textarea" className="form-control" id="exampleFormControlTextarea1" rows="3"></Form.Control>
+            <Form.Control value={descCourte} onChange={e => setDescCourte(e.target.value)} placeholder="Saisir ici" as="textarea" className="form-control" id="exampleFormControlTextarea1" rows="3"></Form.Control>
           </Col>
         </Row><br />
         <Row>
           <Col>
-            <Form.Label style={{ textAlign: 'left' }}>Sommaire du project (description du but, objectifs et benefices escomptes): </Form.Label>
+            <Form.Label>Sommaire du project (description du but, objectifs et benefices escomptes): </Form.Label>
           </Col>
           <Col lg="9">
-            <textarea value={sommaire} onChange={e => setSommaire(e.target.value)} placeholder="Type here" style={{ width: '70%' }} className="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+            <textarea value={sommaire} onChange={e => setSommaire(e.target.value)} placeholder="Saisir ici" className="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
           </Col>
         </Row><br />
         <Row>
           <Col>
-            <Form.Label style={{ textAlign: 'left' }}>Photo de presentation : </Form.Label>
+            <Form.Label>Photo de presentation : </Form.Label>
           </Col>
           <Col lg="9">
             <input type="file" onChange={handleChange} id="exampleFormControlFile1" />
@@ -108,27 +109,24 @@ function AjouterProjet({ history }) {
         </Row><br />
         <Row>
           <Col lg={3}>
-            <Form.Label style={{ textAlign: 'left' }}>Date du début estimée : </Form.Label>
+            <Form.Label>Date du début estimée : </Form.Label>
           </Col>
-          <Col style={{ color: 'black' }} lg={6}>
+          <Col lg={6}>
             <DatePicker dateFormat="MM-dd-yyyy" selected={startDate} onChange={date => setStartDate(date)} />
           </Col>
         </Row><br />
         <Row>
           <Col lg={3}>
-            <Form.Label style={{ textAlign: 'left' }}>Date du fin de estime: </Form.Label>
+            <Form.Label>Date du fin de estime: </Form.Label>
           </Col>
           <Col lg={5}>
             <DatePicker dateFormat="MM-dd-yyyy" selected={endDate} onChange={date => setEndDate(date)} />
           </Col>
           <Col lg={2}>
-            <Button onClick={handleSubmit} variant="secondary" style={{ backgroundColor: 'orange' }}>Soumettre Projet</Button>
+            <Button onClick={handleSubmit} variant="orange" >Soumettre Projet</Button>
           </Col>
-
         </Row>
-
       </Form><br /><br />
-
 
     </Container>
 

@@ -50,7 +50,7 @@ function ListerProjects({ match, history }) {
                 <div><h2>{project.titre}</h2></div>
               </Row><br />
               <Row>
-                <div style={{ textAlign: 'left', fontSize: '18px' }}>{project.description}</div>
+                <div>{project.description}</div>
               </Row><br />
               <Row>
                 <ButtonPG onClick={() => history.push(`${match.url}/${project.code}`)}>
