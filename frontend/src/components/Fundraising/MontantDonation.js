@@ -12,9 +12,6 @@ function MontantDonation() {
 
     useEffect(() => {
         setFundraising_Id(location.state.id);
-        console.log(fundraising_id)
-        console.log(location.pathname); // result: '/secondpage'// result: '?query=abc'
-        console.log(location.state.id); // result: 'some_value'
 
     }, [location]);
 
@@ -36,13 +33,13 @@ function MontantDonation() {
         <Form onSubmit={handleSubmit}>
             <Form.Label className="mx-4 mb-2"> Donation pour le projet: </Form.Label>
             <Form.Label className="mx-10 mb-2" >{location.state.projet} </Form.Label>
-            <Form.Text className="mx-5">> Entrez le montant de votre donation </Form.Text>
+            <Form.Text className="mx-5"> Entrez le montant de votre donation </Form.Text>
             <Form.Control
                 name="montant"
                 value={montant}
                 onChange={handleOnChange}
                 placeholder="Minimum 1 $"
-                isInvalid={montant<1}
+                isInvalid={montant < 1}
                 type={"number"}
             />
             <Form.Row className="justify-content-md-center p-2">

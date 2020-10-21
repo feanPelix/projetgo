@@ -44,6 +44,15 @@ router.post('/don', async (req, res) => {
         console.log(error.message);
         res.status(500).json({error: error.message});
     }
+
+    try {
+        const updateMontant = await db.query("UPDATE project SET totalFondsColl = totalFondsColl + $1 WHERE code IN(SELECT projet FROM fundraising WHERE fundraising_id = $2)",
+            [montant, fundraising]);
+    } catch(error) {
+        console.log(error.message);
+        res.status(502).json({error: error.message});
+    }
+
 });
 
 module.exports = router;

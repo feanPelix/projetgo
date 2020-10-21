@@ -34,7 +34,7 @@ export function Header() {
                 {
                   authState.isAuthenticated ? (
                     <>
-                      <NavDropdown id="nav-dropdown" title="MEMBRE" id="nav-dropdown">
+                      <NavDropdown id="nav-dropdown" title="MEMBRE">
                         <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/profil')}>Profil</NavDropdown.Item>
                         <NavDropdown.Item className="nav-dropdown" type='submit' onClick={() => history.push('/membre/mesProjets')} >Mes projets</NavDropdown.Item>
                         {!!authState.member && (
