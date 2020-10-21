@@ -17,7 +17,6 @@ function Report({ match }) {
     try {
       const response = await fetch(`/report/${match.params.projectId}`);
       const jsonData = await response.json();
-      console.log(jsonData);
 
       setListReport(jsonData);
     } catch (err) {
@@ -81,6 +80,7 @@ function Report({ match }) {
 
           return (
             <TimelineEvent
+              key={report.id}
               title={<strong>{report.update}</strong>}
               createdAt={moment(report.datereport).calendar()}
               icon={icon}

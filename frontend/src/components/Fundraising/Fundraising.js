@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { Container, Row, ListGroup } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import ButtonPG from '../Buttons/ButtonPG/ButtonPG';
 import DonationsListing from './DonationsListing/DonationsListing';
 

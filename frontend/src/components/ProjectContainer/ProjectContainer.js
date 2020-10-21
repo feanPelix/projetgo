@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Nav, Container } from 'react-bootstrap';
 import { Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext/AuthContext';
@@ -10,15 +10,37 @@ import Report from '../Report/Report';
 
 export default function ProjectContainer({ match }) {
   const {state: {member}} = useContext(AuthContext);
+  const [currentProject, setCurrentProject] = useState({});
+  
   const isDetailsMatch = useRouteMatch(`${match.path}/details`);
   const isReportsMatch = useRouteMatch(`${match.path}/rapports`);
   const isFundraisingMatch = useRouteMatch(`${match.path}/financement`);
-  console.log('match.path', match.path);
+
+  const projetId = match.params.projectId;
+  const isCurrentUserResponsable = currentProject.responsable === member.user_id;
+
+  const getProjectDetail = async () => {
+    try {
+      const response = await fetch(`/project/${projetId}`);
+      const jsonData = await response.json();
+      setCurrentProject(jsonData);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  useEffect(() => {
+    getProjectDetail();
+  }, [projetId])
+
+  if (!currentProject.responsable) {
+    return null;
+  }
 
   return (
     <Container>
       <div style={{backgroundColor:'white'}} className="shadow rounded p-5">
-        {!!member && (
+        {isCurrentUserResponsable && (
           <Nav
             variant="tabs"
             defaultActiveKey="#details"
@@ -43,10 +65,10 @@ export default function ProjectContainer({ match }) {
         )}
         
         <Switch>
-          <Route path={`${match.path}/details`} component={ProjetDetails} exact />
-          {!!member && <Route path={`${match.path}/rapports`} component={Report} exact /> }
-          {!!member && <Route path={`${match.path}/financement`} component={Fundraising} exact /> }
-          {!!member && <Route path={`${match.path}/financement/nouveau`} component={NewFundraising} exact /> }
+          <Route path={`${match.path}/details`} render={(routeProps) => <ProjetDetails {...routeProps} currentProject={currentProject}/>} exact />
+          {isCurrentUserResponsable && <Route path={`${match.path}/rapports`} component={Report} exact /> }
+          {isCurrentUserResponsable && <Route path={`${match.path}/financement`} component={Fundraising} exact /> }
+          {isCurrentUserResponsable && <Route path={`${match.path}/financement/nouveau`} component={NewFundraising} exact /> }
           <Redirect to={`${match.url}/details`} />
         </Switch>
       </div>

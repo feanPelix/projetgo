@@ -6,8 +6,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './AjouterProjet.css';
 import {storage} from "../../firebase";
 import { AuthContext } from '../context/AuthContext/AuthContext';
-import ButtonPG from "../Buttons/ButtonPG/ButtonPG";
-
 
 function AjouterProjet({ history }) {
   const { state: { user } } = useContext(AuthContext)

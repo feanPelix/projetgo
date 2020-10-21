@@ -10,7 +10,7 @@ function ParticipantDisponibleList (props) {
     }
     return (
         <Form.Control as="select" value={props.selectedValue} onChange={handleChange}>
-            <option value='' disabled selected>{props.optionName}</option>
+            <option value='' disabled >{props.optionName}</option>
             {props.participantList.map((option, index) =>
                 <option value={index} key={option.user_id}>
                     {option.nom} {option.prenom}

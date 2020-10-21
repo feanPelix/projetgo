@@ -20,9 +20,9 @@ export default function DonationsListing({donations}) {
       </thead>
       <tbody>
         {donations.length === 0 && <tr><td colSpan="5">Aucun don</td></tr>}
-        {donations.map(donation => {
+        {donations.map((donation, index) => {
           return (
-            <tr>
+            <tr key={`${donation.fundraising}-${index}`}>
               <td>{donation.nom}</td>
               <td>{donation.prenom}</td>
               <td>{donation.email}</td>

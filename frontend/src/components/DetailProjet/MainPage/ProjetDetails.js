@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useReducer, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Col, Row, Button, ListGroup, Image, Dropdown, DropdownButton, ProgressBar } from "react-bootstrap";
+import { Col, Row, Image, Dropdown, DropdownButton, ProgressBar } from "react-bootstrap";
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import './ProjetDetails.css';
@@ -21,7 +21,6 @@ function reducer(state, action) {
       };
 
     case 'UPDATE':
-      console.log('action', action);
       return {
         ...state,
         [action.payload.key]: action.payload.value,
@@ -32,10 +31,11 @@ function reducer(state, action) {
   }
 }
 
-function ProjetDetails({ match }) {
+function ProjetDetails({ match, currentProject: initialCurrentProject }) {
   const { state: { user } } = useContext(AuthContext);
   const history = useHistory();
-  const [currentProject, dispatch] = useReducer(reducer, {});
+  const [currentProject, dispatch] = useReducer(reducer, initialCurrentProject);
+  
   const isCurrentUserResponsable = currentProject.responsable === user.user_id;
   const projetId = match.params.projectId;
   //Adding and deleting members and volunteers
@@ -113,15 +113,7 @@ function ProjetDetails({ match }) {
   }
 
   //Edit info part
-  const getProjectDetail = async () => {
-    try {
-      const response = await fetch(`/project/${projetId}`);
-      const jsonData = await response.json();
-      dispatch({ type: 'LOAD', payload: jsonData });
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
+  
 
   const getFundraisingDetail = async () => {
     try {
@@ -195,9 +187,12 @@ function ProjetDetails({ match }) {
 
   useEffect(() => {
     getParticipantsList();
-    getProjectDetail();
+  }, [projetId]);
+
+  useEffect(() => {
+    dispatch({type: 'LOAD', payload: initialCurrentProject});
     getFundraisingDetail();
-  }, [projetId])
+  }, [initialCurrentProject.code]);
 
   return (
     <div className="detail-projet-body" style={{ textAlign: 'justify' }} >
