@@ -18,3 +18,11 @@
 .input-group {
   width: auto;
 }
+
+.error{
+  color: #F42B4B;
+  text-align: center;
+  width: 60%;
+  padding: 0;
+  margin: auto;
+}
