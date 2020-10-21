@@ -66,7 +66,6 @@ export default function Login() {
         errorMessage: error.message || error.statusText,
       });
     }
-
   }
 
   return (
@@ -105,8 +104,8 @@ export default function Login() {
                 placeholder="Mot de passe"
               />
             </InputGroup>
-          {data.erroMessage && (
-            <span className="error">{data.erroMessage}</span>
+          {data.errorMessage && (
+            <span className="error">{data.errorMessage}</span>
           )}
         </ModalBody>
 

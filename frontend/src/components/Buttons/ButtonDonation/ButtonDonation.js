@@ -22,7 +22,6 @@ export function ButtonDonation({projectID}) {
               } else{
                   const res = await fetch(`/project/${projectID}/campaign`)
                   const jsonDataFund = await  res.json();
-                  console.log(res);
                   if (!res.ok) {
                       alert("Le projet n'accepte pas de dons pour le moment.");
                       return;
