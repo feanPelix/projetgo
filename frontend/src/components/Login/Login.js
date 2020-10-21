@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext/AuthContext';
-import { Form, InputGroup, Nav } from "react-bootstrap";
+import { Alert, Form, InputGroup, Nav } from "react-bootstrap";
 import { Modal, ModalBody } from 'react-bootstrap';
 import ButtonPG from '../Buttons/ButtonPG/ButtonPG';
 import './Login.css';
@@ -105,7 +105,7 @@ export default function Login() {
               />
             </InputGroup>
           {data.errorMessage && (
-            <span className="error">{data.errorMessage}</span>
+            <Alert variant="danger" className="error">Utilisateur ou mot de passe invalide</Alert>
           )}
         </ModalBody>
 
