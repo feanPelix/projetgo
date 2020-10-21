@@ -1,0 +1,8 @@
+.btn-welcome{
+    font-size: 17px;
+    padding:10px;
+    -webkit-border-radius:40px;
+    -moz-border-radius:40px;
+    border-radius:40px;
+    border:1px #b33500 solid;
+}
