@@ -17,7 +17,7 @@ export default function ProjectContainer({ match }) {
   const isFundraisingMatch = useRouteMatch(`${match.path}/financement`);
 
   const projetId = match.params.projectId;
-  const isCurrentUserResponsable = currentProject.responsable === member.user_id;
+  const isCurrentUserResponsable = !!member ? currentProject.responsable === member.user_id : false;
 
   const getProjectDetail = async () => {
     try {
