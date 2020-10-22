@@ -58,7 +58,7 @@ function FormulaireSignUpMembre(props) {
         e.preventDefault();
         if (validateFields()) {
             return;
-        } else {
+        } else if(!showPayButton) {
             let phone = "5551113333";
             let adresse = (numCivique + " " + rue);
             let inscription = moment().format("YYYY-MM-DD");
