@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Container, Col, Row } from 'react-bootstrap';
+import {Container, Col, Row, CardDeck} from 'react-bootstrap';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import CardProject from '../CardProject/CardProject';
 import './Home.css';
@@ -10,7 +10,7 @@ export function Home() {
 
   const getProjects = async () => {
     try {
-      const response = await fetch("http://localhost:5000/Accueil");
+      const response = await fetch("/project/top3");
       const jsonData = await response.json();
 
       setProjects(jsonData);
@@ -35,6 +35,7 @@ export function Home() {
           srcImage={key.image}
           title={key.titre}
           summary={key.description}
+          projectId={key.code}
         />
       </Col>
     );
@@ -48,7 +49,9 @@ export function Home() {
         </Col>
       </Row>
       <Row>
-        {highlightProjects}
+        <CardDeck>
+          {highlightProjects}
+        </CardDeck>
       </Row>
     </Container>
   );

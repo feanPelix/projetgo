@@ -1,13 +1,23 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import './CardProject.css';
-import ButtonDonation from '../ButtonDonation/ButtonDonation';
+import ButtonDonation from '../Buttons/ButtonDonation/ButtonDonation';
 
 
 
-export function ProjectCard({srcImage, title, summary}) {
+export function ProjectCard({srcImage, title, summary, projectId}) {
+  const summary_size = 250;
   const size = null;
   let styles = `bkg ${size}`;
+  let formattedSummary;
+
+  // Trim le text des sommaires si depasse 'summary_size'
+  if (summary.length > summary_size) {
+    let cutIdx = summary.indexOf(' ', summary_size);
+    formattedSummary = summary.slice(0,cutIdx)+' ...';
+  } else {
+    formattedSummary = summary;
+  }
 
   return (
     <Card 
@@ -22,9 +32,9 @@ export function ProjectCard({srcImage, title, summary}) {
           {title}
         </Card.Title>
         <Card.Text>
-          {summary}
+          {formattedSummary}
         </Card.Text>
-          <ButtonDonation />
+          <ButtonDonation projectID={projectId}/>
       </Card.Body>
     </Card>
   );

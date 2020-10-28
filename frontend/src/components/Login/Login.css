@@ -1,0 +1,28 @@
+.login .modal-content {
+  background-color: #2b7185;
+}
+
+.modal-header {
+  color: white;
+  justify-content: center;
+}
+
+.modal-footer {
+  justify-content: center;
+}
+
+.btn-go {
+  width: 15rem;
+}
+
+.input-group {
+  width: auto;
+}
+
+.error{
+  color: #F42B4B;
+  text-align: center;
+  width: 60%;
+  padding: 0;
+  margin: auto;
+}

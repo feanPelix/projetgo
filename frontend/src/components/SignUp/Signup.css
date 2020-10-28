@@ -1,0 +1,25 @@
+.signup {
+  margin: auto;
+  padding: 1rem;
+  background-color: #2b7185;
+  color: white;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: .3rem;
+}
+
+.signup > h4, .signup > h5 {
+  color: white;
+  text-align: center;
+}
+
+.signup > hr {
+  background-color: white;
+}
+
+.sep {
+  border-right: 1px solid #dee2e6;
+}
+
+.btn-go {
+  width: 15rem;
+}

@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Container, Col, Row, ListGroup } from 'react-bootstrap';
 import { Facebook, Twitter, Instagram } from 'react-feather';
 import { useState, useEffect } from 'react';
-import { Link, BrowserRouter } from 'react-router-dom';
-import User from '../User';
+import { Link } from 'react-router-dom';
 import './Footer.css';
+import { AuthContext } from '../context/AuthContext/AuthContext';
 
 export function Footer() {
+  const { state: { isAuthenticated, member } } = useContext(AuthContext);
   const [projects, setProjects] = useState([]);
 
   const getProjects = async () => {
     try {
-      const response = await fetch("http://localhost:5000/Accueil");
+      const response = await fetch("/project/top3");
       const jsonData = await response.json();
 
       setProjects(jsonData);
@@ -30,14 +31,12 @@ export function Footer() {
         key={key.code}
       >
         {key.titre}
-
       </ListGroup.Item>
     );
   });
 
-
   return(
-    <Container fluid>
+    <Container fluid className="mt-5 footer">
       <Row>
         <Col lg={4} md={4}>
           <h4>Campagnes</h4>
@@ -47,33 +46,32 @@ export function Footer() {
         </Col>
         <Col lg={4} md={4}>
           <h4>Mon compte</h4>
-          <BrowserRouter>
-            <ul className="foot-list">
-              <User>
-                {({ isAuthenticated }) => {
-                  if (isAuthenticated) {
-                    return <>
-                      <li>
-                        <Link to="/">Mes projets</Link>
-                      </li>
-                      <li>
-                        <Link to="/">Creer nouveau projet</Link>
-                      </li>
-                    </>;
-                  }
-
-                  return <>
-                    <li>
-                      <Link to="/inscription-membre" href>Devenir membre</Link>
-                    </li>
-                    <li>
-                      <Link to="/inscription-benevole">Devenir bénévole</Link>
-                    </li>
-                  </>;
-                }}
-              </User>
-            </ul>
-          </BrowserRouter>
+          <ul className="foot-list">
+            {isAuthenticated ? (
+              <>
+                <li>
+                  <Link to="/membre/profil">Profil</Link>
+                </li>
+                <li>
+                  <Link to="/membre/mesProjets">Mes projets</Link>
+                </li>
+                {!!member && (
+                  <li>
+                    <Link to="/membre/mesProjets/nouveau">Creer nouveau projet</Link>
+                  </li>
+                )}
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to="/inscription-membre" href>Devenir membre</Link>
+                </li>
+                <li>
+                  <Link to="/inscription-benevole">Devenir bénévole</Link>
+                </li>
+              </>
+            )}
+          </ul>
         </Col>
         <Col lg={4} md={4}>
           <h4>Restez en contact!</h4>
@@ -88,7 +86,7 @@ export function Footer() {
       <Row>
         <Col>
           <div>
-            &#169;2020 ProjetGo. Tous droits réservés./Site Web réalisé par
+            &#169;2020 ProjetGo. Tous droits réservés. Site Web réalisé par
             <span className="team"> <a href="#">do-or-paste</a></span>
           </div>
         </Col>
